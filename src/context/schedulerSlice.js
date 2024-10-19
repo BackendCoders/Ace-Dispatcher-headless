@@ -11,7 +11,7 @@ import {
 	findBookingById,
 	bookingFindByBookings,
 } from '../utils/apiReq';
-// import axios from 'axios';
+import axios from 'axios';
 
 const filterScheduledBookings = function (booking) {
 	return {
@@ -180,21 +180,22 @@ export function allocateBookingToDriver(actionByUserId) {
 		const data = await allocateDriver(requestBody, activeTestMode);
 		if (data.status === 'success' && isActiveTestMode) {
 			// const notification = await axios.get(
-			// 	`https://mobile-notifiation-registraion.onrender.com/8`
+			// 	`https://fcm-notification-a1rh.onrender.com/20`
 			// );
-			// console.log(notification);
-			// if (notification.status === 200) {
-			// 	const expoToken = notification.data.data.expoNotificationToken;
-			// 	await axios.post(
-			// 		'https://mobile-notifiation-registraion.onrender.com/send-notification',
-			// 		{
-			// 			to: expoToken,
-			// 			title: 'Got a new booking',
-			// 			body: 'You have been allocated a new booking. Please check the app for more details.',
-			// 			data: currentBooking,
-			// 		}
-			// 	);
-			// }
+			// console.log('notification---', notification);
+
+			// const expoToken = notification.data.data.expoNotificationToken;
+			const bookingId = currentBooking.bookingId;
+			await axios.post(
+				'http://192.168.1.13:80/api/Authenticate/sendnotification',
+				{
+					userId: selectedDriver,
+					title: 'Got a new booking',
+					messageBody:
+						'You have been allocated a new booking. Please check the app for more details.',
+					bookingId: `${bookingId}`,
+				}
+			);
 
 			dispatch(getRefreshedBookings());
 		}
