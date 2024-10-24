@@ -350,6 +350,44 @@ async function getDriverAvailability(dueDate, testMode = true) {
 // 	}
 // }
 
+// async function getAddressSuggestions(location) {
+// 	const apiKey = import.meta.env.VITE_GETADDRESS_KEY;
+// 	try {
+// 		// Step 1: Get autocomplete suggestions
+// 		const autocompleteResponse = await axios.get(
+// 			`https://api.getAddress.io/autocomplete/${location}?api-key=${apiKey}`
+// 		);
+// 		const suggestions = autocompleteResponse.data.suggestions;
+
+// 		// Step 2: Fetch details for each suggestion based on the returned IDs
+// 		const detailsPromises = suggestions.map(async (suggestion) => {
+// 			// Fetch full details for the suggestion
+// 			const detail = await getAddressDetails(suggestion.id);
+// 			// console.log({ suggestion, detail });
+// 			if (detail) {
+// 				return {
+// 					label: `${detail.address}, ${detail.postcode}`, // Combine address and postcode
+// 					id: suggestion.id,
+// 					latitude: detail.latitude,
+// 					longitude: detail.longitude,
+// 					address: detail.address,
+// 					postcode: detail.postcode,
+// 				};
+// 			} else {
+// 				// If details couldn't be fetched, return null (to filter out later)
+// 				return null;
+// 			}
+// 		});
+
+// 		// Await all the promises for full details, then filter out any null values
+// 		const details = await Promise.all(detailsPromises);
+// 		return details.filter(Boolean); // Filter out null values
+// 	} catch (error) {
+// 		console.error('Error fetching address suggestions:', error);
+// 		return [];
+// 	}
+// }
+
 async function getAddressSuggestions(location) {
 	const apiKey = import.meta.env.VITE_GETADDRESS_KEY;
 	try {
@@ -359,29 +397,14 @@ async function getAddressSuggestions(location) {
 		);
 		const suggestions = autocompleteResponse.data.suggestions;
 
-		// Step 2: Fetch details for each suggestion based on the returned IDs
-		const detailsPromises = suggestions.map(async (suggestion) => {
-			// Fetch full details for the suggestion
-			const detail = await getAddressDetails(suggestion.id);
-			// console.log({ suggestion, detail });
-			if (detail) {
-				return {
-					label: `${detail.address}, ${detail.postcode}`, // Combine address and postcode
-					id: suggestion.id,
-					latitude: detail.latitude,
-					longitude: detail.longitude,
-					address: detail.address,
-					postcode: detail.postcode,
-				};
-			} else {
-				// If details couldn't be fetched, return null (to filter out later)
-				return null;
-			}
-		});
+		// Step 2: Map over the suggestions to format them without making additional API calls
+		const formattedSuggestions = suggestions.map((suggestion) => ({
+			label: suggestion.address, // Use only the address part for the label
+			id: suggestion.id,
+			address: suggestion.address || 'Unknown Address', // Keep the suggestion ID for further use
+		}));
 
-		// Await all the promises for full details, then filter out any null values
-		const details = await Promise.all(detailsPromises);
-		return details.filter(Boolean); // Filter out null values
+		return formattedSuggestions;
 	} catch (error) {
 		console.error('Error fetching address suggestions:', error);
 		return [];

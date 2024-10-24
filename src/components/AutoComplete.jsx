@@ -12,6 +12,7 @@ const Autocomplete = ({
 	type,
 	required,
 	inputRef,
+	// postcodeFilled,
 }) => {
 	const [inputValue, setInputValue] = useState(value || '');
 	const [options, setOptions] = useState([]);
@@ -28,7 +29,7 @@ const Autocomplete = ({
 	}, [value]);
 
 	useEffect(() => {
-		if (inputValue.length < 3) {
+		if (inputValue.length <= 3) {
 			setOptions([]);
 			return;
 		}
