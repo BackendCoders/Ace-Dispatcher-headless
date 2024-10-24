@@ -146,6 +146,7 @@ function ConfirmAllocationModal({
 	setConfirmAllocation,
 }) {
 	const dispatch = useDispatch();
+	const { activeSoftAllocate } = useSelector((state) => state.scheduler);
 	const user = useAuth();
 	const handleConfirmClick = async () => {
 		dispatch(allocateBookingToDriver(user.currentUser.id));
@@ -160,7 +161,11 @@ function ConfirmAllocationModal({
 					<PersonOutlineOutlinedIcon sx={{ color: '#E45454' }} />
 				</div>
 				<div className='flex w-full flex-col justify-center items-center'>
-					<p className='font-medium text-xl '>Confirm Driver Allocation</p>
+					<p className='font-medium text-xl '>
+						{activeSoftAllocate
+							? `Confirm Driver Soft Allocation`
+							: `Confirm Driver Allocation`}
+					</p>
 				</div>
 			</div>
 			<div className='text-center w-full'>

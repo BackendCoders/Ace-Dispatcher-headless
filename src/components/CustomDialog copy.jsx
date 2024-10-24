@@ -222,6 +222,7 @@ function CustomDialog({
 						color='blue'
 						onClick={() => setAllocateModal(true)}
 					/>
+					
 					<BookingButton
 						onClick={() => setEditBookingModal(true)}
 						text='Edit Booking'

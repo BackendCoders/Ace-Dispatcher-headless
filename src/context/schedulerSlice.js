@@ -10,6 +10,7 @@ import {
 	// bookingFindByTerm,
 	findBookingById,
 	bookingFindByBookings,
+	softAllocateDriver,
 } from '../utils/apiReq';
 import axios from 'axios';
 
@@ -35,6 +36,7 @@ const schedulerSlice = createSlice({
 		activeDate: new Date().toISOString(),
 		activeComplete: false,
 		activeSearch: false,
+		activeSoftAllocate: false,
 		activeSearchResults: [],
 		activeSearchResult: null,
 		showDriverAvailability: false,
@@ -90,6 +92,9 @@ const schedulerSlice = createSlice({
 		},
 		setLoading: (state, action) => {
 			state.loading = action.payload;
+		},
+		setActiveSoftAllocate: (state, action) => {
+			state.activeSoftAllocate = action.payload;
 		},
 	},
 });
@@ -159,6 +164,7 @@ export function deleteSchedulerBooking(
 export function allocateBookingToDriver(actionByUserId) {
 	return async (dispatch, getState) => {
 		const activeTestMode = getState().bookingForm.isActiveTestMode;
+		const isSoftAllocateActive = getState().scheduler.activeSoftAllocate;
 		const {
 			bookings,
 			currentlySelectedBookingIndex,
@@ -176,8 +182,12 @@ export function allocateBookingToDriver(actionByUserId) {
 			userId: selectedDriver,
 			actionByUserId,
 		};
-
-		const data = await allocateDriver(requestBody, activeTestMode);
+		let data;
+		if (isSoftAllocateActive) {
+			data = await softAllocateDriver(requestBody, activeTestMode);
+		} else {
+			data = await allocateDriver(requestBody, activeTestMode);
+		}
 		if (data.status === 'success' && isActiveTestMode) {
 			// const notification = await axios.get(
 			// 	`https://fcm-notification-a1rh.onrender.com/20`
@@ -283,6 +293,7 @@ export const {
 	changeShowDriverAvailability,
 	updateBookingAtIndex,
 	setActiveSearchResultClicked,
+	setActiveSoftAllocate,
 } = schedulerSlice.actions;
 
 export default schedulerSlice.reducer;

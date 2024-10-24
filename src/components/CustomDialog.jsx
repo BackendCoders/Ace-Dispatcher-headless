@@ -15,6 +15,7 @@ import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import {
 	deleteSchedulerBooking,
 	setActiveSearchResultClicked,
+	setActiveSoftAllocate,
 } from '../context/schedulerSlice';
 import { useAuth } from '../hooks/useAuth';
 function CustomDialog({ closeDialog }) {
@@ -300,6 +301,14 @@ function CustomDialog({ closeDialog }) {
 						// onClick={() => setViewBookingModal(true)}
 					/> */}
 
+					<BookingButton
+						text='Soft Allocate'
+						color='bg-blue-700'
+						onClick={() => {
+							setAllocateModal(true);
+							dispatch(setActiveSoftAllocate(true));
+						}}
+					/>
 					<BookingButton
 						text='Allocate Booking'
 						color='bg-blue-700'

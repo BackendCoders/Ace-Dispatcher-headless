@@ -46,6 +46,7 @@ const AceScheduler = () => {
 		activeDate,
 		activeSearch,
 		activeSearchResults,
+		activeSoftAllocate,
 		loading: searchLoading,
 	} = useSelector((state) => state.scheduler);
 	const activeTestMode = useSelector(
@@ -73,7 +74,9 @@ const AceScheduler = () => {
 	// syncfusion handler funtion for each render of syncfusion element on the screen
 	function onEventRendered(args) {
 		args.element;
-		if (args.data.status === 1) {
+		if (activeSoftAllocate && args.data.status === 1) {
+			args.element.style.background = `repeating-linear-gradient(0deg,  ${args.data.backgroundColorRGB}, ${args.data.backgroundColorRGB} 10px, rgb(187, 187, 187) 20px, rgb(187, 187, 187) 20px) ${args.data.backgroundColorRGB}`;
+		} else if (args.data.status === 1) {
 			args.element.style.background = `repeating-linear-gradient(-40deg,  ${args.data.backgroundColorRGB}, ${args.data.backgroundColorRGB} 10px, rgb(187, 187, 187) 20px, rgb(187, 187, 187) 20px) ${args.data.backgroundColorRGB}`;
 		}
 		args.element.style.backgroundColor = args.data.backgroundColorRGB;
