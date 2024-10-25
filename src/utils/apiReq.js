@@ -5,10 +5,12 @@ import { formatDate } from './formatDate';
 import { sendLogs } from './getLogs';
 import { filterVias } from './filterVias';
 // const BASE = 'https://abacusonline-001-site1.atempurl.com';
-const BASE = 'https://api.acetaxisdorset.co.uk';
-// const BASE = 'https://abacusonline-001-site1.atempurl.com';
-const TEST = 'https://abacusonline-001-site1.atempurl.com';
-// https://api.getaddress.io/v2/uk/sp84aa?api-key=RCX7bLL_a0C5xaApbiBLFQ983
+// const BASE = 'https://api.acetaxisdorset.co.uk';
+const BASE = import.meta.env.VITE_BASE_URL_PRODUCTION;
+// const TEST = 'https://abacusonline-001-site1.atempurl.com';
+const TEST = import.meta.env.VITE_TEST_URL_DEV;
+
+console.log(BASE);
 
 // utils function
 function convertDateString(inputDateString) {
