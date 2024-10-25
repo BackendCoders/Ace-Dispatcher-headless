@@ -392,8 +392,19 @@ async function getAddressSuggestions(location) {
 	const apiKey = import.meta.env.VITE_GETADDRESS_KEY;
 	try {
 		// Step 1: Get autocomplete suggestions
-		const autocompleteResponse = await axios.get(
-			`https://api.getAddress.io/autocomplete/${location}?api-key=${apiKey}`
+
+		const filter = {
+			radius: {
+				km: 10,
+			},
+			location: {
+				longitude: -2.2799,
+				latitude: 51.0388,
+			},
+		};
+		const autocompleteResponse = await axios.post(
+			`https://api.getAddress.io/autocomplete/${location}?api-key=${apiKey}`,
+			{ filter }
 		);
 		const suggestions = autocompleteResponse.data.suggestions;
 
