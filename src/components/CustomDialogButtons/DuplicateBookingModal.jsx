@@ -14,9 +14,9 @@ export default function DuplicateBookingModal({
 	setDuplicateBookingModal,
 	closeDialog,
 }) {
-	const { isActiveTestMode: activeTestMode } = useSelector(
-		(state) => state.bookingForm
-	);
+	// const { isActiveTestMode: activeTestMode } = useSelector(
+	// 	(state) => state.bookingForm
+	// );
 	const {
 		bookings,
 		currentlySelectedBookingIndex: index,
@@ -50,7 +50,8 @@ export default function DuplicateBookingModal({
 		console.log('Duplicate Booking created');
 		setDuplicateBookingModal(false);
 		closeDialog();
-		const res = await makeBooking(newData, activeTestMode);
+		// const res = await makeBooking(newData, activeTestMode);
+		const res = await makeBooking(newData);
 		if (res.status === 'success') {
 			dispatch(getRefreshedBookings());
 		}

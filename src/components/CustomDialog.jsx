@@ -312,7 +312,10 @@ function CustomDialog({ closeDialog }) {
 					<BookingButton
 						text='Allocate Booking'
 						color='bg-blue-700'
-						onClick={() => setAllocateModal(true)}
+						onClick={() => {
+							setAllocateModal(true);
+							dispatch(setActiveSoftAllocate(false));
+						}}
 					/>
 					<BookingButton
 						onClick={() => {

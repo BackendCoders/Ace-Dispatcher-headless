@@ -1,15 +1,15 @@
 /** @format */
 
-import  React, {useState} from 'react';
+import React from 'react';
 import Dialog from '@mui/material/Dialog';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
+// import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
-import { Box, Switch } from '@mui/material';
-import { setActiveTestMode } from '../context/bookingSlice';
+import { Box } from '@mui/material';
+// import { setActiveTestMode } from '../context/bookingSlice';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return (
@@ -21,11 +21,16 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 	);
 });
 
-export default function FullScreenDialog({ children, open, setOpen, isActiveComplete, setIsActiveComplete }) {
+// export default function FullScreenDialog({ children, open, setOpen, isActiveComplete, setIsActiveComplete }) {
+export default function FullScreenDialog({
+	children,
+	open,
+	setOpen,
+	// isActiveComplete,
+}) {
 	const handleClose = () => {
 		setOpen(false);
 	};
-	
 
 	return (
 		<React.Fragment>
@@ -49,7 +54,6 @@ export default function FullScreenDialog({ children, open, setOpen, isActiveComp
 							aria-label='close'
 						>
 							<CloseIcon />
-							
 						</IconButton>
 					</Toolbar>
 				</AppBar>

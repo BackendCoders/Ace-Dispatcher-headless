@@ -14,7 +14,7 @@ import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import { completeBookings } from '../utils/apiReq';
 import { openSnackbar } from '../context/snackbarSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Loader from './Loader';
 import EditBookingModal from './CustomDialogButtons/EditBookingModal';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
@@ -222,7 +222,7 @@ function CustomDialog({
 						color='blue'
 						onClick={() => setAllocateModal(true)}
 					/>
-					
+
 					<BookingButton
 						onClick={() => setEditBookingModal(true)}
 						text='Edit Booking'
@@ -450,9 +450,9 @@ function ConfirmAllocationModal({
 }) {
 	const dispatch = useDispatch();
 	const user = useAuth();
-	const activeTestMode = useSelector(
-		(store) => store.bookingForm.isActiveTestMode
-	);
+	// const activeTestMode = useSelector(
+	// 	(store) => store.bookingForm.isActiveTestMode
+	// );
 	const handleConfirmClick = async (driver) => {
 		const newAllocationData = {
 			bookingId: bookingData.bookingId,
@@ -460,10 +460,11 @@ function ConfirmAllocationModal({
 			actionByUserId: user.currentUser.id,
 		};
 		// console.log("driver", driver);
-		const res = await allocateDriverToBooking(
-			newAllocationData,
-			activeTestMode
-		);
+		// const res = await allocateDriverToBooking(
+		// 	newAllocationData,
+		// 	activeTestMode
+		// );
+		const res = await allocateDriverToBooking(newAllocationData);
 		setConfirmAllocation(false);
 		setAllocateModal(false);
 		closeDialog();
@@ -519,9 +520,9 @@ function CompleteBookingModal({
 	const [waitingTime, setWaitingTime] = useState(data.waitingTime);
 	const [parkingCharge, setParkingCharge] = useState(data.parkingCharge);
 	const [price, setPrice] = useState(data.price);
-	const isActiveTestMode = useSelector(
-		(store) => store.bookingForm.isActiveTestMode
-	);
+	// const isActiveTestMode = useSelector(
+	// 	(store) => store.bookingForm.isActiveTestMode
+	// );
 
 	const dispatch = useDispatch();
 
@@ -536,10 +537,11 @@ function CompleteBookingModal({
 			accountPrice: data.priceAccount,
 		};
 		// console.log("completedBookingData", completedBookingData);
-		const response = await completeBookings(
-			completedBookingData,
-			isActiveTestMode
-		);
+		// const response = await completeBookings(
+		// 	completedBookingData,
+		// 	isActiveTestMode
+		// );
+		const response = await completeBookings(completedBookingData);
 		setIsCompleteBookingModal(false);
 		closeDialog();
 		if (response.status === 'success') {

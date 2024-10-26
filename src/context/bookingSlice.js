@@ -53,7 +53,7 @@ const initialState = {
 	isLoading: false,
 	error: null,
 	activeBookingIndex: 0,
-	isActiveTestMode: true,
+	// isActiveTestMode: true,
 	isGoogleApiOn: false,
 };
 
@@ -120,9 +120,9 @@ const bookingFormSlice = createSlice({
 			state.activeBookingIndex = action.payload;
 		},
 		// sets the mode of app from live to test or vice versa
-		setActiveTestMode(state, action) {
-			state.isActiveTestMode = action.payload;
-		},
+		// setActiveTestMode(state, action) {
+		// 	state.isActiveTestMode = action.payload;
+		// },
 		// this controller if used to create new booking from scheduler free spaces
 		createBookingFromScheduler(state, action) {
 			const data = filterData({
@@ -168,8 +168,9 @@ export const updateValueSilentMode =
 // Action Creator that will save the booking to the Backend api and return the response
 export const onCreateBooking = (itemIndex) => async (dispatch, getState) => {
 	const targetBooking = getState().bookingForm.bookings[itemIndex];
-	const activeTestMode = getState().bookingForm.isActiveTestMode;
-	const response = await makeBooking(targetBooking, activeTestMode);
+	// const activeTestMode = getState().bookingForm.isActiveTestMode;
+	// const response = await makeBooking(targetBooking, activeTestMode);
+	const response = await makeBooking(targetBooking);
 	if (response.status === 'success') {
 		dispatch(endBooking({ itemIndex }));
 		return { status: 'success' };
@@ -184,9 +185,10 @@ export const onCreateBooking = (itemIndex) => async (dispatch, getState) => {
 // Action Creator that will update the booking to the Backend api and return the response
 export const onUpdateBooking = (itemIndex) => async (dispatch, getState) => {
 	const targetBooking = getState().bookingForm.bookings[itemIndex];
-	const activeTestMode = getState().bookingForm.isActiveTestMode;
+	// const activeTestMode = getState().bookingForm.isActiveTestMode;
 	console.log('targetBooking', targetBooking);
-	const response = await updateBooking(targetBooking, activeTestMode);
+	// const response = await updateBooking(targetBooking, activeTestMode);
+	const response = await updateBooking(targetBooking);
 	if (response.status === 'success') {
 		dispatch(endBooking({ itemIndex }));
 		return { status: 'success' };
@@ -205,7 +207,7 @@ export const {
 	addData,
 	endBooking,
 	setActiveTabChange,
-	setActiveTestMode,
+	// setActiveTestMode,
 	setIsGoogleApiOn,
 	updateBookingData,
 	addDataFromSchedulerInEditMode,

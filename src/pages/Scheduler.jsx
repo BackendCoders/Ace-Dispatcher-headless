@@ -49,9 +49,9 @@ const AceScheduler = () => {
 		activeSoftAllocate,
 		loading: searchLoading,
 	} = useSelector((state) => state.scheduler);
-	const activeTestMode = useSelector(
-		(state) => state.bookingForm.isActiveTestMode
-	);
+	// const activeTestMode = useSelector(
+	// 	(state) => state.bookingForm.isActiveTestMode
+	// );
 
 	// setting some states for the complenent level state management
 	const [dialogOpen, setDialogOpen] = useState(false);
@@ -107,7 +107,8 @@ const AceScheduler = () => {
 			dispatch(getRefreshedBookings());
 		}
 		helper();
-	}, [activeTestMode, activeDate, dispatch, activeComplete]);
+	}, [activeDate, dispatch, activeComplete]);
+	// }, [activeTestMode, activeDate, dispatch, activeComplete]);
 
 	// refresh the booking every 10000 (10 sec)
 	useEffect(() => {
@@ -130,7 +131,8 @@ const AceScheduler = () => {
 	// handler funciton for each booking click
 	const onEventClick = async (args) => {
 		if (activeSearch) {
-			dispatch(setActiveSearchResult(args.event.bookingId, activeTestMode));
+			// dispatch(setActiveSearchResult(args.event.bookingId, activeTestMode));
+			dispatch(setActiveSearchResult(args.event.bookingId));
 		} else {
 			setSelectedBookingData(args.event);
 			dispatch(setActiveBookingIndex(args.event.bookingId));

@@ -101,10 +101,11 @@ const schedulerSlice = createSlice({
 
 export function getRefreshedBookings() {
 	return async (dispatch, getState) => {
-		const activeTestMode = getState().bookingForm.isActiveTestMode;
+		// const activeTestMode = getState().bookingForm.isActiveTestMode;
 		const { activeDate, activeComplete } = getState().scheduler;
 
-		const response = await getBookingData(activeDate, activeTestMode);
+		// const response = await getBookingData(activeDate, activeTestMode);
+		const response = await getBookingData(activeDate);
 
 		if (response.status === 'success') {
 			let filteredBookings = [];
@@ -138,7 +139,7 @@ export function deleteSchedulerBooking(
 			activeSearch,
 			activeSearchResult,
 		} = getState().scheduler;
-		const testMode = getState().bookingForm.isActiveTestMode;
+		// const testMode = getState().bookingForm.isActiveTestMode;
 		if (index === -1 && !activeSearch) return;
 		const bookingId = activeSearch
 			? activeSearchResult.bookingId
@@ -153,7 +154,8 @@ export function deleteSchedulerBooking(
 			cancelledOnArrival: cancelledOnArrival,
 		};
 
-		const data = await deleteBooking(reqData, testMode);
+		// const data = await deleteBooking(reqData, testMode);
+		const data = await deleteBooking(reqData);
 		if (data.status === 'success' && cancelledOnArrival === false) {
 			dispatch({ type: 'scheduler/removeBooking', payload: index });
 		}
@@ -163,7 +165,7 @@ export function deleteSchedulerBooking(
 
 export function allocateBookingToDriver(actionByUserId) {
 	return async (dispatch, getState) => {
-		const activeTestMode = getState().bookingForm.isActiveTestMode;
+		// const activeTestMode = getState().bookingForm.isActiveTestMode;
 		const isSoftAllocateActive = getState().scheduler.activeSoftAllocate;
 		const {
 			bookings,
@@ -175,7 +177,7 @@ export function allocateBookingToDriver(actionByUserId) {
 		const currentBooking = activeSearch
 			? activeSearchResult
 			: bookings[currentlySelectedBookingIndex];
-		const isActiveTestMode = getState().bookingForm.isActiveTestMode;
+		// const isActiveTestMode = getState().bookingForm.isActiveTestMode;
 
 		const requestBody = {
 			bookingId: currentBooking.bookingId,
@@ -184,11 +186,14 @@ export function allocateBookingToDriver(actionByUserId) {
 		};
 		let data;
 		if (isSoftAllocateActive) {
-			data = await softAllocateDriver(requestBody, activeTestMode);
-		} else {
-			data = await allocateDriver(requestBody, activeTestMode);
+			// data = await softAllocateDriver(requestBody, activeTestMode);
+			data = await softAllocateDriver(requestBody);
+		} else if (!isSoftAllocateActive) {
+			// data = await allocateDriver(requestBody, activeTestMode);
+			data = await allocateDriver(requestBody);
 		}
-		if (data.status === 'success' && isActiveTestMode) {
+		// if (data.status === 'success' && isActiveTestMode) {
+		if (data.status === 'success') {
 			// const notification = await axios.get(
 			// 	`https://fcm-notification-a1rh.onrender.com/20`
 			// );
@@ -226,7 +231,7 @@ export function handleCompleteBooking({
 			activeSearch,
 			activeSearchResult,
 		} = getState().scheduler;
-		const activeTestMode = getState().bookingForm.isActiveTestMode;
+		// const activeTestMode = getState().bookingForm.isActiveTestMode;
 		const bookingId = activeSearch
 			? activeSearchResult.bookingId
 			: bookings[index].bookingId;
@@ -238,8 +243,8 @@ export function handleCompleteBooking({
 				parkingCharge,
 				priceAccount,
 				driverPrice,
-			},
-			activeTestMode
+			}
+			// activeTestMode
 		);
 
 		if (response === 'success') {
@@ -250,8 +255,9 @@ export function handleCompleteBooking({
 }
 
 export const handleSearchBooking = function (keyword) {
-	return async (dispatch, getState) => {
-		const activeTestMode = getState().bookingForm.isActiveTestMode;
+	// return async (dispatch, getState) => {
+	return async (dispatch) => {
+		// const activeTestMode = getState().bookingForm.isActiveTestMode;
 		// const res = await bookingFindByKeyword(keyword, activeTestMode);
 		// if (res.status === 'success') {
 		// 	const results =
@@ -262,7 +268,8 @@ export const handleSearchBooking = function (keyword) {
 		// }
 		dispatch(schedulerSlice.actions.setLoading(true));
 		// const res = await bookingFindByTerm(keyword, activeTestMode);
-		const res = await bookingFindByBookings(keyword, activeTestMode);
+		// const res = await bookingFindByBookings(keyword, activeTestMode);
+		const res = await bookingFindByBookings(keyword);
 
 		dispatch(schedulerSlice.actions.setLoading(false));
 		if (res.status === 'success') {
@@ -274,9 +281,11 @@ export const handleSearchBooking = function (keyword) {
 	};
 };
 
-export const setActiveSearchResult = function (bookingId, activeTestMode) {
+// export const setActiveSearchResult = function (bookingId, activeTestMode) {
+export const setActiveSearchResult = function (bookingId) {
 	return async (dispatch) => {
-		const data = await findBookingById(bookingId, activeTestMode);
+		// const data = await findBookingById(bookingId, activeTestMode);
+		const data = await findBookingById(bookingId);
 		if (data.status === 'success') {
 			dispatch(schedulerSlice.actions.setActiveSearchResultClicked(data));
 			console.log(data);

@@ -11,15 +11,18 @@ const getPercentage = (time) => {
 
 const WrapperDiv = function () {
 	const [data, setData] = useState([]);
-	const { bookings, activeBookingIndex, isActiveTestMode } = useSelector(
+	const { bookings, activeBookingIndex } = useSelector(
 		(state) => state.bookingForm
 	);
 	const date = bookings[activeBookingIndex].pickupDateTime;
 	useEffect(() => {
 		async function getData() {
+			// const response = await getDriverAvailability(
+			// 	new Date(date).toISOString(),
+			// 	isActiveTestMode
+			// );
 			const response = await getDriverAvailability(
-				new Date(date).toISOString(),
-				isActiveTestMode
+				new Date(date).toISOString()
 			);
 			const result = Object.values(response);
 			result.pop();
@@ -38,7 +41,8 @@ const WrapperDiv = function () {
 			}
 		}
 		getData();
-	}, [date, isActiveTestMode]);
+		// }, [date, isActiveTestMode]);
+	}, [date]);
 	console.log('driver availability data', data);
 	return (
 		<div

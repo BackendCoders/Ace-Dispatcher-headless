@@ -9,7 +9,7 @@ function Footer() {
 	const user = useAuth();
 	// console.log('User', user);
 	const { showDriverAvailability } = useSelector((state) => state.scheduler);
-	const { isActiveTestMode } = useSelector((state) => state.bookingForm);
+	// const { isActiveTestMode } = useSelector((state) => state.bookingForm);
 	// const [notification, setNotification] = useState(false);
 	const dispatch = useDispatch();
 	const [time, setTime] = useState(new Date().toLocaleTimeString());
@@ -49,13 +49,13 @@ function Footer() {
 					<div className='border border-gray-500 px-1'>F1-Map</div>
 					<div className='border border-gray-500 px-1'>F2-Scheduler</div>
 					<div className='border border-gray-500 px-1'>F3-Messages</div>
-					<div
+					{/* <div
 						className={` ${
 							isActiveTestMode ? 'text-[#fc3939]' : 'text-green-400'
 						} 'border border-gray-500 px-1 cursor-pointer'`}
 					>
 						Mode: {isActiveTestMode ? 'Test' : 'Live'}
-					</div>
+					</div> */}
 					<div className='flex flex-col gap-0 justify-center items-end cursor-pointer'>
 						<div className='text-[12px]'>{time}</div>
 						<div className='mt-[-3px] text-[12px]'>{date}</div>

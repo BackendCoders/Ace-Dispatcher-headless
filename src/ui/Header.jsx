@@ -8,7 +8,9 @@ import Modal from '../components/Modal';
 import CallIcon from '@mui/icons-material/Call';
 import Badge from '@mui/material/Badge';
 import { useDispatch, useSelector } from 'react-redux';
-import { setActiveTestMode, setIsGoogleApiOn } from '../context/bookingSlice';
+// import { setActiveTestMode, setIsGoogleApiOn } from '../context/bookingSlice';
+import { setIsGoogleApiOn } from '../context/bookingSlice';
+
 import {
 	handleSearchBooking,
 	makeSearchInactive,
@@ -20,12 +22,13 @@ import LongButton from '../components/BookingForm/LongButton';
 import SearchIcon from '@mui/icons-material/Search';
 import { useForm } from 'react-hook-form';
 const Navbar = () => {
+	const BASE_URL = import.meta.env.VITE_BASE_URL;
 	const navigate = useNavigate();
 	const { isAuth, logout } = useAuth();
 	const dispatch = useDispatch();
-	const activeTestMode = useSelector(
-		(state) => state.bookingForm.isActiveTestMode
-	);
+	// const activeTestMode = useSelector(
+	// 	(state) => state.bookingForm.isActiveTestMode
+	// );
 	const isGoogleApiOn = useSelector((state) => state.bookingForm.isGoogleApiOn);
 	const callerId = useSelector((state) => state.caller);
 	const { activeSearch } = useSelector((state) => state.scheduler);
@@ -63,7 +66,13 @@ const Navbar = () => {
 					</Modal>
 				)}
 			</>
-			<nav className='sticky top-0 z-50 flex justify-between items-center bg-[#424242] text-white p-4'>
+			<nav
+				className={`sticky top-0 z-50 flex justify-between items-center ${
+					BASE_URL.includes('api.acetaxisdorset')
+						? 'bg-[#424242]'
+						: 'bg-[#C74949]'
+				}  text-white p-4`}
+			>
 				<span className='flex gap-10'>
 					<Link
 						to='/pusher'
@@ -74,6 +83,9 @@ const Navbar = () => {
 							className='flex h-8 w-8'
 						/>
 						<span>Ace Taxis</span>
+						<span>
+							{BASE_URL.includes('api.acetaxisdorset') ? '' : 'TEST MODE'}
+						</span>
 					</Link>
 				</span>
 
@@ -113,7 +125,7 @@ const Navbar = () => {
 							</span>
 
 							{/* Test Mode Toogle Button */}
-							<span className='flex flex-row gap-2 items-center align-middle'>
+							{/* <span className='flex flex-row gap-2 items-center align-middle'>
 								<span>Test Mode</span>
 								<Switch
 									checked={activeTestMode}
@@ -121,7 +133,7 @@ const Navbar = () => {
 										dispatch(setActiveTestMode(e.target.checked));
 									}}
 								/>
-							</span>
+							</span> */}
 
 							{/* Logout Button */}
 							<button

@@ -4,13 +4,7 @@ import axios from 'axios';
 import { formatDate } from './formatDate';
 import { sendLogs } from './getLogs';
 import { filterVias } from './filterVias';
-// const BASE = 'https://abacusonline-001-site1.atempurl.com';
-const BASE = 'https://api.acetaxisdorset.co.uk';
-// const BASE = import.meta.env.VITE_BASE_URL_PRODUCTION;
-const TEST = 'https://abacusonline-001-site1.atempurl.com';
-// const TEST = import.meta.env.VITE_TEST_URL_DEV;
-
-console.log(BASE);
+const BASE = import.meta.env.VITE_BASE_URL;
 
 // utils function
 function convertDateString(inputDateString) {
@@ -140,8 +134,8 @@ async function handlePostReq(URL, data) {
 	}
 }
 
-async function makeBooking(data, testMode = false) {
-	const URL = `${testMode ? TEST : BASE}/api/Bookings/Create`;
+async function makeBooking(data) {
+	const URL = `${BASE}/api/Bookings/Create`;
 	const filteredData = filterData(data);
 	console.log('filtered Data is coming', filteredData);
 	// const filteredData = data;
@@ -159,11 +153,11 @@ async function makeBooking(data, testMode = false) {
 	return res;
 }
 
-const getBookingData = async function (date, testMode = false) {
+const getBookingData = async function (date) {
 	const accessToken = localStorage.getItem('authToken');
 	if (!accessToken) return;
 
-	const URL = `${testMode ? TEST : BASE}/api/Bookings/DateRange`;
+	const URL = `${BASE}/api/Bookings/DateRange`;
 	const dataToSend = createDateObject(date);
 
 	// Use handlePostReq function
@@ -249,6 +243,40 @@ async function getAddressDetails(id) {
 	}
 }
 
+async function getAddressSuggestions(location) {
+	const apiKey = import.meta.env.VITE_GETADDRESS_KEY;
+	try {
+		// Step 1: Get autocomplete suggestions
+
+		const filter = {
+			radius: {
+				km: 10,
+			},
+			location: {
+				longitude: -2.2799,
+				latitude: 51.0388,
+			},
+		};
+		const autocompleteResponse = await axios.post(
+			`https://api.getAddress.io/autocomplete/${location}?api-key=${apiKey}`,
+			{ filter }
+		);
+		const suggestions = autocompleteResponse.data.suggestions;
+
+		// Step 2: Map over the suggestions to format them without making additional API calls
+		const formattedSuggestions = suggestions.map((suggestion) => ({
+			label: suggestion.address, // Use only the address part for the label
+			id: suggestion.id,
+			address: suggestion.address || 'Unknown Address', // Keep the suggestion ID for further use
+		}));
+
+		return formattedSuggestions;
+	} catch (error) {
+		console.error('Error fetching address suggestions:', error);
+		return [];
+	}
+}
+
 async function getAllDrivers() {
 	const URL = `${BASE}/api/UserProfile/ListUsers`;
 	return await handleGetReq(URL);
@@ -266,8 +294,8 @@ async function getAccountList() {
 	}
 }
 
-async function updateBooking(data, testMode = false) {
-	const URL = `${testMode ? TEST : BASE}/api/Bookings/Update`;
+async function updateBooking(data) {
+	const URL = `${BASE}/api/Bookings/Update`;
 	let filteredData = JSON.parse(filterData(data));
 
 	// Include editBlock if present
@@ -291,8 +319,8 @@ async function updateBooking(data, testMode = false) {
 	return res;
 }
 
-async function deleteSchedulerBooking(data, testMode = true) {
-	const URL = `${testMode ? TEST : BASE}/api/Bookings/Cancel`;
+async function deleteSchedulerBooking(data) {
+	const URL = `${BASE}/api/Bookings/Cancel`;
 	const res = await handlePostReq(URL, {
 		bookingId: data.bookingId,
 		cancelledByName: data.cancelledByName,
@@ -319,10 +347,8 @@ async function deleteSchedulerBooking(data, testMode = true) {
 // 	return await handlePostReq(URL, { date: new Date().toISOString() });
 // }
 
-async function getDriverAvailability(dueDate, testMode = true) {
-	const URL = `${
-		testMode ? TEST : BASE
-	}/api/Availability/General?date=${dueDate}`;
+async function getDriverAvailability(dueDate) {
+	const URL = `${BASE}/api/Availability/General?date=${dueDate}`;
 	return await handleGetReq(URL);
 }
 
@@ -390,48 +416,14 @@ async function getDriverAvailability(dueDate, testMode = true) {
 // 	}
 // }
 
-async function getAddressSuggestions(location) {
-	const apiKey = import.meta.env.VITE_GETADDRESS_KEY;
-	try {
-		// Step 1: Get autocomplete suggestions
-
-		const filter = {
-			radius: {
-				km: 10,
-			},
-			location: {
-				longitude: -2.2799,
-				latitude: 51.0388,
-			},
-		};
-		const autocompleteResponse = await axios.post(
-			`https://api.getAddress.io/autocomplete/${location}?api-key=${apiKey}`,
-			{ filter }
-		);
-		const suggestions = autocompleteResponse.data.suggestions;
-
-		// Step 2: Map over the suggestions to format them without making additional API calls
-		const formattedSuggestions = suggestions.map((suggestion) => ({
-			label: suggestion.address, // Use only the address part for the label
-			id: suggestion.id,
-			address: suggestion.address || 'Unknown Address', // Keep the suggestion ID for further use
-		}));
-
-		return formattedSuggestions;
-	} catch (error) {
-		console.error('Error fetching address suggestions:', error);
-		return [];
-	}
-}
-
 async function fireCallerEvent(number) {
 	const URL = `${BASE}/api/CallEvents/CallerLookup?caller_id=${number}`;
 	if (number.length < 10) return;
 	return await handleGetReq(URL);
 }
 
-async function allocateDriver(allocateReqData, testMode = false) {
-	const URL = `${testMode ? TEST : BASE}/api/Bookings/Allocate`;
+async function allocateDriver(allocateReqData) {
+	const URL = `${BASE}/api/Bookings/Allocate`;
 	const res = await handlePostReq(URL, allocateReqData);
 	if (res.status === 'success')
 		sendLogs(
@@ -447,8 +439,8 @@ async function allocateDriver(allocateReqData, testMode = false) {
 	return res;
 }
 
-async function softAllocateDriver(allocateReqData, testMode = false) {
-	const URL = `${testMode ? TEST : BASE}/api/Bookings/SoftAllocate`;
+async function softAllocateDriver(allocateReqData) {
+	const URL = `${BASE}/api/Bookings/SoftAllocate`;
 	const res = await handlePostReq(URL, allocateReqData);
 	if (res.status === 'success')
 		sendLogs(
@@ -464,8 +456,8 @@ async function softAllocateDriver(allocateReqData, testMode = false) {
 	return res;
 }
 
-async function completeBookings(completeBookingData, testMode = false) {
-	const URL = `${testMode ? TEST : BASE}/api/Bookings/Complete`;
+async function completeBookings(completeBookingData) {
+	const URL = `${BASE}/api/Bookings/Complete`;
 	const res = await handlePostReq(URL, completeBookingData);
 	if (res.status === 'success')
 		sendLogs(
@@ -481,10 +473,8 @@ async function completeBookings(completeBookingData, testMode = false) {
 	return res;
 }
 
-async function bookingFindByTerm(queryField, testMode = false) {
-	const URL = `${
-		testMode ? TEST : BASE
-	}/api/Bookings/FindByTerm?term=${queryField}`;
+async function bookingFindByTerm(queryField) {
+	const URL = `${BASE}/api/Bookings/FindByTerm?term=${queryField}`;
 	const res = await handleGetReq(URL);
 	if (res.status === 'success')
 		sendLogs(
@@ -500,8 +490,8 @@ async function bookingFindByTerm(queryField, testMode = false) {
 	return res;
 }
 
-async function bookingFindByBookings(data, testMode = false) {
-	const URL = `${testMode ? TEST : BASE}/api/Bookings/FindBookings`;
+async function bookingFindByBookings(data) {
+	const URL = `${BASE}/api/Bookings/FindBookings`;
 	const reqData = {
 		pickupAddress: data.pickupAddress || '',
 		pickupPostcode: data.pickupPostcode || '',
@@ -526,10 +516,8 @@ async function bookingFindByBookings(data, testMode = false) {
 	return res;
 }
 
-async function findBookingById(bookingId, testMode) {
-	const URL = `${
-		testMode ? TEST : BASE
-	}/api/Bookings/FindById/?bookingId=${bookingId}`;
+async function findBookingById(bookingId) {
+	const URL = `${BASE}/api/Bookings/FindById/?bookingId=${bookingId}`;
 	return await handleGetReq(URL);
 }
 

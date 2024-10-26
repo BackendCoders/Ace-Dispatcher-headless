@@ -4,18 +4,18 @@ import {
 	makeBooking,
 	updateBooking,
 	deleteSchedulerBooking,
-	getDriverAvailability,
+	// getDriverAvailability,
 } from './../utils/apiReq';
-import Pusher from 'pusher-js';
+// import Pusher from 'pusher-js';
 import { useAuth } from '../hooks/useAuth';
 
 // connect to pusher for the caller id event
-const pusher = new Pusher('8d1879146140a01d73cf', {
-	cluster: 'eu',
-});
+// const pusher = new Pusher('8d1879146140a01d73cf', {
+// 	cluster: 'eu',
+// });
 
 // subscribing to a channel for caller id
-const channel = pusher.subscribe('my-channel');
+// const channel = pusher.subscribe('my-channel');
 
 const BookingContext = createContext();
 
