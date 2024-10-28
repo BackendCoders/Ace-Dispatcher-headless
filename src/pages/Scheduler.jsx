@@ -37,6 +37,7 @@ import {
 } from '../context/schedulerSlice';
 import { createBookingFromScheduler } from '../context/bookingSlice';
 import Loader from '../components/Loader';
+import { getAllDrivers } from '../utils/apiReq';
 
 const AceScheduler = () => {
 	// taking our global states from the redux
@@ -46,7 +47,7 @@ const AceScheduler = () => {
 		activeDate,
 		activeSearch,
 		activeSearchResults,
-		activeSoftAllocate,
+		// activeSoftAllocate,
 		loading: searchLoading,
 	} = useSelector((state) => state.scheduler);
 	// const activeTestMode = useSelector(
@@ -57,6 +58,7 @@ const AceScheduler = () => {
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [selectedBookingData, setSelectedBookingData] = useState();
 	const [viewBookingModal, setViewBookingModal] = useState(false);
+	const [driverData, setDriverData] = useState([]);
 	const dispatch = useDispatch();
 
 	// data that syncfusion requires for inside computation of the internal mapping
@@ -74,15 +76,41 @@ const AceScheduler = () => {
 	// syncfusion handler funtion for each render of syncfusion element on the screen
 	function onEventRendered(args) {
 		args.element;
-		if (activeSoftAllocate && args.data.status === 1) {
-			args.element.style.background = `repeating-linear-gradient(0deg,  ${args.data.backgroundColorRGB}, ${args.data.backgroundColorRGB} 10px, rgb(187, 187, 187) 20px, rgb(187, 187, 187) 20px) ${args.data.backgroundColorRGB}`;
-		} else if (args.data.status === 1) {
-			args.element.style.background = `repeating-linear-gradient(-40deg,  ${args.data.backgroundColorRGB}, ${args.data.backgroundColorRGB} 10px, rgb(187, 187, 187) 20px, rgb(187, 187, 187) 20px) ${args.data.backgroundColorRGB}`;
+		let driverColor = '#795548'; // Default color if both suggestedUserId and userId are null
+
+		if (args.data.suggestedUserId) {
+			// If there's a suggestedUserId, use the suggested driver's color
+			const suggestedDriver = driverData.find(
+				(driver) => driver.id === args.data.suggestedUserId
+			);
+			if (suggestedDriver) {
+				driverColor = suggestedDriver.colorRGB;
+			}
+		} else if (args.data.userId) {
+			// If suggestedUserId is null but userId exists, use the user's color
+			driverColor = args.data.backgroundColorRGB;
 		}
-		args.element.style.backgroundColor = args.data.backgroundColorRGB;
+
+		// Apply gradient based on activeSoftAllocate status
+		if (args.data.suggestedUserId) {
+			console.log(
+				'Applying 0deg gradient for soft allocate with color:',
+				driverColor
+			);
+			// Use a 0-degree gradient for soft allocation
+			args.element.style.background = `repeating-linear-gradient(0deg, ${driverColor}, ${driverColor} 10px, rgb(187, 187, 187) 20px)`;
+		} else if (args.data.userId && args.data.status === 1) {
+			// Use a -40-degree gradient for normal allocation
+			args.element.style.background = `repeating-linear-gradient(-40deg, ${driverColor}, ${driverColor} 10px, rgb(187, 187, 187) 20px)`;
+		} else {
+			// No gradient, just set the color
+			args.element.style.backgroundColor = driverColor;
+		}
+
+		// Apply the driver color as the background color for fallback cases
 		args.element.style.borderRadius = '10px';
 
-		if (isLightColor(args.data.backgroundColorRGB)) {
+		if (isLightColor(driverColor)) {
 			args.element.querySelector('.e-subject').style.color = 'black';
 			if (args.element.querySelector('.e-time'))
 				args.element.querySelector('.e-time').style.color = 'black';
@@ -109,7 +137,15 @@ const AceScheduler = () => {
 		helper();
 	}, [activeDate, dispatch, activeComplete]);
 	// }, [activeTestMode, activeDate, dispatch, activeComplete]);
-
+	useEffect(() => {
+		getAllDrivers().then((res) => {
+			const driverUsers = [
+				{ id: 0, fullName: 'Unallocated', colorRGB: '#795548' },
+				...res.users,
+			];
+			setDriverData(driverUsers);
+		});
+	}, []);
 	// refresh the booking every 10000 (10 sec)
 	useEffect(() => {
 		async function helper() {
