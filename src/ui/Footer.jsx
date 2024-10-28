@@ -25,7 +25,7 @@ function Footer() {
 	}, []);
 
 	return (
-		<div className='flex flex-col sm:flex-row justify-between h-auto sm:justify-center items-center sm:h-8 w-full fixed bottom-0 bg-[#424242] text-gray-200 uppercase text-sm sm:p-0'>
+		<div className='flex flex-col sm:flex-row justify-between h-auto sm:justify-center items-center sm:h-8 w-full fixed bottom-0 bg-[#2e2e2e] sm:bg-[#424242] text-gray-200 uppercase text-sm sm:p-0'>
 			<div className='flex flex-col sm:flex-row justify-center gap-2 cursor-pointer mb-2 sm:mb-0 sm:justify-between items-center w-[98%]'>
 				<div className='flex justify-start items-center gap-2 cursor-pointer w-full'>
 					<span className='text-center sm:text-left'>
