@@ -457,7 +457,7 @@ function ConfirmDeleteBookingModal({
 		deleteBooking();
 	};
 	return (
-		<div className='flex flex-col items-center justify-center w-[20vw] bg-white rounded-lg p-4 gap-4'>
+		<div className='flex flex-col items-center justify-center w-[70vw] sm:w-[20vw] bg-white rounded-lg p-4 gap-4'>
 			<div className='flex justify-between items-center  bg-cyan-600 text-white w-full rounded-lg p-2'>
 				<h2 className='text-xl font-semibold bg-cyan-600 text-white w-full'>
 					Discard Booking
