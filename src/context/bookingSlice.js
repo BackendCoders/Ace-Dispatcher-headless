@@ -55,6 +55,7 @@ const initialState = {
 	activeBookingIndex: 0,
 	// isActiveTestMode: true,
 	isGoogleApiOn: false,
+	activeSectionMobileView: 'Booking',
 };
 
 const bookingFormSlice = createSlice({
@@ -139,6 +140,9 @@ const bookingFormSlice = createSlice({
 				state.activeBookingIndex = state.bookings.length - 1;
 			}
 		},
+		setActiveSectionMobileView(state, action) {
+			state.activeSectionMobileView = action.payload;
+		},
 	},
 });
 
@@ -208,6 +212,7 @@ export const {
 	endBooking,
 	setActiveTabChange,
 	// setActiveTestMode,
+	setActiveSectionMobileView,
 	setIsGoogleApiOn,
 	updateBookingData,
 	addDataFromSchedulerInEditMode,

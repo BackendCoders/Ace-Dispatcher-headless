@@ -4,7 +4,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 // Just Displays Information about the Currently Applied Quote
 function QuoteDialog({ onSet, quote }) {
 	return (
-		<div className='flex items-center justify-center w-[20vw] bg-white rounded-lg'>
+		<div className='flex items-center justify-center w-[80vw] sm:w-[20vw] bg-white rounded-lg'>
 			<div className='bg-white p-6 rounded-lg max-w-xs w-full px-12'>
 				<div className='flex justify-center mb-4'>
 					<div className='bg-red-100 rounded-full p-2'>

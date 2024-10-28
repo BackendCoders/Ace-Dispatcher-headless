@@ -207,7 +207,7 @@ function RepeatBooking({ onSet }) {
 	}, [repeatEnd, frequency]);
 
 	return (
-		<form className='p-4 bg-card shadow rounded-lg max-w-lg w-[30vw] mx-auto mt-6 bg-white'>
+		<form className='p-4 bg-card shadow rounded-lg max-w-lg w-[80vw] sm:w-[30vw] mx-auto mt-6 bg-white'>
 			<div className='flex justify-between items-center mb-4'>
 				<p className='text-xl font-bold'>Repeat Booking</p>
 				<div className='flex items-center'></div>

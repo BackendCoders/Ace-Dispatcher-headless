@@ -5,7 +5,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CloseIcon from '@mui/icons-material/Close';
-import { Button } from '@mui/material';
+import { Button, useMediaQuery } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { ResizableBox } from 'react-resizable';
 import 'react-resizable/css/styles.css';
@@ -52,6 +52,11 @@ export default function Push() {
 	const dispatch = useDispatch();
 	const [secondaryTab, setSecondaryTab] = useState(1);
 	const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
+	const activeSectionMobileView = useSelector(
+		(state) => state.bookingForm.activeSectionMobileView
+	);
+
+	const isMobile = useMediaQuery('(max-width:640px)');
 
 	const handleChange = (event, newValue) => {
 		dispatch(setActiveTabChange(newValue));
@@ -171,181 +176,273 @@ export default function Push() {
 					setIsConfirmationModalOpen={setIsConfirmationModalOpen}
 				/>
 			</Modal>
-			<ResizableBox
-				width={(leftWidth / 100) * window.innerWidth}
-				height={window.innerHeight * 0.9}
-				minConstraints={[window.innerWidth * 0.3, window.innerHeight * 0.9]}
-				maxConstraints={[window.innerWidth * 0.7, window.innerHeight * 0.9]}
-				axis='x'
-				resizeHandles={['e']}
-				onResize={handleResize}
-				style={{ display: 'flex', overflow: 'hidden' }}
-			>
+			{isMobile ? (
+				<Box
+					sx={{
+						margin: '0 auto',
+						overflow: 'auto',
+						width: '100%',
+						borderColor: '#e5e7eb',
+						borderWidth: '1px',
+					}}
+				>
+					{showDriverAvailability ? (
+						<Box sx={{ padding: '16px' }}>
+							<CustomDriverAvailabilityChart />
+						</Box>
+					) : (
+						<>
+							{activeSectionMobileView === 'Booking' ? (
+								<>
+									<Tabs
+										value={activeTab}
+										sx={{
+											'backgroundColor': '#e5e7eb',
+											'height': '50px',
+											'& .MuiTabs-flexContainer': {
+												height: '100%',
+											},
+											'& .MuiTab-root': {
+												minHeight: '50px',
+											},
+										}}
+										onChange={handleChange}
+										variant='scrollable'
+										scrollButtons
+										allowScrollButtonsMobile
+										aria-label='scrollable force tabs example'
+									>
+										{data.map((item, index) => {
+											let label =
+												index === 0 ? 'New Booking' : item.phoneNumber;
+											label +=
+												item.bookingType === 'Previous'
+													? ' (New)'
+													: item.bookingType === 'Current'
+													? ' (Edit)'
+													: '';
+											return (
+												<Tab
+													label={label}
+													icon={
+														index !== 0 ? (
+															<CancelIcon
+																color='error'
+																onClick={() => setIsConfirmationModalOpen(true)}
+															/>
+														) : null
+													}
+													iconPosition='end'
+													key={index}
+													style={{
+														color: item.formBusy ? '#B91C1C' : '',
+													}}
+												/>
+											);
+										})}
+									</Tabs>
+									<Box
+										sx={{
+											display: 'flex',
+											justifyContent: 'space-evenly',
+											margin: 'auto',
+											alignContent: 'center',
+										}}
+									>
+										<Booking
+											bookingData={data[activeTab]}
+											key={activeTab}
+											id={activeTab}
+											onBookingUpload={handleBookingUpload}
+										/>
+										<SimpleSnackbar />
+									</Box>
+								</>
+							) : (
+								<Scheduler />
+							)}
+						</>
+					)}
+				</Box>
+			) : (
 				<>
-					{/*  box containg the form*/}
+					<ResizableBox
+						width={(leftWidth / 100) * window.innerWidth}
+						height={window.innerHeight * 0.9}
+						minConstraints={[window.innerWidth * 0.3, window.innerHeight * 0.9]}
+						maxConstraints={[window.innerWidth * 0.7, window.innerHeight * 0.9]}
+						axis='x'
+						resizeHandles={['e']}
+						onResize={handleResize}
+						style={{ display: 'flex', overflow: 'hidden' }}
+					>
+						<>
+							{/*  box containg the form*/}
+							<Box
+								sx={{
+									margin: '0 auto',
+									overflow: 'auto',
+									width: '100%',
+									borderColor: '#e5e7eb',
+									borderWidth: '1px',
+								}}
+							>
+								<Tabs
+									value={activeTab}
+									sx={{
+										'backgroundColor': '#e5e7eb',
+										'height': '50px',
+										'& .MuiTabs-flexContainer': {
+											height: '100%',
+										},
+										'& .MuiTab-root': {
+											minHeight: '50px',
+										},
+									}}
+									onChange={handleChange}
+									variant='scrollable'
+									scrollButtons
+									allowScrollButtonsMobile
+									aria-label='scrollable force tabs example'
+								>
+									{data.map((item, index) => {
+										let label = index === 0 ? 'New Booking' : item.phoneNumber;
+										label +=
+											item.bookingType === 'Previous'
+												? ' (New)'
+												: item.bookingType === 'Current'
+												? ' (Edit)'
+												: '';
+										return (
+											<Tab
+												label={label}
+												icon={
+													index !== 0 ? (
+														<CancelIcon
+															color='error'
+															onClick={() => setIsConfirmationModalOpen(true)}
+														/>
+													) : null
+												}
+												iconPosition='end'
+												key={index}
+												style={{
+													color: item.formBusy ? '#B91C1C' : '',
+												}}
+											/>
+										);
+									})}
+								</Tabs>
+								<Box
+									sx={{
+										display: 'flex',
+										justifyContent: 'space-evenly',
+										margin: 'auto',
+										alignContent: 'center',
+									}}
+								>
+									<Booking
+										bookingData={data[activeTab]}
+										key={activeTab}
+										id={activeTab}
+										onBookingUpload={handleBookingUpload}
+									/>
+									<SimpleSnackbar />
+								</Box>
+							</Box>
+							{showDriverAvailability && (
+								<Box
+									sx={{
+										margin: '0 auto',
+										overflow: 'hidden',
+										width: '50%',
+										borderColor: '#e5e7eb',
+										borderWidth: '1px',
+									}}
+								>
+									<Tabs
+										value={0}
+										sx={{
+											'backgroundColor': '#e5e7eb',
+											'height': '50px',
+											'& .MuiTabs-flexContainer': {
+												height: '100%',
+											},
+											'& .MuiTab-root': {
+												minHeight: '50px',
+											},
+										}}
+										onChange={handleChange}
+										variant='scrollable'
+										scrollButtons
+										allowScrollButtonsMobile
+										aria-label='scrollable force tabs example'
+									>
+										<Tab label='Availability' />
+									</Tabs>
+									<Box
+										sx={{
+											display: 'flex',
+											justifyContent: 'space-evenly',
+											margin: 'auto',
+											alignContent: 'center',
+										}}
+									>
+										<CustomDriverAvailabilityChart />
+									</Box>
+								</Box>
+							)}
+						</>
+					</ResizableBox>
 					<Box
 						sx={{
-							margin: '0 auto',
-							overflow: 'auto',
-							width: '100%',
+							margin: '0vh auto',
+							// height: '90vh',
+							overflow: 'hidden',
+							width: `${100 - leftWidth}%`,
 							borderColor: '#e5e7eb',
 							borderWidth: '1px',
 						}}
 					>
+						{/* driver availibility tab */}
 						<Tabs
-							value={activeTab}
+							value={secondaryTab}
 							sx={{
-								'backgroundColor': '#e5e7eb',
-								'height': '50px',
-								'& .MuiTabs-flexContainer': {
-									height: '100%',
-								},
-								'& .MuiTab-root': {
-									minHeight: '50px',
-								},
+								backgroundColor: '#e5e7eb',
+								position: 'sticky',
+								top: 0,
+								zIndex: 10,
 							}}
-							onChange={handleChange}
+							onChange={(event, newValue) => setSecondaryTab(newValue)}
 							variant='scrollable'
 							scrollButtons
 							allowScrollButtonsMobile
 							aria-label='scrollable force tabs example'
 						>
-							{data.map((item, index) => {
-								let label = index === 0 ? 'New Booking' : item.phoneNumber;
-								label +=
-									item.bookingType === 'Previous'
-										? ' (New)'
-										: item.bookingType === 'Current'
-										? ' (Edit)'
-										: '';
-								return (
-									<Tab
-										label={label}
-										icon={
-											index !== 0 ? (
-												<CancelIcon
-													color='error'
-													onClick={() => setIsConfirmationModalOpen(true)}
-												/>
-											) : null
-										}
-										iconPosition='end'
-										key={index}
-										style={{
-											color: item.formBusy ? '#B91C1C' : '',
-										}}
-									/>
-								);
-							})}
+							{/* <Tab label='Availability' /> */}
+							<Tab label='Map' />
+							<Tab label='Scheduler' />
+							<Tab label='Messages' />
 						</Tabs>
-						<Box
-							sx={{
-								display: 'flex',
-								justifyContent: 'space-evenly',
-								margin: 'auto',
-								alignContent: 'center',
-							}}
-						>
-							<Booking
-								bookingData={data[activeTab]}
-								key={activeTab}
-								id={activeTab}
-								onBookingUpload={handleBookingUpload}
-							/>
-							<SimpleSnackbar />
-						</Box>
-					</Box>
-					{showDriverAvailability && (
-						<Box
-							sx={{
-								margin: '0 auto',
-								overflow: 'hidden',
-								width: '50%',
-								borderColor: '#e5e7eb',
-								borderWidth: '1px',
-							}}
-						>
-							<Tabs
-								value={0}
-								sx={{
-									'backgroundColor': '#e5e7eb',
-									'height': '50px',
-									'& .MuiTabs-flexContainer': {
-										height: '100%',
-									},
-									'& .MuiTab-root': {
-										minHeight: '50px',
-									},
-								}}
-								onChange={handleChange}
-								variant='scrollable'
-								scrollButtons
-								allowScrollButtonsMobile
-								aria-label='scrollable force tabs example'
-							>
-								<Tab label='Availability' />
-							</Tabs>
-							<Box
-								sx={{
-									display: 'flex',
-									justifyContent: 'space-evenly',
-									margin: 'auto',
-									alignContent: 'center',
-								}}
-							>
-								<CustomDriverAvailabilityChart />
-							</Box>
-						</Box>
-					)}
-				</>
-			</ResizableBox>
-
-			{/* box containing the map and driver avialability */}
-			<Box
-				sx={{
-					margin: '0vh auto',
-					// height: '90vh',
-					overflow: 'hidden',
-					width: `${100 - leftWidth}%`,
-					borderColor: '#e5e7eb',
-					borderWidth: '1px',
-				}}
-			>
-				{/* driver availibility tab */}
-				<Tabs
-					value={secondaryTab}
-					sx={{
-						backgroundColor: '#e5e7eb',
-						position: 'sticky',
-						top: 0,
-						zIndex: 10,
-					}}
-					onChange={(event, newValue) => setSecondaryTab(newValue)}
-					variant='scrollable'
-					scrollButtons
-					allowScrollButtonsMobile
-					aria-label='scrollable force tabs example'
-				>
-					{/* <Tab label='Availability' /> */}
-					<Tab label='Map' />
-					<Tab label='Scheduler' />
-					<Tab label='Messages' />
-				</Tabs>
-				{/*secondaryTab === 0 && (
+						{/*secondaryTab === 0 && (
 					<CustomDriverAvailibilityChart />
 					// <div className='rotate-[90deg] mt-48'>
 					// 	<AvailabilityChart />
 					// </div>
 				)*/}
-				{secondaryTab === 0 && (
-					<>
-						<Map />
-						<JourneyQuote quoteOptions={data[activeTab].quoteOptions} />
-					</>
-				)}
-				{secondaryTab === 1 ? <Scheduler /> : null}
-				{secondaryTab === 2 && <DriverSection />}
-			</Box>
+						{secondaryTab === 0 && (
+							<>
+								<Map />
+								<JourneyQuote quoteOptions={data[activeTab].quoteOptions} />
+							</>
+						)}
+						{secondaryTab === 1 ? <Scheduler /> : null}
+						{secondaryTab === 2 && <DriverSection />}
+					</Box>
+				</>
+			)}
+
+			{/* box containing the map and driver avialability */}
 		</Box>
 	);
 }

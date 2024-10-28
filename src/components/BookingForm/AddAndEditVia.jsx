@@ -58,7 +58,7 @@ const AddAndEditVia = ({ onSet }) => {
 	}
 
 	return (
-		<div className='bg-white p-6 rounded-lg shadow-lg w-[25vw] max-w-md mx-auto'>
+		<div className='bg-white p-6 rounded-lg shadow-lg w-[80vw] sm:w-[25vw] max-w-md mx-auto'>
 			<h2 className='text-2xl font-semibold mb-4 flex items-center'>
 				<svg
 					className='h-6 w-6 text-gray-600 mr-2'

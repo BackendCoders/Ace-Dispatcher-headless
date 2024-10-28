@@ -9,7 +9,10 @@ import CallIcon from '@mui/icons-material/Call';
 import Badge from '@mui/material/Badge';
 import { useDispatch, useSelector } from 'react-redux';
 // import { setActiveTestMode, setIsGoogleApiOn } from '../context/bookingSlice';
-import { setIsGoogleApiOn } from '../context/bookingSlice';
+import {
+	setActiveSectionMobileView,
+	setIsGoogleApiOn,
+} from '../context/bookingSlice';
 
 import {
 	handleSearchBooking,
@@ -33,6 +36,7 @@ const Navbar = () => {
 	const callerId = useSelector((state) => state.caller);
 	const { activeSearch } = useSelector((state) => state.scheduler);
 	const [openSearch, setOpenSearch] = useState(false);
+	const [menuOpen, setMenuOpen] = useState(false);
 	// const [searchData, setSearchData] = useState({});
 	// const inputRef = useRef(null);
 
@@ -73,23 +77,34 @@ const Navbar = () => {
 						: 'bg-[#C74949]'
 				}  text-white p-4`}
 			>
-				<span className='flex gap-10'>
+				<span className='flex sm:gap-10 items-center justify-between gap-2 w-full'>
 					<Link
 						to='/pusher'
-						className='text-lg font-bold flex justify-center items-center space-x-2 uppercase'
+						className='flex justify-center items-center space-x-2 uppercase'
 					>
 						<img
 							src={LogoImg}
 							className='flex h-8 w-8'
 						/>
-						<span>Ace Taxis</span>
-						<span>
+						<span className='text-lg font-bold'>Ace Taxis</span>
+						<span className='text-lg hidden sm:block'>
 							{BASE_URL.includes('api.acetaxisdorset') ? '' : 'TEST MODE'}
 						</span>
 					</Link>
+					{/* Mobile Menu Toggle */}
+					<button
+						className='sm:hidden text-2xl focus:outline-none mr-2'
+						onClick={() => setMenuOpen(!menuOpen)}
+					>
+						☰
+					</button>
 				</span>
 
-				<span className='flex gap-10 uppercase text-sm'>
+				<span
+					className={`${
+						menuOpen ? 'flex' : 'hidden'
+					} flex-col sm:flex sm:flex-row items-center justify-end gap-4 sm:gap-10 uppercase text-sm w-[50%]`}
+				>
 					{!isAuth ? (
 						<></>
 					) : (
@@ -107,20 +122,31 @@ const Navbar = () => {
 							{/* Search Form Started here */}
 							<div className='flex justify-center items-center uppercase'>
 								{!activeSearch && (
-									<button onClick={() => setOpenSearch(true)}>Search</button>
+									<button
+										onClick={() => setOpenSearch(true)}
+										// className='text-sm'
+									>
+										Search
+									</button>
 								)}
 								{activeSearch && (
-									<button onClick={handleCancelSearch}>Cancel Search</button>
+									<button
+										onClick={handleCancelSearch}
+										// className='text-sm'
+									>
+										Cancel Search
+									</button>
 								)}
 							</div>
 
-							<span className='flex flex-row gap-2 items-center align-middle'>
-								<span>Use Google Api</span>
+							<span className='flex gap-2 items-center'>
+								<span className='text-xs sm:text-sm'>Use Google Api</span>
 								<Switch
 									checked={isGoogleApiOn}
 									onChange={(e) => {
 										dispatch(setIsGoogleApiOn(e.target.checked));
 									}}
+									size='small'
 								/>
 							</span>
 
@@ -136,18 +162,117 @@ const Navbar = () => {
 							</span> */}
 
 							{/* Logout Button */}
-							<button
-								className='bg-blue-500 text-white px-4 py-2 rounded-lg uppercase text-sm'
-								onClick={() => {
-									logout();
-									navigate('/login');
-								}}
-							>
-								logout
-							</button>
+							{isAuth && (
+								<button
+									className='bg-blue-500 text-white px-4 py-2 rounded-lg uppercase text-xs sm:text-sm'
+									onClick={() => {
+										logout();
+										navigate('/login');
+									}}
+								>
+									logout
+								</button>
+							)}
 						</div>
 					)}
 				</span>
+				<div
+					className={`fixed inset-y-0 right-0 z-50 w-3/4 max-w-xs bg-[#C74949] text-white p-4 transform ${
+						menuOpen ? 'translate-x-0' : 'translate-x-full'
+					} transition-transform duration-300 ease-in-out sm:hidden`}
+				>
+					<div className='flex justify-between items-center mb-6 mr-4'>
+						<span className='text-lg font-bold'>Menu</span>
+						<button
+							onClick={() => setMenuOpen(false)}
+							className='text-2xl'
+						>
+							✕
+						</button>
+					</div>
+
+					{/* Caller ID Badge */}
+					{isAuth && callerId.length > 0 && (
+						<Badge
+							badgeContent={callerId.length}
+							color='error'
+							className='cursor-pointer animate-bounce mb-4'
+						>
+							<CallIcon />
+						</Badge>
+					)}
+
+					<div className='flex gap-4 mb-4'>
+						<button
+							onClick={() => {
+								dispatch(setActiveSectionMobileView('Booking'));
+								setMenuOpen(false);
+							}}
+						>
+							Booking
+						</button>
+					</div>
+					<div className='flex gap-4 mb-4'>
+						<button
+							onClick={() => {
+								dispatch(setActiveSectionMobileView('Scheduler'));
+								setMenuOpen(false);
+							}}
+						>
+							Scheduler
+						</button>
+					</div>
+
+					{/* Search Button */}
+					<div className='flex justify-start items-center uppercase mb-4'>
+						{!activeSearch ? (
+							<button
+								onClick={() => {
+									setOpenSearch(true);
+									setMenuOpen(false);
+								}}
+							>
+								Search
+							</button>
+						) : (
+							<button onClick={handleCancelSearch}>Cancel Search</button>
+						)}
+					</div>
+
+					{/* Google API Toggle */}
+					<div className='flex justify-start items-center gap-2 mb-4'>
+						<span>Use Google Api</span>
+						<Switch
+							checked={isGoogleApiOn}
+							onChange={(e) => {
+								dispatch(setIsGoogleApiOn(e.target.checked));
+								setMenuOpen(false);
+							}}
+						/>
+					</div>
+
+					{/* Logout Button */}
+					{isAuth && (
+						<button
+							className='bg-blue-500 px-4 py-2 rounded-md uppercase'
+							onClick={() => {
+								logout();
+								navigate('/login');
+								setMenuOpen(false);
+							}}
+						>
+							Logout
+						</button>
+					)}
+				</div>
+
+				{/* Overlay for closing the panel */}
+				{menuOpen && (
+					<div
+						className='fixed inset-0 z-30 bg-black opacity-50'
+						onClick={() => setMenuOpen(false)}
+					></div>
+				)}
 			</nav>
 		</>
 	);
@@ -217,7 +342,7 @@ function SearchModal({ setOpenSearch }) {
 	}, [reset, isSubmitSuccessful]);
 
 	return (
-		<div className='bg-white p-6 rounded-lg shadow-lg w-[25vw] max-w-md mx-auto'>
+		<div className='bg-white p-6 rounded-lg shadow-lg w-[90vw] sm:w-[25vw] max-w-md mx-auto'>
 			<h2 className='text-2xl font-semibold mb-4 flex items-center'>
 				<SearchIcon />
 				Search Bookings
@@ -344,7 +469,7 @@ function SearchModal({ setOpenSearch }) {
 					/>
 				</Box>
 
-				<div className='mt-4 flex flex-row gap-1'>
+				<div className='mt-4 flex gap-1'>
 					<LongButton
 						type='submit'
 						color='bg-green-700'

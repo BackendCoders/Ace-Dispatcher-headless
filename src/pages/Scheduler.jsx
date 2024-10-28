@@ -27,7 +27,7 @@ import LocalTaxiOutlinedIcon from '@mui/icons-material/LocalTaxiOutlined';
 import CurrencyPoundOutlinedIcon from '@mui/icons-material/CurrencyPoundOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import isLightColor from '../utils/isLight';
-import { Switch } from '@mui/material';
+import { Switch, useMediaQuery } from '@mui/material';
 import {
 	changeActiveDate,
 	completeActiveBookingStatus,
@@ -40,6 +40,7 @@ import Loader from '../components/Loader';
 import { getAllDrivers } from '../utils/apiReq';
 
 const AceScheduler = () => {
+	const isMobile = useMediaQuery('(max-width: 640px)');
 	// taking our global states from the redux
 	const {
 		bookings,
@@ -186,7 +187,7 @@ const AceScheduler = () => {
 			{searchLoading && <Loader />}
 			<ScheduleComponent
 				firstDayOfWeek={1}
-				height={window.innerHeight - 150}
+				height={isMobile ? '80vh' : window.innerHeight - 150}
 				currentView={activeSearch ? 'Agenda' : 'Day'}
 				selectedDate={activeDate}
 				navigating={(args) =>
@@ -231,10 +232,10 @@ const AceScheduler = () => {
 				<Inject services={[Day, Agenda]} />
 			</ScheduleComponent>
 			{/* Changed by Tanya - (9 Aug) */}
-			<div className='flex justify-end w-[10%] fixed top-[125px] right-[160px] z-[1000]'>
+			<div className='flex justify-end w-[10%] fixed top-[110px] right-[0px] sm:top-[125px] sm:right-[160px] z-[40]'>
 				{!activeSearch && (
 					<span className='flex flex-row gap-2 items-center align-middle'>
-						<span className='select-none whitespace-nowrap text-sm uppercase font-normal'>
+						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
 							Show Completed
 						</span>
 						<Switch

@@ -35,7 +35,7 @@ function ListDrivers({ setOpen }) {
 	}
 
 	return (
-		<div className='bg-gray-100 w-[25vw] px-2 py-10 rounded'>
+		<div className='bg-gray-100 w-[80vw] sm:w-[25vw] px-2 py-10 rounded'>
 			<div className='header flex w-full flex-col gap-5 text-center text-gray-700'>
 				<div className=''>
 					<p className='text-5xl'>
@@ -63,7 +63,7 @@ function ListDrivers({ setOpen }) {
 									></div>
 									<div className='flex flex-col w-[60%] justify-center items-start'>
 										<p className='text-[1rem]'>
-											({el?.id}) - {el?.fullName}{" "} 
+											({el?.id}) - {el?.fullName}{' '}
 											{el?.vehicleType === 0
 												? ''
 												: el?.vehicleType === 1

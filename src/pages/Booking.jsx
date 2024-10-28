@@ -388,7 +388,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 					</Modal>
 					<SimpleSnackbar />
 				</>
-				<div className='max-w-3xl mx-auto bg-card pb-4 px-4 rounded-lg shadow-lg'>
+				<div className='max-w-3xl mx-auto bg-card pb-4 px-4 rounded-lg shadow-lg mb-20 sm:mb-0'>
 					<div className='flex items-center justify-between mb-4'>
 						<div className='flex gap-5 flex-col md:flex-row'>
 							<input
@@ -594,8 +594,8 @@ function Booking({ bookingData, id, onBookingUpload }) {
 						</LongButton>
 					</div>
 
-					<div className='grid grid-cols-1 md:grid-cols-4 place-content-center gap-4 mb-4 '>
-						<div className='flex items-center gap-2'>
+					<div className='grid grid-cols-1 md:grid-cols-4 sm:place-content-center place-content-start gap-4 mb-4 '>
+						<div className='flex sm:items-center items-start gap-2'>
 							{/* <span>£</span> */}
 							<Input
 								type='number'
@@ -620,12 +620,12 @@ function Booking({ bookingData, id, onBookingUpload }) {
 							/>
 						</div>
 
-						<div className='flex items-center justify-center'>
+						<div className='flex sm:items-center sm:justify-center'>
 							<label className='mr-2'>Passengers</label>
 							<select
 								value={bookingData.passengers}
 								onChange={(e) => updateData('passengers', e.target.value)}
-								className='min-w-[45%] bg-input text-foreground p-2 rounded-lg border border-border'
+								className='sm:min-w-[45%] bg-input text-foreground p-2 rounded-lg border border-border'
 							>
 								<option value={1}>1</option>
 								<option value={2}>2</option>
@@ -649,7 +649,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 							/>
 						</label> */}
 
-						<div className='flex items-center justify-center'>
+						<div className='flex sm:items-center sm:justify-center'>
 							<span className='mr-2 select-none'>All Day</span>
 							<input
 								type='checkbox'
@@ -658,7 +658,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 								className='form-checkbox h-5 w-5 text-primary'
 							/>
 						</div>
-						<div className='flex justify-center items-center'>
+						<div className='flex sm:justify-center sm:items-center'>
 							{bookingData.scope !== 1 && (
 								<>
 									{bookingData.price ? (
