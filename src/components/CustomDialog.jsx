@@ -8,7 +8,10 @@ import CompleteBookingModal from './CustomDialogButtons/CompleteBookingModal';
 import DeleteBookingModal from './CustomDialogButtons/DeleteBookingModal';
 import DuplicateBookingModal from './CustomDialogButtons/DuplicateBookingModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { addDataFromSchedulerInEditMode } from '../context/bookingSlice';
+import {
+	addDataFromSchedulerInEditMode,
+	setActiveSectionMobileView,
+} from '../context/bookingSlice';
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
@@ -319,14 +322,17 @@ function CustomDialog({ closeDialog }) {
 					/>
 					<BookingButton
 						onClick={() => {
-							if (data.recurrenceRule) setEditBookingModal(true);
-							else {
+							if (data.recurrenceRule) {
+								setEditBookingModal(true);
+								dispatch(setActiveSectionMobileView('Booking'));
+							} else {
 								const filterData = {
 									...data,
 									recurrenceID: '',
 									recurrenceRule: '',
 								};
 								dispatch(addDataFromSchedulerInEditMode(filterData));
+								dispatch(setActiveSectionMobileView('Booking'));
 								closeDialog(false);
 							}
 						}}
