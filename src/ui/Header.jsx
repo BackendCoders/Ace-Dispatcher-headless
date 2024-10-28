@@ -181,7 +181,7 @@ const Navbar = () => {
 						menuOpen ? 'translate-x-0' : 'translate-x-full'
 					} transition-transform duration-300 ease-in-out sm:hidden`}
 				>
-					<div className='flex justify-between items-center mb-6 mr-4'>
+					<div className='flex justify-between items-center mb-6 mr-10'>
 						<span className='text-lg font-bold'>Menu</span>
 						<button
 							onClick={() => setMenuOpen(false)}
