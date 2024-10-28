@@ -1,7 +1,7 @@
 /** @format */
 
 import { useState, useEffect, useCallback } from 'react';
-import { useBooking } from '../hooks/useBooking';
+// import { useBooking } from '../hooks/useBooking';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeCaller } from '../context/callerSlice';
 
@@ -82,7 +82,7 @@ const BookingTable = ({ onConfirm, onSet, numBooking }) => {
 	console.log(activeTab);
 
 	return (
-		<div className='w-[55vw] fixed right-[-150px] top-[-150px] bg-white rounded-lg shadow-lg p-5'>
+		<div className='w-[90vw] sm:w-[55vw] fixed right-[-150px] top-[-150px] bg-white rounded-lg shadow-lg p-5'>
 			<div className='flex justify-between'>
 				<h2 className='text-xl font-semibold mb-4 '>
 					📞 ({bookings.Telephone})
