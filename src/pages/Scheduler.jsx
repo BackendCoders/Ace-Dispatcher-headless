@@ -99,9 +99,11 @@ const AceScheduler = () => {
 			);
 			// Use a 0-degree gradient for soft allocation
 			args.element.style.background = `repeating-linear-gradient(0deg, ${driverColor}, ${driverColor} 10px, rgb(187, 187, 187) 20px)`;
+			args.element.style.backgroundColor = driverColor;
 		} else if (args.data.userId && args.data.status === 1) {
 			// Use a -40-degree gradient for normal allocation
 			args.element.style.background = `repeating-linear-gradient(-40deg, ${driverColor}, ${driverColor} 10px, rgb(187, 187, 187) 20px)`;
+			args.element.style.backgroundColor = driverColor;
 		} else {
 			// No gradient, just set the color
 			args.element.style.backgroundColor = driverColor;
@@ -133,19 +135,17 @@ const AceScheduler = () => {
 	useEffect(() => {
 		async function helper() {
 			dispatch(getRefreshedBookings());
+			getAllDrivers().then((res) => {
+				const driverUsers = [
+					{ id: 0, fullName: 'Unallocated', colorRGB: '#795548' },
+					...res.users,
+				];
+				setDriverData(driverUsers);
+			});
 		}
 		helper();
 	}, [activeDate, dispatch, activeComplete]);
 	// }, [activeTestMode, activeDate, dispatch, activeComplete]);
-	useEffect(() => {
-		getAllDrivers().then((res) => {
-			const driverUsers = [
-				{ id: 0, fullName: 'Unallocated', colorRGB: '#795548' },
-				...res.users,
-			];
-			setDriverData(driverUsers);
-		});
-	}, []);
 	// refresh the booking every 10000 (10 sec)
 	useEffect(() => {
 		async function helper() {
