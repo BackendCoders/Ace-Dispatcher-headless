@@ -51,8 +51,8 @@ function CustomDialog({ closeDialog }) {
 	};
 
 	return (
-		<div className='fixed left-[-35vw] inset-0 w-[70vw] mx-auto z-50 flex items-center justify-center p-4 bg-background bg-opacity-50'>
-			<div className='relative w-full max-w-7xl p-6 bg-card rounded-lg shadow-lg dark:bg-popover bg-white max-h-[90vh]'>
+		<div className='fixed sm:left-[-35vw] left-[-45vw] inset-0 w-[90vw] sm:w-[70vw] mx-auto z-50 flex items-center justify-center p-1 sm:p-4 bg-background bg-opacity-50'>
+			<div className='relative w-full max-w-7xl p-3 sm:p-6 bg-card rounded-lg shadow-lg dark:bg-popover bg-white max-h-[90vh] overflow-y-auto sm:overflow-hidden'>
 				<div className='flex items-center justify-between mb-6'>
 					<h2 className='text-lg font-medium text-card'>
 						BookingId:{' '}
@@ -62,7 +62,7 @@ function CustomDialog({ closeDialog }) {
 					</h2>
 
 					<button
-						className='rounded-full p-2'
+						className='rounded-full p-1 sm:p-2'
 						onClick={() => {
 							closeDialog();
 							dispatch(setActiveSearchResultClicked(null));
@@ -71,7 +71,7 @@ function CustomDialog({ closeDialog }) {
 						<CancelRoundedIcon />
 					</button>
 				</div>
-				<div className='p-4 grid grid-cols-2 place-content-between gap-4 mt-4 border border-card dark:border-popover max-h-[70vh] overflow-scroll'>
+				<div className='p-4 grid grid-cols-1 sm:grid-cols-2 place-content-between gap-4 mt-4 border border-card dark:border-popover max-h-[70vh] overflow-scroll'>
 					<div className='w-[100%]'>
 						<div className='flex flex-col w-full gap-4'>
 							<div className='border border-card p-4 shadow-md rounded-lg bg-[#F3F4F6]'>
@@ -276,7 +276,7 @@ function CustomDialog({ closeDialog }) {
 
 										<div>
 											<div className='flex w-full items-start mb-4'>
-												<p className='text-md font-medium pr-2 w-[30%] flex justify-end items-end'>
+												<p className='text-md font-medium pr-2 sm:w-[30%] flex justify-end items-end'>
 													Booked By:{' '}
 												</p>
 												<span
@@ -429,10 +429,10 @@ function getTodayInEnGbFormat(date) {
 const BookingOption = ({ text, head }) => {
 	return (
 		<div className='flex items-start mb-1 w-full'>
-			<p className='text-md font-medium pr-2 whitespace-nowrap w-[30%] flex justify-end items-end'>
+			<p className='text-md font-medium pr-2 sm:whitespace-nowrap sm:w-[30%] flex justify-start sm:justify-end sm:items-end'>
 				{head}:{' '}
 			</p>
-			<span className='text-card dark:text-popover-foreground text-[1rem] w-[70%] flex justify-start items-start'>
+			<span className='text-card dark:text-popover-foreground text-[1rem] sm:w-[70%] flex sm:justify-start sm:items-start'>
 				{text}
 			</span>
 		</div>
