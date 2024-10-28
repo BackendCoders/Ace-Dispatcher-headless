@@ -50,7 +50,7 @@ function Footer() {
 					</div>
 
 					{/* <div className='border border-gray-500 px-1'>F1-Availability</div> */}
-					<div className='sm:flex flex-row gap-2'>
+					<div className='hidden sm:flex flex-row gap-2'>
 						<div className='border border-gray-500 px-1'>F1-Map</div>
 						<div className='border border-gray-500 px-1'>F2-Scheduler</div>
 						<div className='border border-gray-500 px-1'>F3-Messages</div>

@@ -46,7 +46,7 @@ const WrapperDiv = function () {
 	console.log('driver availability data', data);
 	return (
 		<div
-			className={`h-full w-full bg-white mx-auto mt-6 flex justify-center items-center shadow-lg rounded-md`}
+			className={`h-full w-full bg-white mx-auto mt-6 flex justify-center items-center shadow-lg rounded-md mb-4 sm:mb-0`}
 		>
 			<div className='flex h-full w-full'>
 				<div className='flex flex-col h-[75vh] w-10 border-r border-r-gray-400'>
