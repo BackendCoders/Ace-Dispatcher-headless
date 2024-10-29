@@ -324,7 +324,6 @@ function CustomDialog({ closeDialog }) {
 						onClick={() => {
 							if (data.recurrenceRule) {
 								setEditBookingModal(true);
-								dispatch(setActiveSectionMobileView('Booking'));
 							} else {
 								const filterData = {
 									...data,

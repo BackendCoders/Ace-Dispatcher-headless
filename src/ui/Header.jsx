@@ -2,7 +2,7 @@
 
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { Box, Switch, TextField } from '@mui/material';
+import { Box, Switch, TextField, useMediaQuery } from '@mui/material';
 import { useEffect, useState } from 'react';
 import Modal from '../components/Modal';
 import CallIcon from '@mui/icons-material/Call';
@@ -281,6 +281,7 @@ const Navbar = () => {
 export default Navbar;
 
 function SearchModal({ setOpenSearch }) {
+	const isMobile = useMediaQuery('(max-width: 640px)');
 	const dispatch = useDispatch();
 	const {
 		register,
@@ -321,7 +322,11 @@ function SearchModal({ setOpenSearch }) {
 			newinputData.details
 		) {
 			dispatch(handleSearchBooking(newinputData));
-			setOpenSearch(false); // Close the modal after search
+			if (isMobile) {
+				setActiveSectionMobileView('Scheduler');
+			}
+			setOpenSearch(false);
+			// Close the modal after search
 		} else {
 			console.log('Please enter search criteria');
 		}

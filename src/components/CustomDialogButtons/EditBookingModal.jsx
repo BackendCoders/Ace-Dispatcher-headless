@@ -2,7 +2,10 @@
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import { Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { addDataFromSchedulerInEditMode } from '../../context/bookingSlice';
+import {
+	addDataFromSchedulerInEditMode,
+	setActiveSectionMobileView,
+} from '../../context/bookingSlice';
 
 function EditBookingModal({ setEditBookingModal, closeDialog }) {
 	const dispatch = useDispatch();
@@ -23,12 +26,15 @@ function EditBookingModal({ setEditBookingModal, closeDialog }) {
 			editBlock: false,
 		};
 		dispatch(addDataFromSchedulerInEditMode(filterData));
+		dispatch(setActiveSectionMobileView('Booking'));
 		closeDialog(false);
 		setEditBookingModal(false);
 	}
 	function handleEditAll() {
 		console.log('Handle edit all booking Data', data);
 		dispatch(addDataFromSchedulerInEditMode({ editBlock: true, ...data }));
+		dispatch(setActiveSectionMobileView('Booking'));
+
 		closeDialog(false);
 		setEditBookingModal(false);
 	}
