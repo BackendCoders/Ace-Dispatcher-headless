@@ -4,6 +4,10 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeShowDriverAvailability } from '../context/schedulerSlice';
+import { setActiveSectionMobileView } from '../context/bookingSlice';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import EditCalendarIcon from '@mui/icons-material/EditCalendar';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 function Footer() {
 	const user = useAuth();
@@ -26,7 +30,7 @@ function Footer() {
 
 	return (
 		<div className='flex flex-col sm:flex-row justify-between h-auto sm:justify-center items-center sm:h-8 w-full fixed bottom-0 bg-[#2e2e2e] sm:bg-[#424242] text-gray-200 uppercase text-sm sm:p-0'>
-			<div className='flex flex-col sm:flex-row justify-center gap-2 cursor-pointer mb-2 sm:mb-0 sm:justify-between items-center w-[98%]'>
+			<div className='hidden sm:flex flex-col sm:flex-row justify-center gap-2 cursor-pointer mb-2 sm:mb-0 sm:justify-between items-center w-[98%]'>
 				<div className='flex justify-start items-center gap-2 cursor-pointer w-full'>
 					<span className='text-center sm:text-left'>
 						{user.currentUser?.fullName}
@@ -67,6 +71,43 @@ function Footer() {
 						<div className='mt-[-3px] text-[12px]'>{date}</div>
 					</div>
 				</div>
+			</div>
+
+			{/* for Mobile View */}
+			<div className='sm:hidden flex justify-around items-center w-full py-3 bg-[#C74949]'>
+				<button
+					className='flex flex-col items-center text-gray-200'
+					onClick={() =>
+						dispatch(changeShowDriverAvailability(!showDriverAvailability))
+					}
+				>
+					<EventAvailableIcon />
+					<span className='font-medium'>Availability</span>
+				</button>
+				<button
+					className='flex flex-col items-center text-gray-200'
+					onClick={() => {
+						if (showDriverAvailability) {
+							dispatch(changeShowDriverAvailability(!showDriverAvailability));
+						}
+						dispatch(setActiveSectionMobileView('Booking'));
+					}}
+				>
+					<EditCalendarIcon />
+					<span className='font-medium'>Booking</span>
+				</button>
+				<button
+					className='flex flex-col items-center text-gray-200'
+					onClick={() => {
+						if (showDriverAvailability) {
+							dispatch(changeShowDriverAvailability(!showDriverAvailability));
+						}
+						dispatch(setActiveSectionMobileView('Scheduler'));
+					}}
+				>
+					<CalendarMonthIcon />
+					<span className='font-medium'>Scheduler</span>
+				</button>
 			</div>
 		</div>
 	);
