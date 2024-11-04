@@ -21,7 +21,8 @@ import {
 	setActiveSoftAllocate,
 } from '../context/schedulerSlice';
 import { useAuth } from '../hooks/useAuth';
-import { bookingPayment } from '../utils/apiReq';
+import { bookingPayment, smsQueuePayment } from '../utils/apiReq';
+import { openSnackbar } from '../context/snackbarSlice';
 function CustomDialog({ closeDialog }) {
 	const [allocateModal, setAllocateModal] = useState(false);
 	const [isCompleteBookingModal, setIsCompleteBookingModal] = useState(false);
@@ -65,7 +66,22 @@ function CustomDialog({ closeDialog }) {
 				date: new Date().toISOString().split('T')[0],
 			});
 			// Redirect the user to the payment URL returned by the server
-			window.location.href = response.data.paymentUrl;
+			// window.location.href = response.data.paymentUrl;
+			console.log('payment link', {
+				// telephone: data.phoneNumber,
+				telephone: '07572382366',
+				link: response.data.paymentUrl,
+			});
+			const result = await smsQueuePayment({
+				// telephone: data.phoneNumber,
+				telephone: '07572382366',
+				link: response.data.paymentUrl,
+			});
+
+			console.log('result', result);
+			if (result === 'sent') {
+				dispatch(openSnackbar('Payment link sent', 'success'));
+			}
 		} catch (error) {
 			console.error('Payment error:', error);
 		}
@@ -302,7 +318,7 @@ function CustomDialog({ closeDialog }) {
 														onClick={handlePayClick}
 														className='px-3 py-1 text-white bg-green-500 hover:bg-opacity-80 rounded-lg text-[1rem]'
 													>
-														Pay Now
+														Send Payment Link
 													</button>
 												)}
 											</span>

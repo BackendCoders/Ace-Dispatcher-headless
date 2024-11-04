@@ -553,6 +553,40 @@ async function bookingPayment(data) {
 	return response;
 }
 
+async function smsQueuePayment(paymentDetail) {
+	const URL = `${BASE}/api/SmsQue/PaymentLink`;
+	const accessToken = localStorage.getItem('authToken');
+
+	// Check if token is available
+	if (!accessToken) {
+		console.error('Authorization token is missing.');
+		return { status: 'fail', message: 'Unauthorized: No token provided' };
+	}
+
+	try {
+		// Send GET request with headers and params
+		const response = await axios.get(URL, {
+			headers: {
+				'Accept': '*/*',
+				'Authorization': `Bearer ${accessToken}`,
+				'Content-Type': 'application/json',
+			},
+			params: paymentDetail, // Use 'params' for GET request query parameters
+		});
+
+		return response.data;
+	} catch (error) {
+		console.error(
+			'Error in smsQueuePayment:',
+			error?.response?.data || error.message
+		);
+		return {
+			status: 'fail',
+			message: error?.response?.data || 'Failed to send SMS payment link',
+		};
+	}
+}
+
 export {
 	getBookingData,
 	makeBooking,
@@ -574,4 +608,5 @@ export {
 	findBookingById,
 	getAddressDetails,
 	bookingPayment,
+	smsQueuePayment,
 };
