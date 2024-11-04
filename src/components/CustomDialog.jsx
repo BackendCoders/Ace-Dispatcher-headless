@@ -21,6 +21,7 @@ import {
 	setActiveSoftAllocate,
 } from '../context/schedulerSlice';
 import { useAuth } from '../hooks/useAuth';
+import { bookingPayment } from '../utils/apiReq';
 function CustomDialog({ closeDialog }) {
 	const [allocateModal, setAllocateModal] = useState(false);
 	const [isCompleteBookingModal, setIsCompleteBookingModal] = useState(false);
@@ -51,6 +52,23 @@ function CustomDialog({ closeDialog }) {
 			)
 		);
 		closeDialog();
+	};
+
+	const handlePayClick = async () => {
+		console.log('Pay now', data);
+		try {
+			const response = await bookingPayment({
+				amount: parseFloat(data.price),
+				customer_email: data.email || '',
+				pickup: data.pickupAddress,
+				passenger: data.passengerName,
+				date: new Date().toISOString().split('T')[0],
+			});
+			// Redirect the user to the payment URL returned by the server
+			window.location.href = response.data.paymentUrl;
+		} catch (error) {
+			console.error('Payment error:', error);
+		}
 	};
 
 	return (
@@ -252,18 +270,44 @@ function CustomDialog({ closeDialog }) {
 												head='Repeat Booking'
 											/>
 										)}
-										<BookingOption
-											text={
-												data.paymentStatus === 0
+
+										{/* <BookingOption
+												text={
+													data.paymentStatus === 0
+														? 'Not Paid'
+														: data.paymentStatus === 1
+														? 'Paid'
+														: data.paymentStatus === 2
+														? 'Awaiting payment'
+														: ''
+												}
+												head='Payment Status'
+											/> */}
+										<div className='flex w-full items-center mb-1'>
+											<p className='text-md font-medium pr-2 sm:w-[30%] flex justify-end items-end'>
+												Payment Status:{' '}
+											</p>
+											<span
+												className={`text-card dark:text-popover-foreground text-[1rem]`}
+											>
+												{data.paymentStatus === 0
 													? 'Not Paid'
 													: data.paymentStatus === 1
 													? 'Paid'
 													: data.paymentStatus === 2
 													? 'Awaiting payment'
-													: ''
-											}
-											head='Payment Status'
-										/>
+													: ''}{' '}
+												{data.paymentStatus === 0 && (
+													<button
+														onClick={handlePayClick}
+														className='px-3 py-1 text-white bg-green-500 hover:bg-opacity-80 rounded-lg text-[1rem]'
+													>
+														Pay Now
+													</button>
+												)}
+											</span>
+										</div>
+
 										<BookingOption
 											text={
 												data.confirmationStatus === 0

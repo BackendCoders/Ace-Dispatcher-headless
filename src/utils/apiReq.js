@@ -521,6 +521,38 @@ async function findBookingById(bookingId) {
 	return await handleGetReq(URL);
 }
 
+async function bookingPayment(data) {
+	console.log(data);
+
+	const response = await axios.post(
+		'https://revolut-payment-integration.onrender.com/api/create-payment',
+		{
+			amount: data.amount,
+			currency: 'GBP',
+			description: 'Ace Taxi Journey',
+			customer_email: data.customer_email,
+			// customer_email: 'test@gmail.com',
+
+			pickup: data.pickup,
+			passenger: data.passenger,
+			date: data.date,
+		}
+	);
+
+	if (response.status === 'success')
+		sendLogs(
+			{
+				url: URL,
+				requestBody: data,
+				headers: setHeaders(),
+				response: response,
+			},
+			'info'
+		);
+
+	return response;
+}
+
 export {
 	getBookingData,
 	makeBooking,
@@ -541,4 +573,5 @@ export {
 	bookingFindByBookings,
 	findBookingById,
 	getAddressDetails,
+	bookingPayment,
 };
