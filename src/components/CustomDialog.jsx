@@ -21,7 +21,7 @@ import {
 	setActiveSoftAllocate,
 } from '../context/schedulerSlice';
 import { useAuth } from '../hooks/useAuth';
-import { bookingPayment, smsQueuePayment } from '../utils/apiReq';
+import { sendPaymentLink } from '../utils/apiReq';
 import { openSnackbar } from '../context/snackbarSlice';
 function CustomDialog({ closeDialog }) {
 	const [allocateModal, setAllocateModal] = useState(false);
@@ -58,13 +58,13 @@ function CustomDialog({ closeDialog }) {
 	const handlePayClick = async () => {
 		// console.log('Pay now', data);
 		try {
-			const response = await bookingPayment({
-				amount: parseFloat(data.price),
-				customer_email: data.email || '',
-				pickup: data.pickupAddress,
-				passenger: data.passengerName,
-				date: new Date().toISOString().split('T')[0],
-			});
+			// const response = await bookingPayment({
+			// 	amount: parseFloat(data.price),
+			// 	customer_email: data.email || '',
+			// 	pickup: data.pickupAddress,
+			// 	passenger: data.passengerName,
+			// 	date: new Date().toISOString().split('T')[0],
+			// });
 			// Redirect the user to the payment URL returned by the server
 			// window.location.href = response.data.paymentUrl;
 			// console.log('payment link', {
@@ -72,11 +72,15 @@ function CustomDialog({ closeDialog }) {
 			// 	telephone: '07572382366',
 			// 	link: response.data.paymentUrl,
 			// });
-			const link = response.data.paymentUrl;
-			const result = await smsQueuePayment({
-				// telephone: data.phoneNumber,
-				telephone: '07572382366',
-				link: link,
+			// const link = response.data.paymentUrl;
+			const result = await sendPaymentLink({
+				telephone: data.phoneNumber,
+				bookingId: data.bookingId,
+				// telephone: '07572382366',
+				name: data.passengerName,
+				email: data.email,
+				price: data.price,
+				pickup: data.pickupAddress,
 			});
 
 			console.log('result', result);

@@ -551,9 +551,9 @@ async function bookingPayment(data) {
 	return response;
 }
 
-async function smsQueuePayment(paymentDetail) {
-	const { telephone, link } = paymentDetail;
-	const URL = `${BASE}/api/SmsQue/PaymentLink?telephone=${telephone}&link=${link}`;
+async function sendPaymentLink(paymentDetail) {
+	const { telephone, pickup, bookingId, name, email, price } = paymentDetail;
+	const URL = `${BASE}/api/Bookings/PaymentLink?telephone=${telephone}&bookingId=${bookingId}&pickup=${pickup}&name=${name}&email=${email}&price=${price}`;
 	return await handleGetReq(URL);
 }
 
@@ -578,5 +578,5 @@ export {
 	findBookingById,
 	getAddressDetails,
 	bookingPayment,
-	smsQueuePayment,
+	sendPaymentLink,
 };
