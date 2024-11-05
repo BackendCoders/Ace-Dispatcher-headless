@@ -522,7 +522,7 @@ async function findBookingById(bookingId) {
 }
 
 async function bookingPayment(data) {
-	console.log(data);
+	// console.log(data);
 
 	const response = await axios.post(
 		'https://revolut-payment-integration.onrender.com/api/create-payment',
@@ -531,8 +531,6 @@ async function bookingPayment(data) {
 			currency: 'GBP',
 			description: 'Ace Taxi Journey',
 			customer_email: data.customer_email,
-			// customer_email: 'test@gmail.com',
-
 			pickup: data.pickup,
 			passenger: data.passenger,
 			date: data.date,
@@ -554,37 +552,9 @@ async function bookingPayment(data) {
 }
 
 async function smsQueuePayment(paymentDetail) {
-	const URL = `${BASE}/api/SmsQue/PaymentLink`;
-	const accessToken = localStorage.getItem('authToken');
-
-	// Check if token is available
-	if (!accessToken) {
-		console.error('Authorization token is missing.');
-		return { status: 'fail', message: 'Unauthorized: No token provided' };
-	}
-
-	try {
-		// Send GET request with headers and params
-		const response = await axios.get(URL, {
-			headers: {
-				'Accept': '*/*',
-				'Authorization': `Bearer ${accessToken}`,
-				'Content-Type': 'application/json',
-			},
-			params: paymentDetail, // Use 'params' for GET request query parameters
-		});
-
-		return response.data;
-	} catch (error) {
-		console.error(
-			'Error in smsQueuePayment:',
-			error?.response?.data || error.message
-		);
-		return {
-			status: 'fail',
-			message: error?.response?.data || 'Failed to send SMS payment link',
-		};
-	}
+	const { telephone, link } = paymentDetail;
+	const URL = `${BASE}/api/SmsQue/PaymentLink?telephone=${telephone}&link=${link}`;
+	return await handleGetReq(URL);
 }
 
 export {

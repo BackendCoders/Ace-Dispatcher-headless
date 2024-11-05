@@ -56,7 +56,7 @@ function CustomDialog({ closeDialog }) {
 	};
 
 	const handlePayClick = async () => {
-		console.log('Pay now', data);
+		// console.log('Pay now', data);
 		try {
 			const response = await bookingPayment({
 				amount: parseFloat(data.price),
@@ -67,15 +67,16 @@ function CustomDialog({ closeDialog }) {
 			});
 			// Redirect the user to the payment URL returned by the server
 			// window.location.href = response.data.paymentUrl;
-			console.log('payment link', {
-				// telephone: data.phoneNumber,
-				telephone: '07572382366',
-				link: response.data.paymentUrl,
-			});
+			// console.log('payment link', {
+			// 	// telephone: data.phoneNumber,
+			// 	telephone: '07572382366',
+			// 	link: response.data.paymentUrl,
+			// });
+			const link = response.data.paymentUrl;
 			const result = await smsQueuePayment({
 				// telephone: data.phoneNumber,
 				telephone: '07572382366',
-				link: response.data.paymentUrl,
+				link: link,
 			});
 
 			console.log('result', result);
