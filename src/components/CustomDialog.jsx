@@ -88,6 +88,20 @@ function CustomDialog({ closeDialog }) {
 		}
 	};
 
+	const generateRouteLink = () => {
+		const origin = `${data.pickupAddress}, ${data.pickupPostCode}`;
+		const destination = `${data.destinationAddress}, ${data.destinationPostCode}`;
+		const waypoints = data.vias
+			.map((via) => `${via.address}, ${via.postCode}`)
+			.join('|');
+
+		return `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(
+			origin
+		)}&destination=${encodeURIComponent(
+			destination
+		)}&waypoints=${encodeURIComponent(waypoints)}`;
+	};
+
 	return (
 		<div className='fixed sm:left-[-35vw] left-[-45vw] inset-0 w-[90vw] sm:w-[70vw] mx-auto z-50 flex items-center justify-center p-1 sm:p-4 bg-background bg-opacity-50'>
 			<div className='relative w-full max-w-7xl p-3 sm:p-6 bg-card rounded-lg shadow-lg dark:bg-popover bg-white max-h-[90vh] overflow-y-auto sm:overflow-hidden'>
@@ -132,9 +146,7 @@ function CustomDialog({ closeDialog }) {
 										<BookingOption
 											text={`${data.pickupAddress}, ${data.pickupPostCode}`}
 											head='From'
-											link={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-												data.pickupAddress + ', ' + data.pickupPostCode
-											)}`}
+											link={generateRouteLink()}
 										/>
 									</div>
 								</div>
@@ -158,9 +170,7 @@ function CustomDialog({ closeDialog }) {
 														</p>
 														<span className='text-card dark:text-popover-foreground text-[1rem] w-[80%] flex justify-start items-start'>
 															<a
-																href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-																	via.address + ', ' + via.postCode
-																)}`}
+																href={generateRouteLink()}
 																target='_blank'
 																rel='noopener noreferrer'
 																className='text-blue-600'
@@ -189,11 +199,7 @@ function CustomDialog({ closeDialog }) {
 										</p>
 										<span className='text-card dark:text-popover-foreground text-[1rem] w-[80%] flex justify-start items-start'>
 											<a
-												href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-													data.destinationAddress +
-														', ' +
-														data.destinationPostCode
-												)}`}
+												href={generateRouteLink()}
 												target='_blank'
 												rel='noopener noreferrer'
 												className='text-blue-600'
