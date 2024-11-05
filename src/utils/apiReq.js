@@ -553,7 +553,11 @@ async function bookingPayment(data) {
 
 async function sendPaymentLink(paymentDetail) {
 	const { telephone, pickup, bookingId, name, email, price } = paymentDetail;
-	const URL = `${BASE}/api/Bookings/PaymentLink?bookingId=${bookingId}&telephone=${telephone}&email=${email}&name=${name}&price=${price}&pickup=${pickup}`;
+	const URL = `${BASE}/api/Bookings/PaymentLink?bookingId=${Number(
+		bookingId
+	)}&telephone=${telephone}&email=${email}&name=${name}&price=${Number(
+		price
+	)}&pickup=${pickup}`;
 	return await handleGetReq(URL);
 }
 
