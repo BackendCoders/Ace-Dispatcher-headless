@@ -21,6 +21,15 @@ const callerSlice = createSlice({
 			state.unshift(action.payload);
 			state[0].callerType = 'lookup';
 		},
+		removeBookingById(state, action) {
+			const { type, bookingId } = action.payload;
+			// Ensure we're targeting the correct list ('Current' or 'Previous')
+			if (state[0][type]) {
+				state[0][type] = state[0][type].filter(
+					(booking) => booking.bookingId !== bookingId
+				);
+			}
+		},
 	},
 });
 
@@ -69,7 +78,7 @@ export const updateCurrentBookingWithLookup = function (
 	};
 };
 
-export const { addCaller, removeCaller, addCallerToLookup } =
+export const { addCaller, removeCaller, addCallerToLookup, removeBookingById } =
 	callerSlice.actions;
 
 export default callerSlice.reducer;

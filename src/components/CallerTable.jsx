@@ -3,10 +3,17 @@
 import { useState, useEffect, useCallback } from 'react';
 // import { useBooking } from '../hooks/useBooking';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeCaller } from '../context/callerSlice';
+import { removeBookingById, removeCaller } from '../context/callerSlice';
+import { Button } from '@mui/material';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import Modal from '../components/Modal';
+import { useAuth } from '../hooks/useAuth';
+import { deleteSchedulerBooking } from '../utils/apiReq';
+import { openSnackbar } from '../context/snackbarSlice';
 
 const BookingTable = ({ onConfirm, onSet, numBooking }) => {
 	const bookings = useSelector((state) => state.caller[0]);
+	// console.log('bookings in caller', bookings);
 	const dispatch = useDispatch();
 	const [activeTab, setActiveTab] = useState(
 		bookings.Current.length > 0 ? 'current-bookings' : 'previous-bookings'
@@ -124,6 +131,7 @@ const BookingTable = ({ onConfirm, onSet, numBooking }) => {
 					bookings={bookings.Current}
 					selectRow={selectRow}
 					selectedRow={selectedRow}
+					activeTab={activeTab}
 				/>
 			</div>
 			<div
@@ -173,7 +181,7 @@ const BookingTable = ({ onConfirm, onSet, numBooking }) => {
 							onSet(false);
 						}}
 					>
-						cancel
+						Close
 					</button>
 				</div>
 			</div>
@@ -181,13 +189,55 @@ const BookingTable = ({ onConfirm, onSet, numBooking }) => {
 	);
 };
 
-function CurrentTable({ bookings, selectedRow, selectRow }) {
+function CurrentTable({ bookings, selectedRow, selectRow, activeTab }) {
+	const [deleteModal, setDeleteModal] = useState(false);
+	const activeCurrentTab = activeTab === 'current-bookings';
+	const dispatch = useDispatch();
+	const [bookingToCancel, setBookingToCancel] = useState(null);
+	const user = useAuth();
+
+	const openDeleteModal = (booking) => {
+		setBookingToCancel(booking); // Store booking to cancel
+		setDeleteModal(true); // Open modal
+	};
+
+	const confirmCancelJob = async () => {
+		if (bookingToCancel) {
+			// console.log('bookingToCancel', bookingToCancel);
+			try {
+				const data = {
+					bookingId: bookingToCancel.Id,
+					cancelledByName: user.currentUser.fullName,
+					actionByUserId: user.currentUser.id,
+					cancelBlock: false,
+					cancelledOnArrival: false,
+				};
+				// console.log('bookingToCancel', data);
+				const response = await deleteSchedulerBooking(data);
+				if (response.status === 'success') {
+					dispatch(openSnackbar('Job Cancel Successfully', 'success'));
+					dispatch(
+						removeBookingById({
+							type: activeTab === 'current-bookings' ? 'Current' : 'Previous',
+							bookingId: bookingToCancel.bookingId,
+						})
+					);
+				}
+			} catch (error) {
+				console.error('Error canceling booking:', error);
+			} finally {
+				setDeleteModal(false); // Close modal after action
+			}
+		}
+	};
+
 	const rows = [
 		'Date',
 		'Pickup Address',
 		'Destination Address',
 		'Name',
 		'Price',
+		...(activeCurrentTab ? ['Action'] : []),
 	];
 	const formatDate = (dateStr) => {
 		const d = new Date(dateStr);
@@ -201,40 +251,102 @@ function CurrentTable({ bookings, selectedRow, selectRow }) {
 	if (bookings.length === 0) return <div>No bookings</div>;
 
 	return (
-		<table className='min-w-full table-auto'>
-			<thead>
-				<tr>
-					{rows.map((row, index) => (
-						<th
-							key={index}
-							className='px-4 py-2 uppercase text-left'
-						>
-							{row}
-						</th>
-					))}
-				</tr>
-			</thead>
-			<tbody>
-				{bookings.map((booking, index) => (
-					<tr
-						key={index}
-						className={`hover:bg-gray-300 cursor-pointer ${
-							selectedRow === index ? 'bg-gray-300' : ''
-						}`}
-						onClick={() => selectRow(index)}
-					>
-						<td className='border px-4 py-2 whitespace-nowrap'>
-							{formatDate(booking.PickupDateTime)}
-						</td>
-						<td className='border px-4 py-2'>{booking.PickupAddress}</td>
-						<td className='border px-4 py-2'>{booking.DestinationAddress}</td>
-						<td className='border px-4 py-2'>{booking.PassengerName}</td>
-						<td className='border px-4 py-2'>{booking.Price}</td>
+		<>
+			<table className='min-w-full table-auto'>
+				<thead>
+					<tr>
+						{rows.map((row, index) => (
+							<th
+								key={index}
+								className='px-4 py-2 uppercase text-left'
+							>
+								{row}
+							</th>
+						))}
 					</tr>
-				))}
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					{bookings.map((booking, index) => (
+						<tr
+							key={index}
+							className={`hover:bg-gray-300 cursor-pointer ${
+								selectedRow === index ? 'bg-gray-300' : ''
+							}`}
+							onClick={() => selectRow(index)}
+						>
+							<td className='border px-4 py-2 whitespace-nowrap'>
+								{formatDate(booking.PickupDateTime)}
+							</td>
+							<td className='border px-4 py-2'>{booking.PickupAddress}</td>
+							<td className='border px-4 py-2'>{booking.DestinationAddress}</td>
+							<td className='border px-4 py-2'>{booking.PassengerName}</td>
+							<td className='border px-4 py-2'>{booking.Price}</td>
+							{activeTab === 'current-bookings' && (
+								<td className='border px-4 py-2'>
+									<button
+										className='bg-red-500 text-white py-2 px-4 rounded'
+										onClick={(e) => {
+											e.stopPropagation(); // Prevent row selection
+											openDeleteModal(booking); // Open delete modal with booking data
+										}}
+									>
+										Cancel
+									</button>
+								</td>
+							)}
+						</tr>
+					))}
+				</tbody>
+			</table>
+			<Modal
+				open={deleteModal}
+				setOpen={setDeleteModal}
+			>
+				<CancelBookingModal
+					confirmCancelJob={confirmCancelJob} // Function to handle job cancellation
+					setDeleteModal={setDeleteModal}
+				/>
+			</Modal>
+		</>
 	);
 }
 
 export default BookingTable;
+
+function CancelBookingModal({ confirmCancelJob, setDeleteModal }) {
+	return (
+		<div className='flex flex-col items-center justify-center w-[80vw] sm:w-[23vw] bg-white rounded-lg px-4 pb-4 pt-5 sm:p-6 sm:pb-4 gap-4'>
+			<div className='flex w-full flex-col gap-2 justify-center items-center mt-3'>
+				<div className='p-4 flex justify-center items-center text-center rounded-full bg-[#FEE2E2]'>
+					<DeleteOutlinedIcon sx={{ color: '#E45454' }} />
+				</div>
+				<div className='flex w-full flex-col justify-center items-center'>
+					<p className='font-medium text-xl '>Cancel Your Bookings</p>
+				</div>
+			</div>
+			<div className='text-center w-full'>
+				Are you sure you wish to cancel the selected booking?
+			</div>
+			<div className='w-full flex items-center justify-center gap-4'>
+				<Button
+					variant='contained'
+					color='info'
+					sx={{ paddingY: '0.5rem', marginTop: '4px' }}
+					className='w-full cursor-pointer'
+					onClick={() => setDeleteModal(false)} // Close modal on "No"
+				>
+					No, Keep
+				</Button>
+				<Button
+					variant='contained'
+					color='error'
+					sx={{ paddingY: '0.5rem', marginTop: '4px' }}
+					className='w-full cursor-pointer'
+					onClick={confirmCancelJob} // Call confirmCancelJob to execute cancellation
+				>
+					Yes, Cancel
+				</Button>
+			</div>
+		</div>
+	);
+}

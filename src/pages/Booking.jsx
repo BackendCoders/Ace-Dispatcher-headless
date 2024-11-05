@@ -773,6 +773,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 									<option value={0}>Cash</option>
 									<option value={1}>Account</option>
 									<option value={2}>Rank</option>
+									<option value={4}>Card</option>
 									<option value={3}>All</option>
 								</select>
 							</div>
