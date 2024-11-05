@@ -132,6 +132,9 @@ function CustomDialog({ closeDialog }) {
 										<BookingOption
 											text={`${data.pickupAddress}, ${data.pickupPostCode}`}
 											head='From'
+											link={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+												data.pickupAddress + ', ' + data.pickupPostCode
+											)}`}
 										/>
 									</div>
 								</div>
@@ -154,7 +157,16 @@ function CustomDialog({ closeDialog }) {
 															{`Via ${idx + 1}:`}
 														</p>
 														<span className='text-card dark:text-popover-foreground text-[1rem] w-[80%] flex justify-start items-start'>
-															{`${via.address}, ${via.postCode}`}
+															<a
+																href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+																	via.address + ', ' + via.postCode
+																)}`}
+																target='_blank'
+																rel='noopener noreferrer'
+																className='text-blue-600'
+															>
+																{`${via.address}, ${via.postCode}`}
+															</a>
 														</span>
 													</div>
 												</>
@@ -176,7 +188,18 @@ function CustomDialog({ closeDialog }) {
 											To:
 										</p>
 										<span className='text-card dark:text-popover-foreground text-[1rem] w-[80%] flex justify-start items-start'>
-											{`${data.destinationAddress}, ${data.destinationPostCode}`}
+											<a
+												href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+													data.destinationAddress +
+														', ' +
+														data.destinationPostCode
+												)}`}
+												target='_blank'
+												rel='noopener noreferrer'
+												className='text-blue-600'
+											>
+												{`${data.destinationAddress}, ${data.destinationPostCode}`}
+											</a>
 										</span>
 									</div>
 									{/* <BookingOption
@@ -492,14 +515,25 @@ function getTodayInEnGbFormat(date) {
 	return enGbFormatter.format(today);
 }
 
-const BookingOption = ({ text, head }) => {
+const BookingOption = ({ text, head, link }) => {
 	return (
 		<div className='flex items-start mb-1 w-full'>
 			<p className='text-md font-medium pr-2 sm:whitespace-nowrap sm:w-[30%] flex justify-start sm:justify-end sm:items-end'>
 				{head}:{' '}
 			</p>
 			<span className='text-card dark:text-popover-foreground text-[1rem] sm:w-[70%] flex sm:justify-start sm:items-start'>
-				{text}
+				{link ? (
+					<a
+						href={link}
+						target='_blank'
+						rel='noopener noreferrer'
+						className='text-blue-600'
+					>
+						{text}
+					</a>
+				) : (
+					text
+				)}
 			</span>
 		</div>
 	);
