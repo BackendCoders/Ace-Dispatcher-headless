@@ -58,7 +58,7 @@ function CustomDialog({ closeDialog }) {
 		closeDialog();
 	};
 
-	const handlePayClick = async () => {
+	const handlePayClick = async (selectedOptions) => {
 		try {
 			// const response = await bookingPayment({
 			// 	amount: parseFloat(data.price),
@@ -75,15 +75,25 @@ function CustomDialog({ closeDialog }) {
 			// 	link: response.data.paymentUrl,
 			// });
 			// const link = response.data.paymentUrl;
-			const result = await sendPaymentLink({
-				telephone: data.phoneNumber,
+			const { textMessage, email, both } = selectedOptions;
+			const payload = {
 				bookingId: data.bookingId,
-				// telephone: '07572382366',
 				name: data.passengerName,
-				email: data.email,
 				price: data.price,
 				pickup: data.pickupAddress,
-			});
+			};
+			if (textMessage || both) {
+				payload.telephone = data.phoneNumber;
+			} else {
+				payload.telephone = ''; // Leave blank if textMessage is false
+			}
+
+			if (email || both) {
+				payload.email = data.email;
+			} else {
+				payload.email = ''; // Leave blank if email is false
+			}
+			const result = await sendPaymentLink(payload);
 			dispatch(getRefreshedBookings());
 
 			if (result.status === 'success') {
