@@ -38,6 +38,8 @@ import { changeActiveDate } from '../context/schedulerSlice';
 function Booking({ bookingData, id, onBookingUpload }) {
 	// All Hooks and Contexts for the data flow and management
 	const { currentUser, isAuth } = useAuth();
+
+	console.log(currentUser);
 	const dispatch = useDispatch();
 	const callerId = useSelector((state) => state.caller);
 	const { isGoogleApiOn } = useSelector((state) => state.bookingForm);
@@ -746,7 +748,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 						</div>
 					</div>
 
-					{currentUser?.isAdmin ? (
+					{
 						<>
 							{/* <p>options</p> */}
 							<div className='options mb-2 flex justify-between gap-3 align-middle items-center'>
@@ -809,7 +811,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 									</div>
 
 									<div className='mb-2 w-[50%] flex flex-col gap-4'>
-										{bookingData.scope === 1 ? (
+										{bookingData.scope === 1 && currentUser?.isAdmin ? (
 											<Input
 												type='number'
 												placeholder='Price Account'
@@ -829,7 +831,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 								</div>
 							) : null}
 						</>
-					) : null}
+					}
 
 					<div className='flex justify-between gap-5 mb-2'>
 						<LongButton onClick={() => setDriverModalActive(true)}>
