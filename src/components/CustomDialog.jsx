@@ -354,7 +354,7 @@ function CustomDialog({ closeDialog }) {
 														onClick={() =>
 															setOpenSmsDailogModal((prev) => !prev)
 														}
-														className='px-3 py-1 text-white bg-green-500 hover:bg-opacity-80 rounded-lg text-[1rem]'
+														className='px-1 sm:px-3 py-1 text-white bg-green-500 hover:bg-opacity-80 rounded-lg text-[0.65rem] sm:text-[1rem]'
 													>
 														Send Payment Link
 													</button>

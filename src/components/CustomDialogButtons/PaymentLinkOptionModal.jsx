@@ -1,6 +1,6 @@
 /** @format */
 
-import { Button, Switch, FormControlLabel } from '@mui/material';
+import { Button, Switch, FormControlLabel, Box } from '@mui/material';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import { useState } from 'react';
 import ForwardToInboxIcon from '@mui/icons-material/ForwardToInbox';
@@ -35,7 +35,6 @@ export default function PaymentLinkOptionModal({
 					<p className='font-medium text-xl'>Choose Your Options</p>
 				</div>
 			</div>
-			<div className='text-center w-full'></div>
 			<form>
 				<div className='w-full justify-start items-center'>
 					<FormControlLabel
@@ -49,9 +48,18 @@ export default function PaymentLinkOptionModal({
 								}}
 							/>
 						}
-						label='Text Messages'
+						label={
+							<Box
+								display='flex'
+								alignItems='center'
+							>
+								Text Messages{' '}
+								<PermPhoneMsgIcon
+									sx={{ color: '#9B1FE8', marginLeft: '4px' }}
+								/>
+							</Box>
+						}
 					/>
-					<PermPhoneMsgIcon sx={{ color: '#9B1FE8', marginLeft: '-6px' }} />
 				</div>
 				<div className='w-full justify-start items-center'>
 					<FormControlLabel
@@ -64,9 +72,18 @@ export default function PaymentLinkOptionModal({
 								}}
 							/>
 						}
-						label='Email'
+						label={
+							<Box
+								display='flex'
+								alignItems='center'
+							>
+								Email{' '}
+								<ForwardToInboxIcon
+									sx={{ color: '#9B1FE8', marginLeft: '4px' }}
+								/>
+							</Box>
+						}
 					/>
-					<ForwardToInboxIcon sx={{ color: '#9B1FE8', marginLeft: '-6px' }} />
 				</div>
 				<div className='w-full justify-start items-center'>
 					<FormControlLabel
@@ -83,9 +100,16 @@ export default function PaymentLinkOptionModal({
 								}}
 							/>
 						}
-						label='Both (Text Messages & Email)'
+						label={
+							<Box
+								display='flex'
+								alignItems='center'
+							>
+								Both (Text Messages & Email){' '}
+								<SendIcon sx={{ color: '#9B1FE8', marginLeft: '4px' }} />
+							</Box>
+						}
 					/>
-					<SendIcon sx={{ color: '#9B1FE8', marginLeft: '-6px' }} />
 				</div>
 			</form>
 			<div className='w-full flex items-center justify-center gap-4'>
