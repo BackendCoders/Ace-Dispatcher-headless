@@ -10,9 +10,9 @@ export default function PaymentLinkOptionModal({
 	setOpenSmsDailogModal,
 	handlePayClick,
 }) {
-	const [isTextMessage, setIsTextMessage] = useState(false);
+	const [isTextMessage, setIsTextMessage] = useState(true);
 	const [isEmail, setIsEmail] = useState(false);
-	const [isBoth, setIsBoth] = useState(true);
+	const [isBoth, setIsBoth] = useState(false);
 
 	const handleConfirmClick = async () => {
 		// Determine the selected options and pass them to handlePayClick
