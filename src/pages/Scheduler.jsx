@@ -99,7 +99,13 @@ const AceScheduler = () => {
 				driverColor
 			);
 			// Use a 0-degree gradient for soft allocation
-			args.element.style.background = `repeating-linear-gradient(0deg, #795548, #795548 10px, ${driverColor} 20px)`;
+			args.element.style.backgroundImage = `
+    radial-gradient(${driverColor} 40%, transparent 40%),
+    radial-gradient(${driverColor} 40%, transparent 40%)`;
+
+			// Adjust the background size to reflect larger dots and manage spacing
+			args.element.style.backgroundSize = '20px 20px'; // Increase size to make dots larger
+			args.element.style.backgroundPosition = '0 0, 10px 10px';
 			args.element.style.backgroundColor = '#795548';
 		} else if (args.data.userId && args.data.status === 1) {
 			// Use a -40-degree gradient for normal allocation
