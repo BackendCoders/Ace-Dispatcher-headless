@@ -22,7 +22,7 @@ import {
 	setActiveSoftAllocate,
 } from '../context/schedulerSlice';
 import { useAuth } from '../hooks/useAuth';
-import { sendPaymentLink } from '../utils/apiReq';
+import { sendPaymentLink, sendRefundLink } from '../utils/apiReq';
 import { openSnackbar } from '../context/snackbarSlice';
 import PaymentLinkOptionModal from './CustomDialogButtons/PaymentLinkOptionModal';
 function CustomDialog({ closeDialog }) {
@@ -101,6 +101,22 @@ function CustomDialog({ closeDialog }) {
 			}
 		} catch (error) {
 			console.error('Payment error:', error);
+		}
+	};
+
+	const handleRefundClick = async () => {
+		try {
+			const payload = {
+				bookingId: data.bookingId,
+				price: data.price,
+			};
+			const response = await sendRefundLink(payload);
+			if (response.status === 'success') {
+				dispatch(openSnackbar('Refund Request sent', 'success'));
+				dispatch(getRefreshedBookings());
+			}
+		} catch (error) {
+			console.error('Refund error:', error);
 		}
 	};
 
@@ -367,6 +383,14 @@ function CustomDialog({ closeDialog }) {
 														className='px-1 sm:px-3 py-1 text-white bg-green-500 hover:bg-opacity-80 rounded-lg text-[0.65rem] sm:text-[1rem]'
 													>
 														Send Payment Link
+													</button>
+												)}
+												{data.paymentStatus === 2 && (
+													<button
+														onClick={handleRefundClick}
+														className='px-1 sm:px-3 py-1 text-white bg-green-500 hover:bg-opacity-80 rounded-lg text-[0.65rem] sm:text-[1rem]'
+													>
+														Refund
 													</button>
 												)}
 											</span>

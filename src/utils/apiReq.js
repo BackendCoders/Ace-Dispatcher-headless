@@ -561,6 +561,14 @@ async function sendPaymentLink(paymentDetail) {
 	return await handleGetReq(URL);
 }
 
+async function sendRefundLink(paymentDetail) {
+	const { bookingId, price } = paymentDetail;
+	const URL = `${BASE}/api/Bookings/RefundPayment?bookingId=${Number(
+		bookingId
+	)}&price=${Number(price)}`;
+	return await handleGetReq(URL);
+}
+
 export {
 	getBookingData,
 	makeBooking,
@@ -583,4 +591,5 @@ export {
 	getAddressDetails,
 	bookingPayment,
 	sendPaymentLink,
+	sendRefundLink,
 };
