@@ -99,8 +99,8 @@ const AceScheduler = () => {
 				driverColor
 			);
 			// Use a 0-degree gradient for soft allocation
-			args.element.style.background = `repeating-linear-gradient(0deg, ${driverColor}, ${driverColor} 10px, rgb(187, 187, 187) 20px)`;
-			args.element.style.backgroundColor = driverColor;
+			args.element.style.background = `repeating-linear-gradient(0deg, #795548, #795548 10px, ${driverColor} 20px)`;
+			args.element.style.backgroundColor = '#795548';
 		} else if (args.data.userId && args.data.status === 1) {
 			// Use a -40-degree gradient for normal allocation
 			args.element.style.background = `repeating-linear-gradient(-40deg, ${driverColor}, ${driverColor} 10px, rgb(187, 187, 187) 20px)`;
