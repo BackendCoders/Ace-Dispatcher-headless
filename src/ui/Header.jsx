@@ -219,7 +219,7 @@ const Navbar = () => {
 								setMenuOpen(false);
 							}}
 						>
-							Scheduler
+							Diary
 						</button>
 					</div>
 

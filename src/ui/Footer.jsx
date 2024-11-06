@@ -106,7 +106,7 @@ function Footer() {
 					}}
 				>
 					<CalendarMonthIcon />
-					<span className='font-medium'>Scheduler</span>
+					<span className='font-medium'>Diary</span>
 				</button>
 			</div>
 		</div>
