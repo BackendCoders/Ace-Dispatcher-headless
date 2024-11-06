@@ -17,18 +17,21 @@ import PersonIcon from '@mui/icons-material/Person';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import {
 	deleteSchedulerBooking,
+	getRefreshedBookings,
 	setActiveSearchResultClicked,
 	setActiveSoftAllocate,
 } from '../context/schedulerSlice';
 import { useAuth } from '../hooks/useAuth';
 import { sendPaymentLink } from '../utils/apiReq';
 import { openSnackbar } from '../context/snackbarSlice';
+import PaymentLinkOptionModal from './CustomDialogButtons/PaymentLinkOptionModal';
 function CustomDialog({ closeDialog }) {
 	const [allocateModal, setAllocateModal] = useState(false);
 	const [isCompleteBookingModal, setIsCompleteBookingModal] = useState(false);
 	const [editBookingModal, setEditBookingModal] = useState(false);
 	const [deleteModal, setDeleteModal] = useState(false);
 	const [duplicateBookingModal, setDuplicateBookingModal] = useState(false);
+	const [openSmsDailogModal, setOpenSmsDailogModal] = useState(false);
 	const dispatch = useDispatch();
 	const {
 		bookings,
@@ -56,7 +59,6 @@ function CustomDialog({ closeDialog }) {
 	};
 
 	const handlePayClick = async () => {
-		// console.log('Pay now', data);
 		try {
 			// const response = await bookingPayment({
 			// 	amount: parseFloat(data.price),
@@ -82,9 +84,9 @@ function CustomDialog({ closeDialog }) {
 				price: data.price,
 				pickup: data.pickupAddress,
 			});
+			dispatch(getRefreshedBookings());
 
-			console.log('result', result);
-			if (result === 'sent') {
+			if (result.status === 'success') {
 				dispatch(openSnackbar('Payment link sent', 'success'));
 			}
 		} catch (error) {
@@ -341,15 +343,17 @@ function CustomDialog({ closeDialog }) {
 												className={`text-card dark:text-popover-foreground text-[1rem]`}
 											>
 												{data.paymentStatus === 0
-													? 'Not Paid'
-													: data.paymentStatus === 1
-													? 'Paid'
+													? '-'
 													: data.paymentStatus === 2
+													? 'Paid'
+													: data.paymentStatus === 3
 													? 'Awaiting payment'
 													: ''}{' '}
 												{data.paymentStatus === 0 && (
 													<button
-														onClick={handlePayClick}
+														onClick={() =>
+															setOpenSmsDailogModal((prev) => !prev)
+														}
 														className='px-3 py-1 text-white bg-green-500 hover:bg-opacity-80 rounded-lg text-[1rem]'
 													>
 														Send Payment Link
@@ -506,6 +510,15 @@ function CustomDialog({ closeDialog }) {
 				<DeleteBookingModal
 					setDeleteModal={setDeleteModal}
 					closeDialog={closeDialog}
+				/>
+			</Modal>
+			<Modal
+				open={openSmsDailogModal}
+				setOpen={setOpenSmsDailogModal}
+			>
+				<PaymentLinkOptionModal
+					setOpenSmsDailogModal={setOpenSmsDailogModal}
+					handlePayClick={handlePayClick}
 				/>
 			</Modal>
 		</div>
