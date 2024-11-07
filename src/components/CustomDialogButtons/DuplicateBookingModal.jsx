@@ -40,7 +40,7 @@ export default function DuplicateBookingModal({
 	const handleDateChange = (e) => {
 		setNewDate(e.target.value);
 	};
-	console.log(user);
+	// console.log(data);
 	const handleSave = async (data) => {
 		console.log(data);
 		const newData = {
@@ -108,6 +108,7 @@ export default function DuplicateBookingModal({
 							bookedByName: user.currentUser.fullName,
 							recurrenceID: 0,
 							recurrenceRule: '',
+							paymentStatus: 0,
 						})
 					}
 				>
