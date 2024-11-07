@@ -38,8 +38,6 @@ import { changeActiveDate } from '../context/schedulerSlice';
 function Booking({ bookingData, id, onBookingUpload }) {
 	// All Hooks and Contexts for the data flow and management
 	const { currentUser, isAuth } = useAuth();
-
-	console.log(currentUser);
 	const dispatch = useDispatch();
 	const callerId = useSelector((state) => state.caller);
 	const { isGoogleApiOn } = useSelector((state) => state.bookingForm);
