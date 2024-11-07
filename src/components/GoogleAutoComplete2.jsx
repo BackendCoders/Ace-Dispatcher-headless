@@ -257,7 +257,7 @@ function GoogleAutoComplete({
 		if (suggestion.source === 'getAddress') {
 			try {
 				const fullDetails = await getAddressDetails(suggestion.id);
-				console.log('------', fullDetails);
+				// console.log('------', fullDetails);
 				if (fullDetails) {
 					// selectedAddress =
 					// 	fullDetails.formatted_address.join(', ') || 'Unknown Address';

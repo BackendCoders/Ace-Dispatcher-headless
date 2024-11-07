@@ -43,7 +43,7 @@ const WrapperDiv = function () {
 		getData();
 		// }, [date, isActiveTestMode]);
 	}, [date]);
-	console.log('driver availability data', data);
+	// console.log('driver availability data', data);
 	return (
 		<div
 			className={`h-full w-full bg-white mx-auto mt-6 flex justify-center items-center shadow-lg rounded-md mb-4 sm:mb-0`}

@@ -94,10 +94,10 @@ const AceScheduler = () => {
 
 		// Apply gradient based on activeSoftAllocate status
 		if (args.data.suggestedUserId) {
-			console.log(
-				'Applying 0deg gradient for soft allocate with color:',
-				driverColor
-			);
+			// console.log(
+			// 	'Applying 0deg gradient for soft allocate with color:',
+			// 	driverColor
+			// );
 			// Use a 0-degree gradient for soft allocation
 			args.element.style.backgroundImage = `
     radial-gradient(${driverColor} 40%, transparent 40%),

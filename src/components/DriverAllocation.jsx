@@ -73,7 +73,7 @@ const DriverAllocation = () => {
 				);
 				data.pop();
 				let driverData = transformData(data);
-				console.log(data);
+				// console.log(data);
 				if (res.status === 'success') {
 					const formattedData = driverData.map((driver) => ({
 						Id: driver.userId,

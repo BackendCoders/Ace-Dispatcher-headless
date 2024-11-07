@@ -31,7 +31,7 @@ function CustomDialog({
 	const [editBookingModal, setEditBookingModal] = useState(false);
 	const [deleteModal, setDeleteModal] = useState(false);
 	const [duplicateBookingModal, setDuplicateBookingModal] = useState(false);
-	console.log('Data for custom dialog', data);
+	// console.log('Data for custom dialog', data);
 	return (
 		<div className='fixed left-[-35vw] inset-0 w-[70vw] mx-auto z-50 flex items-center justify-center p-4 bg-background bg-opacity-50'>
 			<div className='relative w-full max-w-7xl p-6 bg-card rounded-lg shadow-lg dark:bg-popover bg-white'>
@@ -728,7 +728,7 @@ function DuplicateBookingModal({
 			...data,
 			pickupDateTime: newDate,
 		};
-		console.log('newData---', newData);
+		// console.log('newData---', newData);
 		setDuplicateBookingModal(false);
 		closeDialog();
 		const res = await makeBooking(newData, true);

@@ -132,7 +132,7 @@ export function deleteSchedulerBooking(
 	cancelledOnArrival = false
 ) {
 	return async (dispatch, getState) => {
-		console.log({ cancelBlock, fullName, id });
+		// console.log({ cancelBlock, fullName, id });
 		const {
 			bookings,
 			currentlySelectedBookingIndex: index,
@@ -288,7 +288,7 @@ export const setActiveSearchResult = function (bookingId) {
 		const data = await findBookingById(bookingId);
 		if (data.status === 'success') {
 			dispatch(schedulerSlice.actions.setActiveSearchResultClicked(data));
-			console.log(data);
+			// console.log(data);
 		}
 	};
 };

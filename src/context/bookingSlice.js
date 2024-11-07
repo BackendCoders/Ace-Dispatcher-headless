@@ -87,7 +87,7 @@ const bookingFormSlice = createSlice({
 				...action.payload,
 				pickupDateTime: formatDate(action.payload.pickupDateTime),
 			};
-			console.log(action.payload);
+			// console.log(action.payload);
 
 			state.bookings.push({ ...data, ...action.payload });
 			state.activeBookingIndex = state.bookings.length - 1;
@@ -190,7 +190,7 @@ export const onCreateBooking = (itemIndex) => async (dispatch, getState) => {
 export const onUpdateBooking = (itemIndex) => async (dispatch, getState) => {
 	const targetBooking = getState().bookingForm.bookings[itemIndex];
 	// const activeTestMode = getState().bookingForm.isActiveTestMode;
-	console.log('targetBooking', targetBooking);
+	// console.log('targetBooking', targetBooking);
 	// const response = await updateBooking(targetBooking, activeTestMode);
 	const response = await updateBooking(targetBooking);
 	if (response.status === 'success') {

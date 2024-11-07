@@ -42,12 +42,12 @@ export default function DuplicateBookingModal({
 	};
 	// console.log(data);
 	const handleSave = async (data) => {
-		console.log(data);
+		// console.log(data);
 		const newData = {
 			...data,
 			pickupDateTime: newDate,
 		};
-		console.log('Duplicate Booking created');
+		// console.log('Duplicate Booking created');
 		setDuplicateBookingModal(false);
 		closeDialog();
 		// const res = await makeBooking(newData, activeTestMode);

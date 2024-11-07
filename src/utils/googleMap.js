@@ -9,7 +9,7 @@ let placesService = null;
 const GOOGLE_MAP_KEY = import.meta.env.VITE_GOOGLE_MAP_KEY;
 
 export const loadGoogleMapsScript = (callback, mapLoaded) => {
-	console.log(mapLoaded);
+	// console.log(mapLoaded);
 	if (isLoaded) {
 		callback(true);
 		return;

@@ -31,7 +31,7 @@ function EditBookingModal({ setEditBookingModal, closeDialog }) {
 		setEditBookingModal(false);
 	}
 	function handleEditAll() {
-		console.log('Handle edit all booking Data', data);
+		// console.log('Handle edit all booking Data', data);
 		dispatch(addDataFromSchedulerInEditMode({ editBlock: true, ...data }));
 		dispatch(setActiveSectionMobileView('Booking'));
 
