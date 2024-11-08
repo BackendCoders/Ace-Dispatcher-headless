@@ -93,7 +93,7 @@ const AceScheduler = () => {
 		}
 
 		// Apply gradient based on activeSoftAllocate status
-		if (args.data.suggestedUserId) {
+		if (args.data.suggestedUserId && !args.data.userId) {
 			// console.log(
 			// 	'Applying 0deg gradient for soft allocate with color:',
 			// 	driverColor
