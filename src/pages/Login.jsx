@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-
+import LogoImg from '../assets/ace_taxis_v4.svg';
 function Login() {
 	const { login } = useAuth();
 	const [username, setUsername] = useState('');
@@ -25,15 +25,15 @@ function Login() {
 
 	return (
 		<div className='min-h-screen flex items-center justify-center bg-blue-700 p-4'>
-			<div className='bg-white rounded-lg shadow-lg overflow-hidden max-w-4xl w-full flex'>
-				<div
+			<div className='bg-white rounded-lg shadow-lg overflow-hidden max-w-lg w-full flex'>
+				{/* <div
 					className='hidden md:block md:w-1/2 bg-cover'
-					style={{
-						backgroundImage:
-							"url('https://wallpaperswide.com/download/dark_black_background-wallpaper-600x800.jpg",
-					}}
-				>
-					<button
+					// style={{
+					// 	backgroundImage:
+					// 		"url('https://wallpaperswide.com/download/dark_black_background-wallpaper-600x800.jpg",
+					// }}
+				> */}
+				{/* <button
 						className=' bg-white m-4 p-2 rounded-xl'
 						onClick={(e) => {
 							e.preventDefault();
@@ -41,19 +41,27 @@ function Login() {
 						}}
 					>
 						⬅️ Back
-					</button>
-					<div className='p-8'>
+					</button> */}
+
+				{/* <div className='p-8'>
 						<h2 className='text-3xl font-bold text-white mb-4'>
 							Start Your Journey With Us
-						</h2>
-						<p className='text-white'>
+						</h2> */}
+				{/* <p className='text-white'>
 							Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
 							eiusmod tempor incididunt ut labore et dolore magna aliqua.
-						</p>
-					</div>
-				</div>
-				<div className='w-full md:w-1/2 p-8'>
-					<h2 className='text-2xl font-bold mb-6'>Welcome Back To Digital</h2>
+						</p> */}
+				{/* </div> */}
+
+				{/* </div> */}
+				<div className='w-full md:w-full p-8'>
+					<h2 className='text-2xl font-bold mb-6 flex justify-start items-center gap-2'>
+						<img
+							src={LogoImg}
+							className='flex h-8 w-8'
+						/>
+						Ace Taxis Login
+					</h2>
 					<p className='mb-4'>Enter the details below to get started</p>
 					<form onSubmit={handleSubmit}>
 						<div className='mb-4'>
@@ -86,7 +94,7 @@ function Login() {
 						</div> */}
 						<button
 							type='submit'
-							className='w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600'
+							className='w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600'
 						>
 							Login
 						</button>

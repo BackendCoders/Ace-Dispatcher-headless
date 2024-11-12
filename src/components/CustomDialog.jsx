@@ -30,6 +30,8 @@ import {
 } from '../utils/apiReq';
 import { openSnackbar } from '../context/snackbarSlice';
 import PaymentLinkOptionModal from './CustomDialogButtons/PaymentLinkOptionModal';
+import CurrencyPoundIcon from '@mui/icons-material/CurrencyPound';
+import StarIcon from '@mui/icons-material/Star';
 function CustomDialog({ closeDialog }) {
 	const [allocateModal, setAllocateModal] = useState(false);
 	const [isCompleteBookingModal, setIsCompleteBookingModal] = useState(false);
@@ -177,7 +179,7 @@ function CustomDialog({ closeDialog }) {
 											: data.scope === 3
 											? 'bg-red-500'
 											: data.scope === 4
-											? 'bg-red-500'
+											? 'bg-blue-500'
 											: '' // default color for any other type
 									}`}
 								>
@@ -194,11 +196,36 @@ function CustomDialog({ closeDialog }) {
 										: ''}
 								</span>
 								<div className='absolute -top-4 -right-4 rounded-full p-[0.2rem] flex items-center justify-center bg-white'>
-									<div className=' bg-red-500 rounded-full p-1 flex items-center justify-center'>
-										<LockIcon
-											style={{ color: 'white', fontSize: '16px' }}
-											className='animate-bounce'
-										/>
+									<div
+										className={`${
+											data.scope === 4 ? 'bg-blue-500' : 'bg-red-500'
+										} rounded-full p-1 flex items-center justify-center`}
+									>
+										{data.scope === 0 ? (
+											<CurrencyPoundIcon
+												style={{ color: 'white', fontSize: '16px' }}
+												className='animate-bounce'
+											/>
+										) : data.scope === 1 ? (
+											<LockIcon
+												style={{ color: 'white', fontSize: '16px' }}
+												className='animate-bounce'
+											/>
+										) : data.scope === 2 ? (
+											<StarIcon
+												style={{ color: 'white', fontSize: '16px' }}
+												className='animate-bounce'
+											/>
+										) : data.scope === 3 ? (
+											''
+										) : data.scope === 4 ? (
+											<CurrencyPoundIcon
+												style={{ color: 'white', fontSize: '16px' }}
+												className='animate-bounce'
+											/>
+										) : (
+											''
+										)}
 									</div>
 								</div>
 							</div>
