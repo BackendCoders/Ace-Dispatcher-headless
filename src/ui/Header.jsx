@@ -122,35 +122,39 @@ const Navbar = () => {
 							)}
 
 							{/* Search Form Started here */}
-							<div className='flex justify-center items-center uppercase'>
-								{!activeSearch && (
-									<button
-										onClick={() => setOpenSearch(true)}
-										// className='text-sm'
-									>
-										Search
-									</button>
-								)}
-								{activeSearch && (
-									<button
-										onClick={handleCancelSearch}
-										// className='text-sm'
-									>
-										Cancel Search
-									</button>
-								)}
-							</div>
+							{currentUser?.isAdmin && (
+								<div className='flex justify-center items-center uppercase'>
+									{!activeSearch && (
+										<button
+											onClick={() => setOpenSearch(true)}
+											// className='text-sm'
+										>
+											Search
+										</button>
+									)}
+									{activeSearch && (
+										<button
+											onClick={handleCancelSearch}
+											// className='text-sm'
+										>
+											Cancel Search
+										</button>
+									)}
+								</div>
+							)}
 
-							<span className='flex gap-2 items-center'>
-								<span className='text-xs sm:text-sm'>Use Google Api</span>
-								<Switch
-									checked={isGoogleApiOn}
-									onChange={(e) => {
-										dispatch(setIsGoogleApiOn(e.target.checked));
-									}}
-									size='small'
-								/>
-							</span>
+							{currentUser?.isAdmin && (
+								<span className='flex gap-2 items-center'>
+									<span className='text-xs sm:text-sm'>Use Google Api</span>
+									<Switch
+										checked={isGoogleApiOn}
+										onChange={(e) => {
+											dispatch(setIsGoogleApiOn(e.target.checked));
+										}}
+										size='small'
+									/>
+								</span>
+							)}
 
 							{/* Test Mode Toogle Button */}
 							{/* <span className='flex flex-row gap-2 items-center align-middle'>
