@@ -24,7 +24,7 @@ function Login() {
 	}, [isAuth, navigation]);
 
 	return (
-		<div className='min-h-screen flex items-center justify-center bg-blue-700 p-4'>
+		<div className='min-h-screen flex items-center justify-center bg-white p-4'>
 			<div className='bg-white rounded-lg shadow-lg overflow-hidden max-w-lg w-full flex'>
 				{/* <div
 					className='hidden md:block md:w-1/2 bg-cover'
