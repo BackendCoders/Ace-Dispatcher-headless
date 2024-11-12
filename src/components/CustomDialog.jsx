@@ -160,8 +160,8 @@ function CustomDialog({ closeDialog }) {
 			<div className='relative w-full max-w-7xl p-3 sm:p-6 bg-card rounded-lg shadow-lg dark:bg-popover bg-white max-h-[90vh] overflow-y-auto sm:overflow-hidden'>
 				<div className='flex items-center justify-between mb-6'>
 					<h2 className='text-lg font-medium text-card text-center flex justify-center items-center'>
-						Booking #:{' '}
-						<span className='text-xl font-semibold text-green-900'>
+						Booking #:
+						<span className='text-xl font-semibold text-green-900 ml-2'>
 							{data.bookingId}
 						</span>
 						{
