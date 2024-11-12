@@ -45,7 +45,7 @@ function CustomDialog({ closeDialog }) {
 		activeSearchResult,
 	} = useSelector((state) => state.scheduler);
 	const user = useAuth();
-	console.log(user);
+	// console.log(user);
 	let data = {};
 	data = bookings[index];
 	if (activeSearch) data = activeSearchResult;
