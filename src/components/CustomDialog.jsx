@@ -13,6 +13,7 @@ import {
 	setActiveSectionMobileView,
 } from '../context/bookingSlice';
 import HomeIcon from '@mui/icons-material/Home';
+import LockIcon from '@mui/icons-material/Lock';
 import PersonIcon from '@mui/icons-material/Person';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import {
@@ -22,7 +23,11 @@ import {
 	setActiveSoftAllocate,
 } from '../context/schedulerSlice';
 import { useAuth } from '../hooks/useAuth';
-import { sendPaymentLink, sendRefundLink } from '../utils/apiReq';
+import {
+	driverArrived,
+	sendPaymentLink,
+	sendRefundLink,
+} from '../utils/apiReq';
 import { openSnackbar } from '../context/snackbarSlice';
 import PaymentLinkOptionModal from './CustomDialogButtons/PaymentLinkOptionModal';
 function CustomDialog({ closeDialog }) {
@@ -40,6 +45,7 @@ function CustomDialog({ closeDialog }) {
 		activeSearchResult,
 	} = useSelector((state) => state.scheduler);
 	const user = useAuth();
+	console.log(user);
 	let data = {};
 	data = bookings[index];
 	if (activeSearch) data = activeSearchResult;
@@ -116,7 +122,22 @@ function CustomDialog({ closeDialog }) {
 				dispatch(getRefreshedBookings());
 			}
 		} catch (error) {
+			dispatch(openSnackbar('Error in Sending Request', 'error'));
 			console.error('Refund error:', error);
+		}
+	};
+
+	const handleDriverArrived = async () => {
+		try {
+			const bookingId = data.bookingId;
+			const response = await driverArrived(bookingId);
+			if (response.status === 'success') {
+				dispatch(openSnackbar('Driver Arrived Successfully', 'success'));
+				closeDialog();
+				dispatch(getRefreshedBookings());
+			}
+		} catch (error) {
+			console.error('Driver arrived error:', error);
 		}
 	};
 
@@ -138,11 +159,50 @@ function CustomDialog({ closeDialog }) {
 		<div className='fixed sm:left-[-35vw] left-[-45vw] inset-0 w-[90vw] sm:w-[70vw] mx-auto z-50 flex items-center justify-center p-1 sm:p-4 bg-background bg-opacity-50'>
 			<div className='relative w-full max-w-7xl p-3 sm:p-6 bg-card rounded-lg shadow-lg dark:bg-popover bg-white max-h-[90vh] overflow-y-auto sm:overflow-hidden'>
 				<div className='flex items-center justify-between mb-6'>
-					<h2 className='text-lg font-medium text-card'>
-						BookingId:{' '}
+					<h2 className='text-lg font-medium text-card text-center flex justify-center items-center'>
+						Booking #:{' '}
 						<span className='text-xl font-semibold text-green-900'>
 							{data.bookingId}
 						</span>
+						{
+							<div className={`relative inline-flex items-center`}>
+								<span
+									className={`ml-2 px-3 py-2 rounded-md text-white text-sm uppercase font-semibold ${
+										data.scope === 0
+											? 'bg-red-500'
+											: data.scope === 1
+											? 'bg-red-500'
+											: data.scope === 2
+											? 'bg-red-500'
+											: data.scope === 3
+											? 'bg-red-500'
+											: data.scope === 4
+											? 'bg-red-500'
+											: '' // default color for any other type
+									}`}
+								>
+									{data.scope === 0
+										? 'Cash'
+										: data.scope === 1
+										? 'Account'
+										: data.scope === 2
+										? 'Rank'
+										: data.scope === 3
+										? 'All'
+										: data.scope === 4
+										? 'Card'
+										: ''}
+								</span>
+								<div className='absolute -top-4 -right-4 rounded-full p-[0.2rem] flex items-center justify-center bg-white'>
+									<div className=' bg-red-500 rounded-full p-1 flex items-center justify-center'>
+										<LockIcon
+											style={{ color: 'white', fontSize: '16px' }}
+											className='animate-bounce'
+										/>
+									</div>
+								</div>
+							</div>
+						}
 					</h2>
 
 					<button
@@ -304,6 +364,8 @@ function CustomDialog({ closeDialog }) {
 													? 'Rank'
 													: data.scope === 3
 													? 'All'
+													: data.scope === 4
+													? 'Card'
 													: ''
 											}
 										/>
@@ -375,24 +437,26 @@ function CustomDialog({ closeDialog }) {
 													: data.paymentStatus === 3
 													? 'Awaiting payment'
 													: ''}{' '}
-												{data.paymentStatus === 0 && (
-													<button
-														onClick={() =>
-															setOpenSmsDailogModal((prev) => !prev)
-														}
-														className='px-1 sm:px-3 py-1 text-white bg-green-500 hover:bg-opacity-80 rounded-lg text-[0.65rem] sm:text-[1rem]'
-													>
-														Send Payment Link
-													</button>
-												)}
-												{data.paymentStatus === 2 && (
-													<button
-														onClick={handleRefundClick}
-														className='px-1 sm:px-3 py-1 text-white bg-green-500 hover:bg-opacity-80 rounded-lg text-[0.65rem] sm:text-[1rem]'
-													>
-														Refund
-													</button>
-												)}
+												{data.paymentStatus === 0 &&
+													user?.currentUser?.isAdmin && (
+														<button
+															onClick={() =>
+																setOpenSmsDailogModal((prev) => !prev)
+															}
+															className='px-1 sm:px-3 py-1 text-white bg-green-500 hover:bg-opacity-80 rounded-lg text-[0.65rem] sm:text-[1rem]'
+														>
+															Send Payment Link
+														</button>
+													)}
+												{data.paymentStatus === 2 &&
+													user?.currentUser?.isAdmin && (
+														<button
+															onClick={handleRefundClick}
+															className='px-1 sm:px-3 py-1 text-white bg-green-500 hover:bg-opacity-80 rounded-lg text-[0.65rem] sm:text-[1rem]'
+														>
+															Refund
+														</button>
+													)}
 											</span>
 										</div>
 
@@ -436,48 +500,57 @@ function CustomDialog({ closeDialog }) {
 						// onClick={() => setViewBookingModal(true)}
 					/> */}
 
-					<BookingButton
-						text='Soft Allocate'
-						color='bg-blue-700'
-						onClick={() => {
-							setAllocateModal(true);
-							dispatch(setActiveSoftAllocate(true));
-						}}
-					/>
-					<BookingButton
-						text='Allocate Booking'
-						color='bg-blue-700'
-						onClick={() => {
-							setAllocateModal(true);
-							dispatch(setActiveSoftAllocate(false));
-						}}
-					/>
-					<BookingButton
-						onClick={() => {
-							if (data.recurrenceRule) {
-								setEditBookingModal(true);
-							} else {
-								const filterData = {
-									...data,
-									recurrenceID: '',
-									recurrenceRule: '',
-								};
-								dispatch(addDataFromSchedulerInEditMode(filterData));
-								dispatch(setActiveSectionMobileView('Booking'));
-								closeDialog(false);
-							}
-						}}
-						text='Edit Booking'
-						color='bg-blue-700'
-					/>
-					<BookingButton
-						text='Duplicate Booking'
-						color='bg-blue-700'
-						onClick={() => setDuplicateBookingModal(true)}
-					/>
+					{user?.currentUser?.isAdmin && (
+						<BookingButton
+							text='Soft Allocate'
+							color='bg-blue-700'
+							onClick={() => {
+								setAllocateModal(true);
+								dispatch(setActiveSoftAllocate(true));
+							}}
+						/>
+					)}
+					{user?.currentUser?.isAdmin && (
+						<BookingButton
+							text='Allocate Booking'
+							color='bg-blue-700'
+							onClick={() => {
+								setAllocateModal(true);
+								dispatch(setActiveSoftAllocate(false));
+							}}
+						/>
+					)}
+					{user?.currentUser?.isAdmin && (
+						<BookingButton
+							onClick={() => {
+								if (data.recurrenceRule) {
+									setEditBookingModal(true);
+								} else {
+									const filterData = {
+										...data,
+										recurrenceID: '',
+										recurrenceRule: '',
+									};
+									dispatch(addDataFromSchedulerInEditMode(filterData));
+									dispatch(setActiveSectionMobileView('Booking'));
+									closeDialog(false);
+								}
+							}}
+							text='Edit Booking'
+							color='bg-blue-700'
+						/>
+					)}
+					{user?.currentUser?.isAdmin && (
+						<BookingButton
+							text='Duplicate Booking'
+							color='bg-blue-700'
+							onClick={() => setDuplicateBookingModal(true)}
+						/>
+					)}
 					<BookingButton
 						text='Driver Arrived'
 						color='bg-blue-700'
+						onClick={handleDriverArrived}
 					/>
 					<BookingButton
 						text='Complete Booking'
@@ -491,11 +564,13 @@ function CustomDialog({ closeDialog }) {
 							onClick={handleCancelOnArrival}
 						/>
 					)}
-					<BookingButton
-						text='Cancel Booking'
-						color='bg-red-700'
-						onClick={() => setDeleteModal(true)}
-					/>
+					{user?.currentUser?.isAdmin && (
+						<BookingButton
+							text='Cancel Booking'
+							color='bg-red-700'
+							onClick={() => setDeleteModal(true)}
+						/>
+					)}
 				</div>
 			</div>
 			<Modal

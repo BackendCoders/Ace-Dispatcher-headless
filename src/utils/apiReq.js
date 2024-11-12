@@ -569,6 +569,11 @@ async function sendRefundLink(paymentDetail) {
 	return await handleGetReq(URL);
 }
 
+async function driverArrived(bookingId) {
+	const URL = `${BASE}/api/DriverApp/Arrived?bookingId=${Number(bookingId)}`;
+	return await handleGetReq(URL);
+}
+
 export {
 	getBookingData,
 	makeBooking,
@@ -592,4 +597,5 @@ export {
 	bookingPayment,
 	sendPaymentLink,
 	sendRefundLink,
+	driverArrived,
 };

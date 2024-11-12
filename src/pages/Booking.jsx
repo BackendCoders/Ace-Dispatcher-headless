@@ -750,18 +750,24 @@ function Booking({ bookingData, id, onBookingUpload }) {
 						<>
 							{/* <p>options</p> */}
 							<div className='options mb-2 flex justify-between gap-3 align-middle items-center'>
-								<p className='text-gray-700 text-sm'>status:</p>
-								<select
-									name='status'
-									onChange={(e) => updateData('paymentStatus', +e.target.value)}
-									id='options'
-									value={bookingData.paymentStatus}
-									className='block w-[75%] mt-1 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm'
-								>
-									<option value={0}>None</option>
-									<option value={2}>Paid</option>
-									<option value={3}>Awaiting payment</option>
-								</select>
+								{currentUser?.isAdmin && (
+									<p className='text-gray-700 text-sm'>status:</p>
+								)}
+								{currentUser?.isAdmin && (
+									<select
+										name='status'
+										onChange={(e) =>
+											updateData('paymentStatus', +e.target.value)
+										}
+										id='options'
+										value={bookingData.paymentStatus}
+										className='block w-[75%] mt-1 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm'
+									>
+										<option value={0}>None</option>
+										<option value={2}>Paid</option>
+										<option value={3}>Awaiting payment</option>
+									</select>
+								)}
 								<p className='text-gray-700 text-sm'>scope:</p>
 								<select
 									name='scope'
@@ -771,10 +777,10 @@ function Booking({ bookingData, id, onBookingUpload }) {
 									className='block w-[75%] mt-1 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm'
 								>
 									<option value={0}>Cash</option>
-									<option value={1}>Account</option>
+									{currentUser?.isAdmin && <option value={1}>Account</option>}
 									<option value={2}>Rank</option>
-									<option value={4}>Card</option>
-									<option value={3}>All</option>
+									{currentUser?.isAdmin && <option value={4}>Card</option>}
+									{currentUser?.isAdmin && <option value={3}>All</option>}
 								</select>
 							</div>
 							{bookingData.scope === 1 ? (

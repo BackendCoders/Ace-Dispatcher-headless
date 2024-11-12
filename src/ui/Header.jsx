@@ -27,8 +27,10 @@ import { useForm } from 'react-hook-form';
 const Navbar = () => {
 	const BASE_URL = import.meta.env.VITE_BASE_URL;
 	const navigate = useNavigate();
-	const { isAuth, logout } = useAuth();
+	const { isAuth, logout, currentUser } = useAuth();
 	const dispatch = useDispatch();
+
+	// console.log(currentUser);
 	// const activeTestMode = useSelector(
 	// 	(state) => state.bookingForm.isActiveTestMode
 	// );
@@ -224,32 +226,36 @@ const Navbar = () => {
 					</div>
 
 					{/* Search Button */}
-					<div className='flex justify-start items-center uppercase mb-4'>
-						{!activeSearch ? (
-							<button
-								onClick={() => {
-									setOpenSearch(true);
-									setMenuOpen(false);
-								}}
-							>
-								Search
-							</button>
-						) : (
-							<button onClick={handleCancelSearch}>Cancel Search</button>
-						)}
-					</div>
+					{currentUser?.isAdmin && (
+						<div className='flex justify-start items-center uppercase mb-4'>
+							{!activeSearch ? (
+								<button
+									onClick={() => {
+										setOpenSearch(true);
+										setMenuOpen(false);
+									}}
+								>
+									Search
+								</button>
+							) : (
+								<button onClick={handleCancelSearch}>Cancel Search</button>
+							)}
+						</div>
+					)}
 
 					{/* Google API Toggle */}
-					<div className='flex justify-start items-center gap-2 mb-4'>
-						<span>Use Google Api</span>
-						<Switch
-							checked={isGoogleApiOn}
-							onChange={(e) => {
-								dispatch(setIsGoogleApiOn(e.target.checked));
-								setMenuOpen(false);
-							}}
-						/>
-					</div>
+					{currentUser?.isAdmin && (
+						<div className='flex justify-start items-center gap-2 mb-4'>
+							<span>Use Google Api</span>
+							<Switch
+								checked={isGoogleApiOn}
+								onChange={(e) => {
+									dispatch(setIsGoogleApiOn(e.target.checked));
+									setMenuOpen(false);
+								}}
+							/>
+						</div>
+					)}
 
 					{/* Logout Button */}
 					{isAuth && (

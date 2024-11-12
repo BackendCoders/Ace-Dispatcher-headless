@@ -9,6 +9,7 @@ import { openSnackbar } from '../../context/snackbarSlice';
 import CurrencyPoundOutlinedIcon from '@mui/icons-material/CurrencyPoundOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import { Button } from '@mui/material';
+import { useAuth } from '../../hooks/useAuth';
 export default function CompleteBookingModal({
 	setIsCompleteBookingModal,
 	closeDialog,
@@ -26,7 +27,8 @@ export default function CompleteBookingModal({
 	const [waitingTime, setWaitingTime] = useState(data.waitingTime || 0);
 	const [parkingCharge, setParkingCharge] = useState(data.parkingCharge || 0);
 	const [price, setPrice] = useState(data.price || 0);
-
+	const user = useAuth();
+	// console.log({ data, user });
 	const dispatch = useDispatch();
 
 	const handleCompleteClick = async (e) => {
@@ -98,6 +100,9 @@ export default function CompleteBookingModal({
 							onChange={(e) => setPrice(+e.target.value)}
 							className='w-full pl-10 pr-4 py-2 p-2 border border-gray-500 rounded-md placeholder:text-slate-900'
 							placeholder='0'
+							disabled={
+								data.scope === 1 && user?.currentUser?.isAdmin ? false : true
+							}
 						/>
 						<i className=' absolute left-4 top-10  text-black'>
 							<CurrencyPoundOutlinedIcon fontSize='12px' />
