@@ -14,6 +14,8 @@ import {
 } from '../utils/apiReq';
 import axios from 'axios';
 
+const isMobile = window.innerWidth <= 640;
+
 const filterScheduledBookings = function (booking) {
 	return {
 		bookingId: booking.bookingId,
@@ -34,7 +36,7 @@ const schedulerSlice = createSlice({
 		currentlySelectedBookingIndex: -1,
 		selectedDriver: null,
 		activeDate: new Date().toISOString(),
-		activeComplete: false,
+		activeComplete: isMobile ? true : false,
 		activeSearch: false,
 		activeSoftAllocate: false,
 		activeSearchResults: [],
