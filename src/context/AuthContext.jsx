@@ -4,8 +4,7 @@ import { createContext, useState, useEffect } from 'react';
 import { getAccountList } from '../utils/apiReq';
 import { getAllDrivers } from '../utils/apiReq';
 import { sendLogs } from '../utils/getLogs';
-// const BASEURL = 'https://abacusonline-001-site1.atempurl.com';
-const BASEURL = 'https://api.acetaxisdorset.co.uk';
+const BASEURL = import.meta.env.VITE_BASE_URL;
 
 const AuthContext = createContext({
 	currentUser: null,
@@ -35,7 +34,7 @@ const AuthProvider = ({ children }) => {
 
 			sendLogs(
 				{
-					url: 'https://api.acetaxisdorset.co.uk/api/UserProfile/Login',
+					url: `${BASEURL}/api/UserProfile/Login`,
 					requestBody: request,
 					response: response,
 				},
@@ -50,6 +49,7 @@ const AuthProvider = ({ children }) => {
 				setIsAuth(true);
 				setToken(data.token); // Assuming response contains a token
 				setUsername(credentials.username);
+				localStorage.setItem('userData', JSON.stringify(data));
 				alert('Login successful');
 			} else {
 				const data = await response.json();
@@ -81,7 +81,7 @@ const AuthProvider = ({ children }) => {
 			);
 			sendLogs(
 				{
-					url: 'https://api.acetaxisdorset.co.uk/api/UserProfile/GetUser?username=${username}',
+					url: `${BASEURL}/api/UserProfile/GetUser?username=${username}`,
 					requestBody: request,
 					response,
 				},
@@ -134,30 +134,35 @@ const AuthProvider = ({ children }) => {
 		setIsLoading(true);
 		const token = getToken();
 		const username = getUsername();
+
 		if (!token || !username) {
 			setCurrentUser(null);
+		} else if (!currentUser) {
+			const userData = JSON.parse(localStorage.getItem('userData'));
+
+			if (userData) {
+				setCurrentUser(userData); // Set from localStorage
+				getUserRole(userData); // Set role and isAdmin
+			} else {
+				getUser(token, username); // Fetch user if not in localStorage
+			}
 		}
-		if (token && username && !currentUser) {
-			getUser(token, username);
-		} else {
-			setCurrentUser(
-				token ? JSON.parse(localStorage.getItem('userData')) : null
-			);
-			setIsAuth(!!token); // Assuming token presence indicates auth
-			setIsLoading(false);
-		}
+		setIsAuth(!!token); // Set auth status
+		setIsLoading(false);
 	}, []); // Run only on component mount
 
 	function getUserRole(currentUser) {
 		getAllDrivers().then((res) => {
 			const allUsers = res.users;
-			const user = allUsers.find((user) => user.id === currentUser.id);
+			const user = allUsers.find((user) => user?.id === currentUser?.id);
 			if (user) {
-				setCurrentUser((prev) => ({
-					...prev,
+				const updatedUser = {
+					...currentUser,
 					role: user.role,
 					isAdmin: user.role === 1,
-				}));
+				};
+				setCurrentUser(updatedUser);
+				localStorage.setItem('userData', JSON.stringify(updatedUser)); // Save with role
 			}
 		});
 	}

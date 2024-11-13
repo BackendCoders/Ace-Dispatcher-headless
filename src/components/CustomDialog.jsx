@@ -47,7 +47,7 @@ function CustomDialog({ closeDialog }) {
 		activeSearchResult,
 	} = useSelector((state) => state.scheduler);
 	const user = useAuth();
-	console.log(user);
+	// console.log(user);
 	let data = {};
 	data = bookings[index];
 	if (activeSearch) data = activeSearchResult;
@@ -472,7 +472,7 @@ function CustomDialog({ closeDialog }) {
 													? 'Awaiting payment'
 													: ''}{' '}
 												{data.paymentStatus === 0 &&
-													user?.currentUser?.role !== 3 && (
+													user?.currentUser?.roleId !== 3 && (
 														<button
 															onClick={() =>
 																setOpenSmsDailogModal((prev) => !prev)
@@ -483,7 +483,7 @@ function CustomDialog({ closeDialog }) {
 														</button>
 													)}
 												{data.paymentStatus === 2 &&
-													user?.currentUser?.role !== 3 && (
+													user?.currentUser?.roleId !== 3 && (
 														<button
 															onClick={handleRefundClick}
 															className='px-1 sm:px-3 py-1 text-white bg-green-500 hover:bg-opacity-80 rounded-lg text-[0.65rem] sm:text-[1rem]'
@@ -534,7 +534,7 @@ function CustomDialog({ closeDialog }) {
 						// onClick={() => setViewBookingModal(true)}
 					/> */}
 
-					{user?.currentUser?.role !== 3 && (
+					{user?.currentUser?.roleId !== 3 && (
 						<BookingButton
 							text='Soft Allocate'
 							color='bg-blue-700'
@@ -544,7 +544,7 @@ function CustomDialog({ closeDialog }) {
 							}}
 						/>
 					)}
-					{user?.currentUser?.role !== 3 && (
+					{user?.currentUser?.roleId !== 3 && (
 						<BookingButton
 							text='Allocate Booking'
 							color='bg-blue-700'
@@ -554,7 +554,7 @@ function CustomDialog({ closeDialog }) {
 							}}
 						/>
 					)}
-					{user?.currentUser?.role !== 3 && (
+					{user?.currentUser?.roleId !== 3 && (
 						<BookingButton
 							onClick={() => {
 								if (data.recurrenceRule) {
@@ -574,7 +574,7 @@ function CustomDialog({ closeDialog }) {
 							color='bg-blue-700'
 						/>
 					)}
-					{user?.currentUser?.role !== 3 && (
+					{user?.currentUser?.roleId !== 3 && (
 						<BookingButton
 							text='Duplicate Booking'
 							color='bg-blue-700'
@@ -591,14 +591,14 @@ function CustomDialog({ closeDialog }) {
 						color='bg-green-700'
 						onClick={() => setIsCompleteBookingModal(true)}
 					/>
-					{data.scope === 1 && user?.currentUser?.role !== 3 && (
+					{data.scope === 1 && user?.currentUser?.roleId !== 3 && (
 						<BookingButton
 							text='Cancel On Arrival'
 							color='bg-orange-700'
 							onClick={handleCancelOnArrival}
 						/>
 					)}
-					{user?.currentUser?.role !== 3 && (
+					{user?.currentUser?.roleId !== 3 && (
 						<BookingButton
 							text='Cancel Booking'
 							color='bg-red-700'

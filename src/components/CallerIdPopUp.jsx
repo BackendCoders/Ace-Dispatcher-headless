@@ -16,7 +16,7 @@ function CallerIdPopUp() {
 	const caller = useSelector((state) => state.caller);
 	const bookingData = useSelector((state) => state.bookingForm);
 	const [open, setOpen] = useState(
-		caller.length && user?.currentUser?.role !== 3 ? true : false
+		caller.length && user?.currentUser?.roleId !== 3 ? true : false
 	);
 	const isEmpty =
 		caller[0]?.Current?.length === 0 && caller[0]?.Previous?.length === 0;
@@ -27,7 +27,7 @@ function CallerIdPopUp() {
 	const callerType = caller.length ? caller[0].callerType : null;
 	// the simple use effect to open the popup or modal
 	useEffect(() => {
-		if (user?.currentUser?.role === 3) {
+		if (user?.currentUser?.roleId === 3) {
 			setOpen(false);
 			return;
 		}
@@ -37,12 +37,12 @@ function CallerIdPopUp() {
 	}, [caller, isEmpty]);
 
 	useEffect(() => {
-		if (user?.currentUser?.role !== 3 && callerType === 'lookup') {
+		if (user?.currentUser?.roleId !== 3 && callerType === 'lookup') {
 			setOpen(true);
 			return;
 		}
 		if (isCurrentTabActive) return;
-		if (user?.currentUser?.role !== 3 && caller.length > 0) setOpen(true);
+		if (user?.currentUser?.roleId !== 3 && caller.length > 0) setOpen(true);
 	}, [caller.length, isCurrentTabActive, callerType]);
 
 	function handleSubmit(selectedRow, activeTab) {
@@ -55,7 +55,7 @@ function CallerIdPopUp() {
 	}
 
 	if (
-		user?.currentUser?.role === 3 ||
+		user?.currentUser?.roleId === 3 ||
 		(isCurrentTabActive && callerType === 'stack')
 	)
 		return null;

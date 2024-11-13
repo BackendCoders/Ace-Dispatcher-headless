@@ -30,7 +30,7 @@ const Navbar = () => {
 	const { isAuth, logout, currentUser } = useAuth();
 	const dispatch = useDispatch();
 
-	// console.log(currentUser);
+	console.log(currentUser);
 	// const activeTestMode = useSelector(
 	// 	(state) => state.bookingForm.isActiveTestMode
 	// );
@@ -122,7 +122,7 @@ const Navbar = () => {
 							)}
 
 							{/* Search Form Started here */}
-							{currentUser?.role !== 3 && (
+							{currentUser?.roleId !== 3 && (
 								<div className='flex justify-center items-center uppercase'>
 									{!activeSearch && (
 										<button
@@ -143,7 +143,7 @@ const Navbar = () => {
 								</div>
 							)}
 
-							{currentUser?.role !== 3 && (
+							{currentUser?.roleId !== 3 && (
 								<span className='flex gap-2 items-center'>
 									<span className='text-xs sm:text-sm'>Use Google Api</span>
 									<Switch
@@ -230,7 +230,7 @@ const Navbar = () => {
 					</div>
 
 					{/* Search Button */}
-					{currentUser?.role !== 3 && (
+					{currentUser?.roleId !== 3 && (
 						<div className='flex justify-start items-center uppercase mb-4'>
 							{!activeSearch ? (
 								<button
@@ -248,7 +248,7 @@ const Navbar = () => {
 					)}
 
 					{/* Google API Toggle */}
-					{currentUser?.role !== 3 && (
+					{currentUser?.roleId !== 3 && (
 						<div className='flex justify-start items-center gap-2 mb-4'>
 							<span>Use Google Api</span>
 							<Switch

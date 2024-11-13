@@ -38,6 +38,8 @@ import { changeActiveDate } from '../context/schedulerSlice';
 function Booking({ bookingData, id, onBookingUpload }) {
 	// All Hooks and Contexts for the data flow and management
 	const { currentUser, isAuth } = useAuth();
+
+	// console.log(currentUser);
 	const dispatch = useDispatch();
 	const callerId = useSelector((state) => state.caller);
 	const { isGoogleApiOn } = useSelector((state) => state.bookingForm);
@@ -750,10 +752,10 @@ function Booking({ bookingData, id, onBookingUpload }) {
 						<>
 							{/* <p>options</p> */}
 							<div className='options mb-2 flex justify-between gap-3 align-middle items-center'>
-								{currentUser?.role !== 3 && (
+								{currentUser?.roleId !== 3 && (
 									<p className='text-gray-700 text-sm'>status:</p>
 								)}
-								{currentUser?.role !== 3 && (
+								{currentUser?.roleId !== 3 && (
 									<select
 										name='status'
 										onChange={(e) =>
@@ -777,12 +779,12 @@ function Booking({ bookingData, id, onBookingUpload }) {
 									className='block w-[75%] mt-1 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm'
 								>
 									<option value={0}>Cash</option>
-									{currentUser?.role !== 3 && (
+									{currentUser?.roleId !== 3 && (
 										<option value={1}>Account</option>
 									)}
 									<option value={2}>Rank</option>
-									{currentUser?.role !== 3 && <option value={4}>Card</option>}
-									{currentUser?.role !== 3 && <option value={3}>All</option>}
+									{currentUser?.roleId !== 3 && <option value={4}>Card</option>}
+									{currentUser?.roleId !== 3 && <option value={3}>All</option>}
 								</select>
 							</div>
 							{bookingData.scope === 1 ? (
@@ -817,7 +819,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 									</div>
 
 									<div className='mb-2 w-[50%] flex flex-col gap-4'>
-										{bookingData.scope === 1 && currentUser?.role !== 3 ? (
+										{bookingData.scope === 1 && currentUser?.roleId !== 3 ? (
 											<Input
 												type='number'
 												placeholder='Price Account'

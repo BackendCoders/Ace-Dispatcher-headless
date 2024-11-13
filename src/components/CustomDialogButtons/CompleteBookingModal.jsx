@@ -28,7 +28,7 @@ export default function CompleteBookingModal({
 	const [parkingCharge, setParkingCharge] = useState(data.parkingCharge || 0);
 	const [price, setPrice] = useState(data.price || 0);
 	const user = useAuth();
-	// console.log({ data, user });
+	console.log({ data, user });
 	const dispatch = useDispatch();
 
 	const handleCompleteClick = async (e) => {
@@ -101,7 +101,9 @@ export default function CompleteBookingModal({
 							className='w-full pl-10 pr-4 py-2 p-2 border border-gray-500 rounded-md placeholder:text-slate-900'
 							placeholder='0'
 							disabled={
-								data.scope === 1 && user?.currentUser?.role !== 3 ? false : true
+								data.scope === 1 && user?.currentUser?.roleId !== 3
+									? false
+									: true
 							}
 						/>
 						<i className=' absolute left-4 top-10  text-black'>
