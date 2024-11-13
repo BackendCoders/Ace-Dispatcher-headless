@@ -79,7 +79,7 @@ const AceScheduler = () => {
 		args.element;
 		let driverColor = '#795548'; // Default color if both suggestedUserId and userId are null
 
-		if (args.data.suggestedUserId) {
+		if (args.data.suggestedUserId && !args.data.userId) {
 			// If there's a suggestedUserId, use the suggested driver's color
 			const suggestedDriver = driverData.find(
 				(driver) => driver.id === args.data.suggestedUserId

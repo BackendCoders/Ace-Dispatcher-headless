@@ -8,12 +8,16 @@ import {
 	addCallerToBooking,
 	updateCurrentBookingWithLookup,
 } from '../context/callerSlice';
+import { useAuth } from '../hooks/useAuth';
 
 function CallerIdPopUp() {
+	const user = useAuth();
 	const dispatch = useDispatch();
 	const caller = useSelector((state) => state.caller);
 	const bookingData = useSelector((state) => state.bookingForm);
-	const [open, setOpen] = useState(caller.length ? true : false);
+	const [open, setOpen] = useState(
+		caller.length && user?.currentUser?.role !== 3 ? true : false
+	);
 	const isEmpty =
 		caller[0]?.Current?.length === 0 && caller[0]?.Previous?.length === 0;
 	const isCurrentTabActive =
@@ -21,21 +25,24 @@ function CallerIdPopUp() {
 		bookingData;
 
 	const callerType = caller.length ? caller[0].callerType : null;
-
 	// the simple use effect to open the popup or modal
 	useEffect(() => {
+		if (user?.currentUser?.role === 3) {
+			setOpen(false);
+			return;
+		}
 		if (caller[0]?.Telephone && !isEmpty) {
 			setOpen(true);
 		}
 	}, [caller, isEmpty]);
 
 	useEffect(() => {
-		if (callerType === 'lookup') {
+		if (user?.currentUser?.role !== 3 && callerType === 'lookup') {
 			setOpen(true);
 			return;
 		}
 		if (isCurrentTabActive) return;
-		if (caller.length > 0) setOpen(true);
+		if (user?.currentUser?.role !== 3 && caller.length > 0) setOpen(true);
 	}, [caller.length, isCurrentTabActive, callerType]);
 
 	function handleSubmit(selectedRow, activeTab) {
@@ -47,7 +54,11 @@ function CallerIdPopUp() {
 		setOpen(false);
 	}
 
-	if (isCurrentTabActive && callerType === 'stack') return null;
+	if (
+		user?.currentUser?.role === 3 ||
+		(isCurrentTabActive && callerType === 'stack')
+	)
+		return null;
 	if (isEmpty) return null;
 
 	return (

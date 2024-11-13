@@ -193,6 +193,13 @@ function CustomDialog({ closeDialog }) {
 										? 'All'
 										: data.scope === 4
 										? 'Card'
+										: ''}{' '}
+									{data.paymentStatus === 0
+										? ''
+										: data.paymentStatus === 2
+										? '- Received'
+										: data.paymentStatus === 3
+										? '- Awaiting'
 										: ''}
 								</span>
 								<div className='absolute -top-4 -right-4 rounded-full p-[0.2rem] flex items-center justify-center bg-white'>
