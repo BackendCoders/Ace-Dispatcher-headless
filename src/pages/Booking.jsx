@@ -819,7 +819,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 									</div>
 
 									<div className='mb-2 w-[50%] flex flex-col gap-4'>
-										{bookingData.scope === 1 && currentUser?.roleId !== 3 ? (
+										{bookingData.scope === 1 && currentUser?.roleId === 1 ? (
 											<Input
 												type='number'
 												placeholder='Price Account'
