@@ -158,8 +158,6 @@ const AuthProvider = ({ children }) => {
 					role: user.role,
 					isAdmin: user.role === 1,
 				}));
-			} else {
-				setCurrentUser((prev) => ({ ...prev, isAdmin: false }));
 			}
 		});
 	}
