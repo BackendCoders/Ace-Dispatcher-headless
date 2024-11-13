@@ -32,6 +32,7 @@ const AuthProvider = ({ children }) => {
 				body: JSON.stringify(credentials),
 			};
 			const response = await fetch(BASEURL + '/api/UserProfile/Login', request);
+
 			sendLogs(
 				{
 					url: 'https://api.acetaxisdorset.co.uk/api/UserProfile/Login',
@@ -150,8 +151,12 @@ const AuthProvider = ({ children }) => {
 		getAllDrivers().then((res) => {
 			const allUsers = res.users;
 			const user = allUsers.find((user) => user.id === currentUser.id);
-			if (user.role === 1) {
-				setCurrentUser((prev) => ({ ...prev, isAdmin: true }));
+			if (user) {
+				setCurrentUser((prev) => ({
+					...prev,
+					role: user.role,
+					isAdmin: user.role === 1,
+				}));
 			} else {
 				setCurrentUser((prev) => ({ ...prev, isAdmin: false }));
 			}

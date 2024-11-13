@@ -101,7 +101,7 @@ export default function CompleteBookingModal({
 							className='w-full pl-10 pr-4 py-2 p-2 border border-gray-500 rounded-md placeholder:text-slate-900'
 							placeholder='0'
 							disabled={
-								data.scope === 1 && user?.currentUser?.isAdmin ? false : true
+								data.scope === 1 && user?.currentUser?.role !== 3 ? false : true
 							}
 						/>
 						<i className=' absolute left-4 top-10  text-black'>
