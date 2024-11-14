@@ -74,7 +74,7 @@ const AceScheduler = () => {
 		Readonly: { name: 'Readonly' },
 	};
 
-	// syncfusion handler funtion for each render of syncfusion element on the screen
+	// syncfusion handler function for each render of syncfusion element on the screen
 	function onEventRendered(args) {
 		args.element;
 		let driverColor = '#795548'; // Default color if both suggestedUserId and userId are null
