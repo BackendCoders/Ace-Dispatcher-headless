@@ -55,7 +55,7 @@ const initialState = {
 	activeBookingIndex: 0,
 	// isActiveTestMode: true,
 	isGoogleApiOn: false,
-	activeSectionMobileView: 'Booking',
+	activeSectionMobileView: 'Scheduler',
 };
 
 const bookingFormSlice = createSlice({
