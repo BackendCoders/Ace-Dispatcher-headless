@@ -94,11 +94,7 @@ const AceScheduler = () => {
 
 		// Apply gradient based on activeSoftAllocate status
 		if (args.data.suggestedUserId && !args.data.userId) {
-			// console.log(
-			// 	'Applying 0deg gradient for soft allocate with color:',
-			// 	driverColor
-			// );
-			// Use a 0-degree gradient for soft allocation
+			// Use a dot-pattern gradient for soft allocation
 			args.element.style.backgroundImage = `
     radial-gradient(${driverColor} 40%, transparent 40%),
     radial-gradient(${driverColor} 40%, transparent 40%)`;
@@ -107,16 +103,6 @@ const AceScheduler = () => {
 			args.element.style.backgroundSize = '20px 20px'; // Increase size to make dots larger
 			args.element.style.backgroundPosition = '0 0, 10px 10px';
 			args.element.style.backgroundColor = '#795548';
-
-			// args.element.querySelector('.e-appointment-details').style.display =
-			// 	'flex';
-			// args.element.querySelector('.e-appointment-details').style.flexDirection =
-			// 	'column';
-			// args.element.querySelector(
-			// 	'.e-appointment-details'
-			// ).style.justifyContent = 'flex-start';
-			// args.element.querySelector('.e-appointment-details').style.alignItems =
-			// 	'flex-start';
 
 			const subjectElement = args.element.querySelector('.e-subject');
 			if (subjectElement) {
