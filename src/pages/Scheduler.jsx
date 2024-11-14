@@ -104,9 +104,57 @@ const AceScheduler = () => {
     radial-gradient(${driverColor} 40%, transparent 40%)`;
 
 			// Adjust the background size to reflect larger dots and manage spacing
-			args.element.style.backgroundSize = '10px 10px'; // Increase size to make dots larger
+			args.element.style.backgroundSize = '20px 20px'; // Increase size to make dots larger
 			args.element.style.backgroundPosition = '0 0, 10px 10px';
 			args.element.style.backgroundColor = '#795548';
+
+			// args.element.querySelector('.e-appointment-details').style.display =
+			// 	'flex';
+			// args.element.querySelector('.e-appointment-details').style.flexDirection =
+			// 	'column';
+			// args.element.querySelector(
+			// 	'.e-appointment-details'
+			// ).style.justifyContent = 'flex-start';
+			// args.element.querySelector('.e-appointment-details').style.alignItems =
+			// 	'flex-start';
+
+			const subjectElement = args.element.querySelector('.e-subject');
+			if (subjectElement) {
+				subjectElement.style.display = 'inline-block'; // Ensure it only takes the width of the text
+				subjectElement.style.padding = '0 4px'; // Add a little padding if needed
+				subjectElement.style.backgroundColor = driverColor; // Optional background for clarity
+				subjectElement.style.borderRadius = '4px'; // Round the edges for a badge-like appearance
+				subjectElement.style.maxWidth = 'fit-content'; // Ensure it wraps to the text width
+				// subjectElement.style.overflow = 'hidden'; // Hide overflow if text exceeds width
+				subjectElement.style.whiteSpace = 'wrap'; // Prevent wrapping to new lines
+			}
+
+			if (args.element.querySelector('.e-time')) {
+				args.element.querySelector('.e-time').style.display = 'block';
+				args.element.querySelector('.e-time').style.backgroundColor =
+					driverColor;
+				args.element.querySelector('.e-time').style.padding = '0 4px'; // Add a little padding if needed
+				args.element.querySelector('.e-time').style.borderRadius = '4px';
+				args.element.querySelector('.e-time').style.maxWidth = 'fit-content'; // Ensure it wraps to the text width
+				// subjectElement.style.overflow = 'hidden'; // Hide overflow if text exceeds width
+				args.element.querySelector('.e-time').style.whiteSpace = 'wrap';
+			}
+
+			// const subjectElement = args.element.querySelector('.e-subject');
+
+			// // Create the badge element
+			// const badge = document.createElement('span');
+			// badge.textContent = 'Soft';
+			// badge.style.backgroundColor = driverColor;
+			// badge.style.color = isLightColor(driverColor) ? 'black' : 'white';
+			// badge.style.padding = '5px 5px';
+			// badge.style.marginLeft = '5px';
+			// badge.style.borderRadius = '3px';
+			// badge.style.fontSize = '10px';
+			// badge.style.fontWeight = 'bold';
+
+			// // Append the badge next to the subject text
+			// subjectElement.appendChild(badge);
 		} else if (args.data.userId && args.data.status === 1) {
 			// Use a -40-degree gradient for normal allocation
 			args.element.style.background = `repeating-linear-gradient(-40deg, ${driverColor}, ${driverColor} 10px, rgb(187, 187, 187) 20px)`;
