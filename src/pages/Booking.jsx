@@ -1,6 +1,6 @@
 /** @format */
 // all External Libraries and Components are imports
-import { Switch, TextField } from '@mui/material';
+import { Switch, TextField, useMediaQuery } from '@mui/material';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import { useEffect, useState, Fragment, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -58,7 +58,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 	const [isQuoteDialogActive, setIsQuoteDialogActive] = useState(false);
 	const [quote, setQuote] = useState(null);
 	const [formSubmitLoading, setFormSubmitLoading] = useState(false);
-
+	const isMobile = useMediaQuery('(max-width:640px)');
 	// working for 🔁 button basically toggles between pickup and destination addresses
 	function toggleAddress() {
 		updateData('destinationAddress', bookingData.pickupAddress);
@@ -472,7 +472,9 @@ function Booking({ bookingData, id, onBookingUpload }) {
 								}}
 								inputRef={pickupRef}
 								handleChangeRef={(e) => handleChangeFocus(e, destinationRef)}
-								handleClickRef={(e) => handleClick(e, pickupRef)}
+								handleClickRef={
+									isMobile ? null : (e) => handleClick(e, pickupRef)
+								}
 							/>
 						) : (
 							<GoogleAutoComplete2
@@ -490,7 +492,9 @@ function Booking({ bookingData, id, onBookingUpload }) {
 								}}
 								inputRef={pickupRef}
 								handleChangeRef={(e) => handleChangeFocus(e, destinationRef)}
-								handleClickRef={(e) => handleClick(e, pickupRef)}
+								handleClickRef={
+									isMobile ? null : (e) => handleClick(e, pickupRef)
+								}
 							/>
 						)}
 						<Autocomplete
@@ -542,7 +546,9 @@ function Booking({ bookingData, id, onBookingUpload }) {
 								}}
 								inputRef={destinationRef}
 								handleChangeRef={(e) => handleChangeFocus(e, userNameRef)}
-								handleClickRef={(e) => handleClick(e, destinationRef)}
+								handleClickRef={
+									isMobile ? null : (e) => handleClick(e, destinationRef)
+								}
 							/>
 						) : (
 							<GoogleAutoComplete2
@@ -559,7 +565,9 @@ function Booking({ bookingData, id, onBookingUpload }) {
 								}}
 								inputRef={destinationRef}
 								handleChangeRef={(e) => handleChangeFocus(e, userNameRef)}
-								handleClickRef={(e) => handleClick(e, destinationRef)}
+								handleClickRef={
+									isMobile ? null : (e) => handleClick(e, destinationRef)
+								}
 							/>
 						)}
 						<Autocomplete

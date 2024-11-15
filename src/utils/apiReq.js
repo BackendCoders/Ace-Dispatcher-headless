@@ -249,12 +249,10 @@ async function getAddressSuggestions(location) {
 		// Step 1: Get autocomplete suggestions
 
 		const filter = {
-			radius: {
-				km: 10,
-			},
 			location: {
-				longitude: -2.2799,
+				// km: 100,
 				latitude: 51.0388,
+				longitude: -2.2799,
 			},
 		};
 		const autocompleteResponse = await axios.post(
