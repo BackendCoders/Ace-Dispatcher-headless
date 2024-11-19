@@ -107,7 +107,7 @@ const Navbar = () => {
 				<span
 					className={`${
 						menuOpen ? 'flex' : 'hidden'
-					} flex-col sm:flex sm:flex-row items-center justify-end gap-4 sm:gap-10 uppercase text-sm w-[50%]`}
+					} flex-col sm:flex sm:flex-row items-center justify-end gap-4 sm:gap-10 uppercase text-sm  w-[50%]`}
 				>
 					{!isAuth ? (
 						<></>
@@ -185,7 +185,7 @@ const Navbar = () => {
 					)}
 				</span>
 				<div
-					className={`fixed inset-y-0 right-0 z-50 w-3/4 max-w-xs bg-[#C74949] text-white p-4 transform ${
+					className={`fixed inset-y-0 right-0 z-50 w-[55%] max-w-xs bg-[#C74949] text-white p-4 transform ${
 						menuOpen ? 'translate-x-0' : 'translate-x-full'
 					} transition-transform duration-300 ease-in-out sm:hidden`}
 				>

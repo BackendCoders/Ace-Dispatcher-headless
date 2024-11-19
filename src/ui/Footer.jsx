@@ -76,15 +76,15 @@ function Footer() {
 
 			{/* for Mobile View */}
 			{isAuth && (
-				<div className='sm:hidden flex justify-around items-center w-full py-3 bg-[#C74949]'>
+				<div className='sm:hidden flex justify-around items-center w-full py-2 bg-[#C74949]'>
 					<button
 						className='flex flex-col items-center text-gray-200'
 						onClick={() =>
 							dispatch(changeShowDriverAvailability(!showDriverAvailability))
 						}
 					>
-						<EventAvailableIcon />
-						<span className='font-medium'>Availability</span>
+						<EventAvailableIcon fontSize='14px' />
+						<span className='font-medium text-[.8rem]'>Availability</span>
 					</button>
 					<button
 						className='flex flex-col items-center text-gray-200'
@@ -95,8 +95,8 @@ function Footer() {
 							dispatch(setActiveSectionMobileView('Booking'));
 						}}
 					>
-						<EditCalendarIcon />
-						<span className='font-medium'>Booking</span>
+						<EditCalendarIcon fontSize='14px' />
+						<span className='font-medium text-[.8rem]'>Booking</span>
 					</button>
 					<button
 						className='flex flex-col items-center text-gray-200'
@@ -107,8 +107,8 @@ function Footer() {
 							dispatch(setActiveSectionMobileView('Scheduler'));
 						}}
 					>
-						<CalendarMonthIcon />
-						<span className='font-medium'>Diary</span>
+						<CalendarMonthIcon fontSize='14px' />
+						<span className='font-medium text-[.8rem]'>Diary</span>
 					</button>
 				</div>
 			)}
