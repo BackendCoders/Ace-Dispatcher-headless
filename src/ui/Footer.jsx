@@ -11,6 +11,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 function Footer() {
 	const user = useAuth();
+	const { isAuth } = useAuth();
 	// console.log('User', user);
 	const { showDriverAvailability } = useSelector((state) => state.scheduler);
 	// const { isActiveTestMode } = useSelector((state) => state.bookingForm);
@@ -74,41 +75,43 @@ function Footer() {
 			</div>
 
 			{/* for Mobile View */}
-			<div className='sm:hidden flex justify-around items-center w-full py-3 bg-[#C74949]'>
-				<button
-					className='flex flex-col items-center text-gray-200'
-					onClick={() =>
-						dispatch(changeShowDriverAvailability(!showDriverAvailability))
-					}
-				>
-					<EventAvailableIcon />
-					<span className='font-medium'>Availability</span>
-				</button>
-				<button
-					className='flex flex-col items-center text-gray-200'
-					onClick={() => {
-						if (showDriverAvailability) {
-							dispatch(changeShowDriverAvailability(!showDriverAvailability));
+			{isAuth && (
+				<div className='sm:hidden flex justify-around items-center w-full py-3 bg-[#C74949]'>
+					<button
+						className='flex flex-col items-center text-gray-200'
+						onClick={() =>
+							dispatch(changeShowDriverAvailability(!showDriverAvailability))
 						}
-						dispatch(setActiveSectionMobileView('Booking'));
-					}}
-				>
-					<EditCalendarIcon />
-					<span className='font-medium'>Booking</span>
-				</button>
-				<button
-					className='flex flex-col items-center text-gray-200'
-					onClick={() => {
-						if (showDriverAvailability) {
-							dispatch(changeShowDriverAvailability(!showDriverAvailability));
-						}
-						dispatch(setActiveSectionMobileView('Scheduler'));
-					}}
-				>
-					<CalendarMonthIcon />
-					<span className='font-medium'>Diary</span>
-				</button>
-			</div>
+					>
+						<EventAvailableIcon />
+						<span className='font-medium'>Availability</span>
+					</button>
+					<button
+						className='flex flex-col items-center text-gray-200'
+						onClick={() => {
+							if (showDriverAvailability) {
+								dispatch(changeShowDriverAvailability(!showDriverAvailability));
+							}
+							dispatch(setActiveSectionMobileView('Booking'));
+						}}
+					>
+						<EditCalendarIcon />
+						<span className='font-medium'>Booking</span>
+					</button>
+					<button
+						className='flex flex-col items-center text-gray-200'
+						onClick={() => {
+							if (showDriverAvailability) {
+								dispatch(changeShowDriverAvailability(!showDriverAvailability));
+							}
+							dispatch(setActiveSectionMobileView('Scheduler'));
+						}}
+					>
+						<CalendarMonthIcon />
+						<span className='font-medium'>Diary</span>
+					</button>
+				</div>
+			)}
 		</div>
 	);
 }

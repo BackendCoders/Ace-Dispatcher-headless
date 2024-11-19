@@ -94,12 +94,14 @@ const Navbar = () => {
 						</span>
 					</Link>
 					{/* Mobile Menu Toggle */}
-					<button
-						className='sm:hidden text-2xl focus:outline-none mr-2'
-						onClick={() => setMenuOpen(!menuOpen)}
-					>
-						☰
-					</button>
+					{isAuth && (
+						<button
+							className='sm:hidden text-2xl focus:outline-none mr-2'
+							onClick={() => setMenuOpen(!menuOpen)}
+						>
+							☰
+						</button>
+					)}
 				</span>
 
 				<span
