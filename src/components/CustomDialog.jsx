@@ -154,7 +154,7 @@ function CustomDialog({ closeDialog }) {
 			origin
 		)}&destination=${encodeURIComponent(
 			destination
-		)}&waypoints=${encodeURIComponent(waypoints)}`;
+		)}&waypoints=${encodeURIComponent(waypoints)}&travelmode=driving`;
 	};
 
 	return (
