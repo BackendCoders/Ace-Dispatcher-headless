@@ -29,7 +29,7 @@ const Navbar = () => {
 	const navigate = useNavigate();
 	const { isAuth, logout, currentUser } = useAuth();
 	const dispatch = useDispatch();
-
+	const isMobile = useMediaQuery('(max-width:640px)');
 	console.log(currentUser);
 	// const activeTestMode = useSelector(
 	// 	(state) => state.bookingForm.isActiveTestMode
@@ -198,15 +198,17 @@ const Navbar = () => {
 					</div>
 
 					{/* Caller ID Badge */}
-					{isAuth && callerId.length > 0 && (
-						<Badge
-							badgeContent={callerId.length}
-							color='error'
-							className='cursor-pointer animate-bounce mb-4'
-						>
-							<CallIcon />
-						</Badge>
-					)}
+					{(!isMobile || currentUser?.roleId !== 3) &&
+						isAuth &&
+						callerId.length > 0 && (
+							<Badge
+								badgeContent={callerId.length}
+								color='error'
+								className='cursor-pointer animate-bounce mb-4'
+							>
+								<CallIcon />
+							</Badge>
+						)}
 
 					<div className='flex gap-4 mb-4'>
 						<button
