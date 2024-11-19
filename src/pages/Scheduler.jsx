@@ -273,7 +273,7 @@ const AceScheduler = () => {
 			</ScheduleComponent>
 			{/* Changed by Tanya - (9 Aug) */}
 			<div className='flex justify-end w-[10%] fixed top-[120px] right-[0px] sm:top-[125px] sm:right-[160px] z-[40]'>
-				{!activeSearch && (
+				{!isMobile && !activeSearch && (
 					<span className='flex flex-row gap-2 items-center align-middle'>
 						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
 							Show Completed

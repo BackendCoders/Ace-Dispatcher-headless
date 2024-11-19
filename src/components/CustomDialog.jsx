@@ -586,13 +586,13 @@ function CustomDialog({ closeDialog }) {
 						color='bg-blue-700'
 						onClick={handleDriverArrived}
 					/>
-					{user?.currentUser?.roleId !== 3 && (
-						<BookingButton
-							text='Complete Booking'
-							color='bg-green-700'
-							onClick={() => setIsCompleteBookingModal(true)}
-						/>
-					)}
+
+					<BookingButton
+						text='Complete Booking'
+						color='bg-green-700'
+						onClick={() => setIsCompleteBookingModal(true)}
+					/>
+
 					{data.scope === 1 && user?.currentUser?.roleId !== 3 && (
 						<BookingButton
 							text='Cancel On Arrival'
