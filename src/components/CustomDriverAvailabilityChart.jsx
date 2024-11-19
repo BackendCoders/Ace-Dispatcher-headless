@@ -3,18 +3,22 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getDriverAvailability } from '../utils/apiReq';
+import { useMediaQuery } from '@mui/material';
 
 const getPercentage = (time) => {
 	const [hours, minutes] = time.split(':').map(Number);
 	return ((hours * 60 + minutes) / (24 * 60)) * 100;
 };
 
-const WrapperDiv = function () {
+const WrapperDiv = function ({ availabilityDate }) {
 	const [data, setData] = useState([]);
 	const { bookings, activeBookingIndex } = useSelector(
 		(state) => state.bookingForm
 	);
-	const date = bookings[activeBookingIndex].pickupDateTime;
+	const isMobile = useMediaQuery('(max-width:640px)');
+	const date = isMobile
+		? availabilityDate
+		: bookings[activeBookingIndex].pickupDateTime;
 	useEffect(() => {
 		async function getData() {
 			// const response = await getDriverAvailability(

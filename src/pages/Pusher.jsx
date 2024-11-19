@@ -56,6 +56,8 @@ export default function Push() {
 		(state) => state.bookingForm.activeSectionMobileView
 	);
 
+	const [availabilityDate, setAvailabilityDate] = useState('');
+
 	const isMobile = useMediaQuery('(max-width:640px)');
 
 	const handleChange = (event, newValue) => {
@@ -90,6 +92,16 @@ export default function Push() {
 			console.error('Error processing booking:', error);
 		}
 	}
+
+	useEffect(() => {
+		const now = new Date();
+		const formattedDate = `${now.getFullYear()}-${String(
+			now.getMonth() + 1
+		).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}T${String(
+			now.getHours()
+		).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+		setAvailabilityDate(formattedDate);
+	}, []);
 
 	useEffect(() => {
 		function handleBind(data) {
@@ -188,7 +200,18 @@ export default function Push() {
 				>
 					{showDriverAvailability ? (
 						<Box sx={{ padding: '16px' }}>
-							<CustomDriverAvailabilityChart />
+							<Box>
+								<input
+									required
+									type='datetime-local'
+									className='w-full bg-input text-foreground p-2 rounded-lg border border-border'
+									value={availabilityDate}
+									onChange={(e) => setAvailabilityDate(e.target.value)}
+								/>
+							</Box>
+							<CustomDriverAvailabilityChart
+								availabilityDate={availabilityDate}
+							/>
 						</Box>
 					) : (
 						<>
