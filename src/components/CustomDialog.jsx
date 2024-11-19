@@ -586,11 +586,13 @@ function CustomDialog({ closeDialog }) {
 						color='bg-blue-700'
 						onClick={handleDriverArrived}
 					/>
-					<BookingButton
-						text='Complete Booking'
-						color='bg-green-700'
-						onClick={() => setIsCompleteBookingModal(true)}
-					/>
+					{user?.currentUser?.roleId !== 3 && (
+						<BookingButton
+							text='Complete Booking'
+							color='bg-green-700'
+							onClick={() => setIsCompleteBookingModal(true)}
+						/>
+					)}
 					{data.scope === 1 && user?.currentUser?.roleId !== 3 && (
 						<BookingButton
 							text='Cancel On Arrival'
@@ -682,13 +684,22 @@ function getTodayInEnGbFormat(date) {
 }
 
 const BookingOption = ({ text, head, link }) => {
+	const isPhoneNumber = head.toLowerCase().includes('phone') && text !== 'NA';
+	const phoneLink = isPhoneNumber ? `tel:${text}` : null;
 	return (
 		<div className='flex items-start mb-1 w-full'>
 			<p className='text-md font-medium pr-2 sm:whitespace-nowrap sm:w-[30%] flex justify-start sm:justify-end sm:items-end'>
 				{head}:{' '}
 			</p>
 			<span className='text-card dark:text-popover-foreground text-[1rem] sm:w-[70%] flex sm:justify-start sm:items-start'>
-				{link ? (
+				{isPhoneNumber ? (
+					<a
+						href={phoneLink}
+						className='text-blue-600'
+					>
+						{text}
+					</a>
+				) : link ? (
 					<a
 						href={link}
 						target='_blank'
