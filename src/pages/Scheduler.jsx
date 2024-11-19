@@ -38,6 +38,7 @@ import {
 import { createBookingFromScheduler } from '../context/bookingSlice';
 import Loader from '../components/Loader';
 import { getAllDrivers } from '../utils/apiReq';
+import { useAuth } from '../hooks/useAuth';
 
 const AceScheduler = () => {
 	const isMobile = useMediaQuery('(max-width: 640px)');
@@ -61,6 +62,7 @@ const AceScheduler = () => {
 	const [viewBookingModal, setViewBookingModal] = useState(false);
 	const [driverData, setDriverData] = useState([]);
 	const dispatch = useDispatch();
+	const user = useAuth();
 
 	// data that syncfusion requires for inside computation of the internal mapping
 	const fieldsData = {
@@ -273,7 +275,7 @@ const AceScheduler = () => {
 			</ScheduleComponent>
 			{/* Changed by Tanya - (9 Aug) */}
 			<div className='flex justify-end w-[10%] fixed top-[120px] right-[0px] sm:top-[125px] sm:right-[160px] z-[40]'>
-				{!isMobile && !activeSearch && (
+				{(!isMobile || user?.currentUser?.roleId !== 3) && !activeSearch && (
 					<span className='flex flex-row gap-2 items-center align-middle'>
 						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
 							Show Completed
