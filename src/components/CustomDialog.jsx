@@ -274,7 +274,9 @@ function CustomDialog({ closeDialog }) {
 										<BookingOption
 											text={`${data.pickupAddress}, ${data.pickupPostCode}`}
 											head='From'
-											link={generateRouteLink()}
+											link={`https://www.google.com/maps?q=${encodeURIComponent(
+												data.pickupPostCode
+											)}`}
 										/>
 									</div>
 								</div>
