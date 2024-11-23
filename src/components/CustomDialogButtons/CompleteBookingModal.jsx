@@ -31,6 +31,16 @@ export default function CompleteBookingModal({
 	console.log({ data, user });
 	const dispatch = useDispatch();
 
+	const disableInput = () => {
+		if (data?.scope === 1 && user?.currentUser?.roleId === 3) {
+			return true;
+		} else if (data.scope !== 1) {
+			return false;
+		}
+
+		return false;
+	};
+
 	const handleCompleteClick = async (e) => {
 		// console.log(`${data.bookingId} is completed`);
 		e.preventDefault();
@@ -100,11 +110,7 @@ export default function CompleteBookingModal({
 							onChange={(e) => setPrice(+e.target.value)}
 							className='w-full pl-10 pr-4 py-2 p-2 border border-gray-500 rounded-md placeholder:text-slate-900'
 							placeholder='0'
-							disabled={
-								data.scope === 1 && user?.currentUser?.roleId !== 3
-									? false
-									: true
-							}
+							disabled={disableInput()}
 						/>
 						<i className=' absolute left-4 top-10  text-black'>
 							<CurrencyPoundOutlinedIcon fontSize='12px' />
