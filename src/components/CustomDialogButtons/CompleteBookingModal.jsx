@@ -80,6 +80,7 @@ export default function CompleteBookingModal({
 							onChange={(e) => setWaitingTime(+e.target.value)}
 							className='w-full pl-10 pr-4 py-2 p-2 border border-gray-500 rounded-md placeholder:text-slate-900'
 							placeholder='0'
+							disabled={user?.currentUser?.roleId === 3 ? true : false}
 						/>
 						<i className='absolute left-4 top-10 text-black'>
 							<AccessTimeOutlinedIcon fontSize='12px' />
@@ -94,6 +95,7 @@ export default function CompleteBookingModal({
 							min='0'
 							className='w-full pl-10 pr-4 py-2 p-2 border border-gray-500 rounded-md placeholder:text-slate-900'
 							placeholder='0'
+							disabled={user?.currentUser?.roleId === 3 ? true : false}
 						/>
 						<i className='absolute left-4 top-10 text-black'>
 							<CurrencyPoundOutlinedIcon fontSize='12px' />
