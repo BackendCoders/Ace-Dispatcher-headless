@@ -118,7 +118,7 @@ export default function CompleteBookingModal({
 							<CurrencyPoundOutlinedIcon fontSize='12px' />
 						</i>
 					</div>
-					{data.priceAccount > 0 && (
+					{data.priceAccount > 0 && user?.currentUser?.roleId !== 3 && (
 						<div className='w-full relative flex flex-col justify-center items-start gap-2'>
 							<label className=''>Account Price</label>
 							<input
