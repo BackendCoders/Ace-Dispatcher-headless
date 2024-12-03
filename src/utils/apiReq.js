@@ -347,10 +347,10 @@ async function deleteSchedulerBooking(data) {
 	return res;
 }
 
-// async function getDriverAvailability() {
-// 	const URL = `${BASE}/api/UserProfile/GetAvailability`;
-// 	return await handlePostReq(URL, { date: new Date().toISOString() });
-// }
+async function getAvailabilityDriverOld(date) {
+	const URL = `${BASE}/api/UserProfile/GetAvailability`;
+	return await handlePostReq(URL, { date: new Date(date).toISOString() });
+}
 
 async function getDriverAvailability(dueDate) {
 	const URL = `${BASE}/api/Availability/General?date=${dueDate}`;
@@ -603,4 +603,5 @@ export {
 	sendPaymentLink,
 	sendRefundLink,
 	driverArrived,
+	getAvailabilityDriverOld,
 };

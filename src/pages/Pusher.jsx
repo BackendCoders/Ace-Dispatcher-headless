@@ -5,7 +5,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CloseIcon from '@mui/icons-material/Close';
-import { Button, useMediaQuery } from '@mui/material';
+import { Button, Switch, useMediaQuery } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { ResizableBox } from 'react-resizable';
 import 'react-resizable/css/styles.css';
@@ -34,6 +34,8 @@ import { getRefreshedBookings } from '../context/schedulerSlice';
 import CustomDriverAvailabilityChart from '../components/CustomDriverAvailabilityChart';
 import { loadGoogleMapsScript } from '../utils/googleMap';
 import { sendLogs } from '../utils/getLogs';
+import AvailbilityChartMobileView from '../components/AvailbilityChartMobileView';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 
 const pusher = new Pusher('8d1879146140a01d73cf', {
 	cluster: 'eu',
@@ -57,7 +59,7 @@ export default function Push() {
 	);
 
 	const [availabilityDate, setAvailabilityDate] = useState('');
-
+	const [oldAvailbility, setOldAvailbility] = useState(false);
 	const isMobile = useMediaQuery('(max-width:640px)');
 
 	const handleChange = (event, newValue) => {
@@ -209,9 +211,32 @@ export default function Push() {
 									onChange={(e) => setAvailabilityDate(e.target.value)}
 								/>
 							</Box>
-							<CustomDriverAvailabilityChart
-								availabilityDate={availabilityDate}
-							/>
+							<Box>
+								<span className='flex justify-end gap-2 items-center'>
+									<div className='p-2 flex justify-center items-center text-center rounded-full bg-[#FEE2E2]'>
+										<PersonOutlineOutlinedIcon
+											sx={{ color: '#E45454' }}
+											fontSize='14px'
+										/>
+									</div>
+									<span className='font-medium'>
+										Use Old Driver Availability
+									</span>
+									<Switch
+										checked={oldAvailbility}
+										onChange={(e) => setOldAvailbility(e.target.checked)}
+									/>
+								</span>
+							</Box>
+							{oldAvailbility ? (
+								<AvailbilityChartMobileView
+									availabilityDate={availabilityDate}
+								/>
+							) : (
+								<CustomDriverAvailabilityChart
+									availabilityDate={availabilityDate}
+								/>
+							)}
 						</Box>
 					) : (
 						<>
