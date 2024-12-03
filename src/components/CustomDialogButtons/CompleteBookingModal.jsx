@@ -76,10 +76,9 @@ export default function CompleteBookingModal({
 						<input
 							type='number'
 							min='0'
-							value={waitingTime}
+							value={waitingTime === 0 ? '' : waitingTime}
 							onChange={(e) => setWaitingTime(+e.target.value)}
 							className='w-full pl-10 pr-4 py-2 p-2 border border-gray-500 rounded-md placeholder:text-slate-900'
-							placeholder='0'
 							disabled={user?.currentUser?.roleId === 3 ? true : false}
 						/>
 						<i className='absolute left-4 top-10 text-black'>
@@ -90,11 +89,10 @@ export default function CompleteBookingModal({
 						<label>Parking Charge</label>
 						<input
 							type='number'
-							value={parkingCharge}
+							value={parkingCharge === 0 ? '' : parkingCharge}
 							onChange={(e) => setParkingCharge(+e.target.value)}
 							min='0'
 							className='w-full pl-10 pr-4 py-2 p-2 border border-gray-500 rounded-md placeholder:text-slate-900'
-							placeholder='0'
 							disabled={user?.currentUser?.roleId === 3 ? true : false}
 						/>
 						<i className='absolute left-4 top-10 text-black'>
@@ -108,10 +106,9 @@ export default function CompleteBookingModal({
 						<input
 							required
 							type='number'
-							value={price}
+							value={price === 0 ? '' : price}
 							onChange={(e) => setPrice(+e.target.value)}
 							className='w-full pl-10 pr-4 py-2 p-2 border border-gray-500 rounded-md placeholder:text-slate-900'
-							placeholder='0'
 							disabled={disableInput()}
 						/>
 						<i className=' absolute left-4 top-10  text-black'>
@@ -123,10 +120,9 @@ export default function CompleteBookingModal({
 							<label className=''>Account Price</label>
 							<input
 								type='number'
-								value={accountPrice}
+								value={accountPrice === 0 ? '' : accountPrice}
 								onChange={(e) => setAccountPrice(+e.target.value)}
 								className='w-full pl-10 pr-4 py-2 p-2 border border-gray-500 rounded-md placeholder:text-slate-900'
-								placeholder='0'
 							/>
 							<i className='absolute left-4 top-10  text-black'>
 								<CurrencyPoundOutlinedIcon fontSize='12px' />
