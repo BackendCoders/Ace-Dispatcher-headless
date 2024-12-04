@@ -57,7 +57,7 @@ function AvailbilityChartMobileView({ availabilityDate }) {
 					{date?.split('T')[1]}
 				</p>
 			</div>
-			<div className='m-auto w-full h-full overflow-auto'>
+			<div className='m-auto w-full h-full overflow-auto mb-4'>
 				{loading ? (
 					<Loader />
 				) : (

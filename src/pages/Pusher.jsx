@@ -96,13 +96,24 @@ export default function Push() {
 	}
 
 	useEffect(() => {
-		const now = new Date();
-		const formattedDate = `${now.getFullYear()}-${String(
-			now.getMonth() + 1
-		).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}T${String(
-			now.getHours()
-		).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-		setAvailabilityDate(formattedDate);
+		const updateAvailabilityDate = () => {
+			const now = new Date();
+			const formattedDate = `${now.getFullYear()}-${String(
+				now.getMonth() + 1
+			).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}T${String(
+				now.getHours()
+			).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+			setAvailabilityDate(formattedDate);
+		};
+
+		// Initial update when the component is mounted
+		updateAvailabilityDate();
+
+		// Update every minute (or adjust to your needs, e.g. every second)
+		// const intervalId = setInterval(updateAvailabilityDate, 1000); // 60000ms = 1 minute
+
+		// Cleanup interval when component is unmounted
+		// return () => clearInterval(intervalId);
 	}, []);
 
 	useEffect(() => {
