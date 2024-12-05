@@ -300,7 +300,10 @@ function CustomDialog({ closeDialog }) {
 														</p>
 														<span className='text-card dark:text-popover-foreground text-[1rem] w-[80%] flex justify-start items-start'>
 															<a
-																href={generateRouteLink()}
+																// href={generateRouteLink()}
+																href={`https://www.google.com/maps?q=${encodeURIComponent(
+																	via.postCode
+																)}`}
 																target='_blank'
 																rel='noopener noreferrer'
 																className='text-blue-600'
@@ -329,7 +332,10 @@ function CustomDialog({ closeDialog }) {
 										</p>
 										<span className='text-card dark:text-popover-foreground text-[1rem] w-[80%] flex justify-start items-start'>
 											<a
-												href={generateRouteLink()}
+												// href={generateRouteLink()}
+												href={`https://www.google.com/maps?q=${encodeURIComponent(
+													data.destinationPostCode
+												)}`}
 												target='_blank'
 												rel='noopener noreferrer'
 												className='text-blue-600'
