@@ -144,23 +144,11 @@ const AceScheduler = () => {
 
     // Apply the driver color as the background color for fallback cases
     args.element.style.borderRadius = "10px";
-    if (args?.data?.scope) {
+    if (args?.data?.scope === 4) {
       const subjectElement = args.element.querySelector(".e-subject");
 
       const badge = document.createElement("span");
-      badge.textContent = `${
-        args?.data?.scope === 0
-          ? "Cash"
-          : args?.data?.scope === 1
-          ? "Account"
-          : args?.data?.scope === 2
-          ? "Rank"
-          : args?.data?.scope === 3
-          ? "All"
-          : args?.data?.scope === 4
-          ? "Card"
-          : ""
-      } - ${
+      badge.textContent = `Card - ${
         args?.data?.paymentStatus === 0
           ? "Unpaid"
           : args?.data?.paymentStatus === 2
