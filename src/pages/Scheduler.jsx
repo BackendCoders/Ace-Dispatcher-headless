@@ -177,8 +177,8 @@ const AceScheduler = () => {
       badge.style.borderRadius = "50%";
       badge.style.fontSize = "12px";
       badge.style.fontWeight = "bold";
-
       subjectElement.appendChild(badge);
+      // subjectElement.parentNode.insertBefore(badge, subjectElement);
     }
     if (isLightColor(driverColor)) {
       args.element.querySelector(".e-subject").style.color = "black";
