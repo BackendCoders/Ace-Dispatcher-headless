@@ -169,12 +169,22 @@ const AceScheduler = () => {
           ? "Awaiting"
           : ""
       }`;
-      badge.style.backgroundColor = driverColor;
-      badge.style.color = isLightColor(driverColor) ? "black" : "white";
+
+      const badgeColor =
+        args.data.paymentStatus === 0
+          ? "red"
+          : args?.data?.paymentStatus === 2
+          ? "green"
+          : args.data.paymentStatus === 3
+          ? "orange"
+          : "";
+      badge.style.backgroundColor = badgeColor;
+
+      badge.style.color = isLightColor(badgeColor) ? "black" : "white";
       badge.style.padding = "3px 5px";
       badge.style.marginLeft = "5px";
       badge.style.border = `1px solid ${
-        isLightColor(driverColor) ? "black" : "white"
+        isLightColor(badgeColor) ? "black" : "white"
       }`;
       badge.style.borderRadius = "3px";
       badge.style.fontSize = "12px";
