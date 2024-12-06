@@ -145,18 +145,18 @@ const AceScheduler = () => {
     // Apply the driver color as the background color for fallback cases
     args.element.style.borderRadius = "10px";
     if (args?.data?.scope === 4) {
-      const subjectElement = args.element.querySelector(".e-subject");
+      const subjectElement = args.element.querySelector(".e-time");
 
       const badge = document.createElement("span");
-      badge.textContent = `Card - ${
-        args?.data?.paymentStatus === 0
-          ? "Unpaid"
-          : args?.data?.paymentStatus === 2
-          ? "Received"
-          : args?.data?.paymentStatus === 3
-          ? "Awaiting"
-          : ""
-      }`;
+      // badge.textContent = `Card - ${
+      //   args?.data?.paymentStatus === 0
+      //     ? "Unpaid"
+      //     : args?.data?.paymentStatus === 2
+      //     ? "Received"
+      //     : args?.data?.paymentStatus === 3
+      //     ? "Awaiting"
+      //     : ""
+      // }`;
 
       const badgeColor =
         args.data.paymentStatus === 0
@@ -169,12 +169,12 @@ const AceScheduler = () => {
       badge.style.backgroundColor = badgeColor;
 
       badge.style.color = isLightColor(badgeColor) ? "black" : "white";
-      badge.style.padding = "3px 5px";
+      badge.style.padding = "0px 5px";
       badge.style.marginLeft = "5px";
       badge.style.border = `1px solid ${
         isLightColor(badgeColor) ? "black" : "white"
       }`;
-      badge.style.borderRadius = "3px";
+      badge.style.borderRadius = "50%";
       badge.style.fontSize = "12px";
       badge.style.fontWeight = "bold";
 
