@@ -287,14 +287,6 @@ function CustomDialog({ closeDialog }) {
 								Send Confirmation Text
 							</button>
 						)}
-						{data.paymentStatus !== 2 && user.currentUser?.roleId === 1 && (
-							<button
-								onClick={handleReminderButton}
-								className='px-3 py-2 text-white bg-green-500 hover:bg-opacity-80 rounded-lg'
-							>
-								Resend
-							</button>
-						)}
 					</div>
 
 					<button
@@ -546,6 +538,15 @@ function CustomDialog({ closeDialog }) {
 															className='px-1 sm:px-3 py-1 text-white bg-green-500 hover:bg-opacity-80 rounded-lg text-[0.65rem] sm:text-[1rem]'
 														>
 															Send Payment Link
+														</button>
+													)}
+												{data.paymentStatus !== 2 &&
+													user.currentUser?.roleId === 1 && (
+														<button
+															onClick={handleReminderButton}
+															className='px-1 sm:px-3 py-1 text-white bg-green-500 hover:bg-opacity-80 rounded-lg text-[0.65rem] sm:text-[1rem] ml-2'
+														>
+															Resend
 														</button>
 													)}
 												{data.paymentStatus === 2 &&
