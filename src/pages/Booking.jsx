@@ -366,6 +366,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 
 				const data = await deleteSchedulerBooking(reqData);
 				if (data.status === 'success') {
+					setConfirmCoaModal(false);
 					getRefreshedBookings();
 				}
 			}
