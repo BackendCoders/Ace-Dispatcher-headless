@@ -1,10 +1,11 @@
 /** @format */
 // all External Libraries and Components are imports
-import { Switch, TextField, useMediaQuery } from '@mui/material';
+import { Button, Switch, TextField, useMediaQuery } from '@mui/material';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import { useEffect, useState, Fragment, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { isValidDate } from '../utils/isValidDate';
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 
 // Context And Hooks imports for data flow and management
 import {
@@ -56,7 +57,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 	const [isRepeatBookingModelActive, setIsRepeatBookingModelActive] =
 		useState(false);
 	const [isDriverModalActive, setDriverModalActive] = useState(false);
-
+	const [confirmCoaModal, setConfirmCoaModal] = useState(false);
 	const pickupRef = useRef(null);
 	const destinationRef = useRef(null);
 	const userNameRef = useRef(null);
@@ -414,6 +415,15 @@ function Booking({ bookingData, id, onBookingUpload }) {
 							onSet={setIsQuoteDialogActive}
 							id={id}
 							quote={quote}
+						/>
+					</Modal>
+					<Modal
+						open={confirmCoaModal}
+						setOpen={setConfirmCoaModal}
+					>
+						<ConfirmCOA
+							onClick={handleCoaButton}
+							setConfirmCoaModal={setConfirmCoaModal}
 						/>
 					</Modal>
 					<SimpleSnackbar />
@@ -884,10 +894,10 @@ function Booking({ bookingData, id, onBookingUpload }) {
 					</div>
 
 					<div className='flex justify-between space-x-4'>
-						{currentUser?.roleId === 1 && (
+						{currentUser?.roleId !== 3 && (
 							<button
-								onClick={handleCoaButton}
-								className='bg-muted text-primary-foreground text-white px-4 py-2 rounded-lg bg-red-700'
+								onClick={() => setConfirmCoaModal(true)}
+								className='bg-muted text-primary-foreground text-white px-4 py-2 rounded-lg bg-orange-700'
 								type='button'
 							>
 								Cancel On Arrival
@@ -929,6 +939,41 @@ function Input({ value, onChange, type, placeholder, required, ...props }) {
 			label={placeholder}
 			{...props}
 		/>
+	);
+}
+
+function ConfirmCOA({ onClick, setConfirmCoaModal }) {
+	return (
+		<div className='flex flex-col items-center justify-center w-[80vw] sm:w-[23vw] bg-white rounded-lg px-4 pb-4 pt-5 sm:p-6 sm:pb-4 gap-4'>
+			<div className='flex w-full flex-col gap-2 justify-center items-center mt-3'>
+				<div className='p-4 flex justify-center items-center text-center rounded-full bg-[#FEE2E2]'>
+					<LibraryBooksIcon sx={{ color: '#E45454' }} />
+				</div>
+			</div>
+			<div className='text-center w-full'>
+				Are you sure you want to set this job as a COA?
+			</div>
+			<div className='w-full flex items-center justify-center gap-4'>
+				<Button
+					variant='contained'
+					color='error'
+					sx={{ paddingY: '0.5rem', marginTop: '4px' }}
+					className='w-full cursor-pointer'
+					onClick={() => setConfirmCoaModal(false)}
+				>
+					Cancel
+				</Button>
+				<Button
+					variant='contained'
+					color='success'
+					sx={{ paddingY: '0.5rem', marginTop: '4px' }}
+					className='w-full cursor-pointer'
+					onClick={() => onClick()}
+				>
+					Confirm
+				</Button>
+			</div>
+		</div>
 	);
 }
 
