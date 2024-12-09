@@ -581,7 +581,7 @@ async function driverArrived(bookingId) {
 
 async function sendConfirmationText(data) {
 	const { bookingId, phoneNumber, date } = data;
-	const URL = `${BASE}api/Bookings/SendConfirmationText?phone=${
+	const URL = `${BASE}/api/Bookings/SendConfirmationText?phone=${
 		phoneNumber || ''
 	}&date=${date}&bookingId=${Number(bookingId)}`;
 	return await handleGetReq(URL);
@@ -589,7 +589,7 @@ async function sendConfirmationText(data) {
 
 async function sendReminderForPayment(data) {
 	const { bookingId, phoneNumber } = data;
-	const URL = `${BASE}api/Bookings/ReminderPaymentLink?phone=${
+	const URL = `${BASE}/api/Bookings/ReminderPaymentLink?phone=${
 		phoneNumber || ''
 	}&bookingId=${Number(bookingId)}`;
 	return await handleGetReq(URL);
