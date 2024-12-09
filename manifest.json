@@ -2,7 +2,7 @@
 	"short_name": "Ace Taxis PWA",
 	"name": "Ace Taxis",
 	"description": "Progressive Web App for Ace Taxis",
-	"start_url": "/index.html",
+	"start_url": "./index.html",
 	"display": "standalone",
 	"background_color": "#ffffff",
 	"theme_color": "#ffffff",
