@@ -30,7 +30,7 @@ const Navbar = () => {
 	const { isAuth, logout, currentUser } = useAuth();
 	const dispatch = useDispatch();
 	const isMobile = useMediaQuery('(max-width:640px)');
-	console.log(currentUser);
+	// console.log(currentUser);
 	// const activeTestMode = useSelector(
 	// 	(state) => state.bookingForm.isActiveTestMode
 	// );
