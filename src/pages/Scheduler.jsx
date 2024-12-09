@@ -260,7 +260,7 @@ const AceScheduler = () => {
 			{searchLoading && <Loader />}
 			<ScheduleComponent
 				firstDayOfWeek={1}
-				height={isMobile ? '80vh' : window.innerHeight - 150}
+				height={isMobile ? window.innerHeight - 100 : window.innerHeight - 150}
 				currentView={activeSearch ? 'Agenda' : 'Day'}
 				selectedDate={activeDate}
 				navigating={(args) =>
