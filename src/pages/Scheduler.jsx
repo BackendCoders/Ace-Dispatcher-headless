@@ -14,7 +14,7 @@ registerLicense(import.meta.env.VITE_SYNCFUSION_KEY);
 
 import './scheduler.css';
 import ProtectedRoute from '../utils/Protected';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Snackbar from '../components/Snackbar-v2';
 import { useDispatch, useSelector } from 'react-redux';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
@@ -63,7 +63,7 @@ const AceScheduler = () => {
 	const [driverData, setDriverData] = useState([]);
 	const dispatch = useDispatch();
 	const user = useAuth();
-
+	const scheduleRef = useRef(null);
 	// data that syncfusion requires for inside computation of the internal mapping
 	const fieldsData = {
 		id: 'bookingId',
@@ -254,11 +254,41 @@ const AceScheduler = () => {
 		dispatch(createBookingFromScheduler(args.startTime));
 	};
 
+	// Create a ref for ScheduleComponent
+	const onCreate = () => {
+		const scheduleObj = scheduleRef.current;
+		if (scheduleObj) {
+			// Get current time and go 1 hour back
+			const currentTime = new Date();
+			currentTime.setHours(currentTime.getHours() - 2);
+
+			// Get the local time string
+			const hours = currentTime.getHours();
+			const minutes = currentTime.getMinutes();
+
+			// Format the time to HH:mm (adding leading zero if needed)
+			const formattedTime = `${hours}:${
+				minutes < 10 ? '0' + minutes : minutes
+			}`;
+
+			// console.log(formattedTime); // This should log the correct time in local format
+
+			// Scroll to the formatted time
+			scheduleObj.scrollTo(formattedTime);
+		}
+	};
+
+	// Effect to trigger scroll on initial load (or whenever necessary)
+	useEffect(() => {
+		onCreate(); // Call onCreate to scroll when the component mounts
+	}, []);
+
 	return (
 		<ProtectedRoute>
 			<Snackbar />
 			{searchLoading && <Loader />}
 			<ScheduleComponent
+				ref={scheduleRef}
 				firstDayOfWeek={1}
 				height={isMobile ? window.innerHeight - 100 : window.innerHeight - 150}
 				currentView={activeSearch ? 'Agenda' : 'Day'}
@@ -281,6 +311,7 @@ const AceScheduler = () => {
 						interval: 1,
 					},
 				]}
+
 				// agendaDaysCount={365}
 			>
 				{dialogOpen && !viewBookingModal && (
