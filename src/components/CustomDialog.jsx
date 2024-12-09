@@ -25,8 +25,10 @@ import {
 import { useAuth } from '../hooks/useAuth';
 import {
 	driverArrived,
+	sendConfirmationText,
 	sendPaymentLink,
 	sendRefundLink,
+	sendReminderForPayment,
 } from '../utils/apiReq';
 import { openSnackbar } from '../context/snackbarSlice';
 import PaymentLinkOptionModal from './CustomDialogButtons/PaymentLinkOptionModal';
@@ -143,6 +145,41 @@ function CustomDialog({ closeDialog }) {
 		}
 	};
 
+	const handleSendConfirmationText = async () => {
+		try {
+			const reqData = {
+				phone: data?.phoneNumber,
+				date: data?.pickupDateTime?.split('T')[0],
+				bookingId: data.bookingId,
+			};
+			const response = await sendConfirmationText(reqData);
+			if (response.status === 'success') {
+				dispatch(
+					openSnackbar('Confirmation text send Successfully', 'success')
+				);
+				dispatch(getRefreshedBookings());
+			}
+		} catch (error) {
+			console.error('Sending confirmation text error:', error);
+		}
+	};
+
+	const handleReminderButton = async () => {
+		try {
+			const reqData = {
+				phone: data?.phoneNumber,
+				bookingId: data.bookingId,
+			};
+			const response = await sendReminderForPayment(reqData);
+			if (response.status === 'success') {
+				dispatch(openSnackbar('Reminder send Successfully', 'success'));
+				dispatch(getRefreshedBookings());
+			}
+		} catch (error) {
+			console.error('Sending Reminder error:', error);
+		}
+	};
+
 	const generateRouteLink = () => {
 		const origin = `${data.pickupAddress}, ${data.pickupPostCode}`;
 		const destination = `${data.destinationAddress}, ${data.destinationPostCode}`;
@@ -163,83 +200,102 @@ function CustomDialog({ closeDialog }) {
 		<div className='fixed sm:left-[-35vw] left-[-45vw] inset-0 w-[90vw] sm:w-[70vw] mx-auto z-50 flex items-center justify-center p-1 sm:p-4 bg-background bg-opacity-50'>
 			<div className='relative w-full max-w-7xl p-3 sm:p-6 bg-card rounded-lg shadow-lg dark:bg-popover bg-white max-h-[90vh] overflow-y-auto sm:overflow-hidden'>
 				<div className='flex items-center justify-between mb-6'>
-					<h2 className='text-lg font-medium text-card text-center flex justify-center items-center'>
-						Booking #:
-						<span className='text-xl font-semibold text-green-900 ml-2'>
-							{data.bookingId}
-						</span>
-						{
-							<div className={`relative inline-flex items-center`}>
-								<span
-									className={`ml-2 px-3 py-2 rounded-md text-white text-sm uppercase font-semibold ${
-										data.scope === 0
-											? 'bg-red-500'
-											: data.scope === 1
-											? 'bg-red-500'
-											: data.scope === 2
-											? 'bg-red-500'
-											: data.scope === 3
-											? 'bg-red-500'
-											: data.scope === 4
-											? 'bg-blue-500'
-											: '' // default color for any other type
-									}`}
-								>
-									{data.scope === 0
-										? 'Cash'
-										: data.scope === 1
-										? 'Account'
-										: data.scope === 2
-										? 'Rank'
-										: data.scope === 3
-										? 'All'
-										: data.scope === 4
-										? 'Card'
-										: ''}{' '}
-									{data.paymentStatus === 0
-										? ''
-										: data.paymentStatus === 2
-										? '- Received'
-										: data.paymentStatus === 3
-										? '- Awaiting'
-										: ''}
-								</span>
-								<div className='absolute -top-4 -right-4 rounded-full p-[0.2rem] flex items-center justify-center bg-white'>
-									<div
-										className={`${
-											data.scope === 4 ? 'bg-blue-500' : 'bg-red-500'
-										} rounded-full p-1 flex items-center justify-center`}
+					<div className='flex flex-wrap items-center justify-start gap-4'>
+						<h2 className='text-lg font-medium text-card text-center flex justify-center items-center'>
+							Booking #:
+							<span className='text-xl font-semibold text-green-900 ml-2'>
+								{data.bookingId}
+							</span>
+							{
+								<div className={`relative inline-flex items-center`}>
+									<span
+										className={`ml-2 px-3 py-2 rounded-md text-white text-sm uppercase font-semibold ${
+											data.scope === 0
+												? 'bg-red-500'
+												: data.scope === 1
+												? 'bg-red-500'
+												: data.scope === 2
+												? 'bg-red-500'
+												: data.scope === 3
+												? 'bg-red-500'
+												: data.scope === 4
+												? 'bg-blue-500'
+												: '' // default color for any other type
+										}`}
 									>
-										{data.scope === 0 ? (
-											<CurrencyPoundIcon
-												style={{ color: 'white', fontSize: '16px' }}
-												className='animate-bounce'
-											/>
-										) : data.scope === 1 ? (
-											<LockIcon
-												style={{ color: 'white', fontSize: '16px' }}
-												className='animate-bounce'
-											/>
-										) : data.scope === 2 ? (
-											<StarIcon
-												style={{ color: 'white', fontSize: '16px' }}
-												className='animate-bounce'
-											/>
-										) : data.scope === 3 ? (
-											''
-										) : data.scope === 4 ? (
-											<CurrencyPoundIcon
-												style={{ color: 'white', fontSize: '16px' }}
-												className='animate-bounce'
-											/>
-										) : (
-											''
-										)}
+										{data.scope === 0
+											? 'Cash'
+											: data.scope === 1
+											? 'Account'
+											: data.scope === 2
+											? 'Rank'
+											: data.scope === 3
+											? 'All'
+											: data.scope === 4
+											? 'Card'
+											: ''}{' '}
+										{data.paymentStatus === 0
+											? ''
+											: data.paymentStatus === 2
+											? '- Received'
+											: data.paymentStatus === 3
+											? '- Awaiting'
+											: ''}
+									</span>
+									<div className='absolute -top-4 -right-4 rounded-full p-[0.2rem] flex items-center justify-center bg-white'>
+										<div
+											className={`${
+												data.scope === 4 ? 'bg-blue-500' : 'bg-red-500'
+											} rounded-full p-1 flex items-center justify-center`}
+										>
+											{data.scope === 0 ? (
+												<CurrencyPoundIcon
+													style={{ color: 'white', fontSize: '16px' }}
+													className='animate-bounce'
+												/>
+											) : data.scope === 1 ? (
+												<LockIcon
+													style={{ color: 'white', fontSize: '16px' }}
+													className='animate-bounce'
+												/>
+											) : data.scope === 2 ? (
+												<StarIcon
+													style={{ color: 'white', fontSize: '16px' }}
+													className='animate-bounce'
+												/>
+											) : data.scope === 3 ? (
+												''
+											) : data.scope === 4 ? (
+												<CurrencyPoundIcon
+													style={{ color: 'white', fontSize: '16px' }}
+													className='animate-bounce'
+												/>
+											) : (
+												''
+											)}
+										</div>
 									</div>
 								</div>
-							</div>
-						}
-					</h2>
+							}
+						</h2>
+
+						{user?.currentUser?.roleId === 1 && (
+							<button
+								onClick={handleSendConfirmationText}
+								className={`px-3 py-2 text-white bg-blue-700 hover:bg-opacity-80 rounded-lg`}
+							>
+								Send Confirmation Text
+							</button>
+						)}
+						{data.paymentStatus !== 2 && user.currentUser?.roleId === 1 && (
+							<button
+								onClick={handleReminderButton}
+								className='px-3 py-2 text-white bg-green-500 hover:bg-opacity-80 rounded-lg'
+							>
+								Resend
+							</button>
+						)}
+					</div>
 
 					<button
 						className='rounded-full p-1 sm:p-2'
@@ -701,7 +757,13 @@ const BookingOption = ({ text, head, link }) => {
 			<p className='text-md font-medium pr-2 sm:whitespace-nowrap sm:w-[30%] flex justify-start sm:justify-end sm:items-end'>
 				{head}:{' '}
 			</p>
-			<span className='text-card dark:text-popover-foreground text-[1rem] sm:w-[70%] flex sm:justify-start sm:items-start'>
+			<span
+				className={` ${
+					head === 'Price'
+						? 'text-card dark:text-popover-foreground text-[1.25rem] text-[#EF4444] font-bold'
+						: 'text-card dark:text-popover-foreground text-[1rem]'
+				} sm:w-[70%] flex sm:justify-start sm:items-start`}
+			>
 				{isPhoneNumber ? (
 					<a
 						href={phoneLink}
@@ -718,6 +780,8 @@ const BookingOption = ({ text, head, link }) => {
 					>
 						{text}
 					</a>
+				) : head === 'Price' ? (
+					text + '.00'
 				) : (
 					text
 				)}
