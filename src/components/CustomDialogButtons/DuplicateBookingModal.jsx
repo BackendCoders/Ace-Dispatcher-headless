@@ -108,7 +108,7 @@ export default function DuplicateBookingModal({
 							bookedByName: user.currentUser.fullName,
 							recurrenceID: 0,
 							recurrenceRule: '',
-							scope: data?.scope === 4 && 0,
+							scope: data?.scope === 4 ? 0 : data?.scope,
 							paymentStatus: 0,
 							accountNumber: 9999,
 						})
