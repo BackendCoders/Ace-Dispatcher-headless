@@ -154,9 +154,7 @@ function CustomDialog({ closeDialog }) {
 			};
 			const response = await sendConfirmationText(reqData);
 			if (response.status === 'success') {
-				dispatch(
-					openSnackbar('Confirmation text send Successfully', 'success')
-				);
+				dispatch(openSnackbar('Sent Successfully', 'success'));
 				dispatch(getRefreshedBookings());
 			}
 		} catch (error) {
