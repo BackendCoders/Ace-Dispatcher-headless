@@ -1,8 +1,20 @@
 {
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ]
+	"rewrites": [
+		{
+			"source": "/manifest.json",
+			"destination": "/manifest.json"
+		},
+		{
+			"source": "/assets/(.*)",
+			"destination": "/assets/$1"
+		},
+		{
+			"source": "/service-worker.js",
+			"destination": "/service-worker.js"
+		},
+		{
+			"source": "/(.*)",
+			"destination": "/index.html"
+		}
+	]
 }
