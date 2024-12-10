@@ -2,18 +2,19 @@
 	"short_name": "Ace Taxis PWA",
 	"name": "Ace Taxis",
 	"description": "Progressive Web App for Ace Taxis",
+	"id": "/",
 	"start_url": "/",
 	"display": "standalone",
 	"background_color": "#ffffff",
 	"theme_color": "#ffffff",
 	"icons": [
 		{
-			"src": "/src/assets/logo.png",
+			"src": "/logo.png",
 			"sizes": "192x192",
 			"type": "image/png"
 		},
 		{
-			"src": "/src/assets/logo.png",
+			"src": "/logo.png",
 			"sizes": "512x512",
 			"type": "image/png"
 		}
