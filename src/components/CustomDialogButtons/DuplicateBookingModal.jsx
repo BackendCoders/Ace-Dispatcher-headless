@@ -110,7 +110,7 @@ export default function DuplicateBookingModal({
 							recurrenceRule: '',
 							scope: data?.scope === 4 ? 0 : data?.scope,
 							paymentStatus: 0,
-							accountNumber: 9999,
+							accountNumber: data?.scope === 4 ? 9999 : data?.accountNumber,
 						})
 					}
 				>
