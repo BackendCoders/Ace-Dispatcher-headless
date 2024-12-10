@@ -12,10 +12,13 @@ function AvailbilityChartMobileView({ availabilityDate }) {
 		(state) => state.bookingForm
 	);
 	const isMobile = useMediaQuery('(max-width:640px)');
+	const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1023px)');
+
 	const [loading, setLoading] = useState(false);
-	const date = isMobile
-		? availabilityDate
-		: bookings[activeBookingIndex].pickupDateTime;
+	const date =
+		isMobile || isTablet
+			? availabilityDate
+			: bookings[activeBookingIndex].pickupDateTime;
 
 	useEffect(() => {
 		async function getData() {

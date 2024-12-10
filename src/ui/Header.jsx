@@ -30,6 +30,8 @@ const Navbar = () => {
 	const { isAuth, logout, currentUser } = useAuth();
 	const dispatch = useDispatch();
 	const isMobile = useMediaQuery('(max-width:640px)');
+	const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1023px)');
+
 	// console.log(currentUser);
 	// const activeTestMode = useSelector(
 	// 	(state) => state.bookingForm.isActiveTestMode
@@ -96,7 +98,7 @@ const Navbar = () => {
 					{/* Mobile Menu Toggle */}
 					{isAuth && (
 						<button
-							className='sm:hidden text-2xl focus:outline-none mr-2'
+							className='md:hidden block text-2xl focus:outline-none mr-2'
 							onClick={() => setMenuOpen(!menuOpen)}
 						>
 							☰
@@ -107,7 +109,7 @@ const Navbar = () => {
 				<span
 					className={`${
 						menuOpen ? 'flex' : 'hidden'
-					} flex-col sm:flex sm:flex-row items-center justify-end gap-4 sm:gap-10 uppercase text-sm  w-[50%]`}
+					} flex-col md:flex md:flex-row items-center justify-end gap-4 sm:gap-10 uppercase text-sm  w-[50%]`}
 				>
 					{!isAuth ? (
 						<></>
@@ -187,7 +189,7 @@ const Navbar = () => {
 				<div
 					className={`fixed inset-y-0 right-0 z-50 w-[55%] max-w-xs bg-[#C74949] text-white p-4 transform ${
 						menuOpen ? 'translate-x-0' : 'translate-x-full'
-					} transition-transform duration-300 ease-in-out sm:hidden`}
+					} transition-transform duration-300 ease-in-out md:hidden`}
 				>
 					<div className='flex justify-between items-center mb-6 mr-10'>
 						<span className='text-lg font-bold'>Menu</span>
@@ -200,7 +202,7 @@ const Navbar = () => {
 					</div>
 
 					{/* Caller ID Badge */}
-					{(!isMobile || currentUser?.roleId !== 3) &&
+					{(!isMobile || !isTablet || currentUser?.roleId !== 3) &&
 						isAuth &&
 						callerId.length > 0 && (
 							<Badge
@@ -296,6 +298,7 @@ export default Navbar;
 
 function SearchModal({ setOpenSearch }) {
 	const isMobile = useMediaQuery('(max-width: 640px)');
+	const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1023px)');
 	const dispatch = useDispatch();
 	const {
 		register,
@@ -336,7 +339,7 @@ function SearchModal({ setOpenSearch }) {
 			newinputData.details
 		) {
 			dispatch(handleSearchBooking(newinputData));
-			if (isMobile) {
+			if (isMobile || isTablet) {
 				setActiveSectionMobileView('Scheduler');
 			}
 			setOpenSearch(false);
@@ -361,7 +364,7 @@ function SearchModal({ setOpenSearch }) {
 	}, [reset, isSubmitSuccessful]);
 
 	return (
-		<div className='bg-white p-6 rounded-lg shadow-lg w-[90vw] sm:w-[25vw] max-w-md mx-auto'>
+		<div className='bg-white p-6 rounded-lg shadow-lg w-[90vw] md:w-[45vw] sm:w-[25vw] max-w-md mx-auto'>
 			<h2 className='text-2xl font-semibold mb-4 flex items-center'>
 				<SearchIcon />
 				Search Bookings

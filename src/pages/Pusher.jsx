@@ -61,6 +61,7 @@ export default function Push() {
 	const [availabilityDate, setAvailabilityDate] = useState('');
 	const [oldAvailbility, setOldAvailbility] = useState(false);
 	const isMobile = useMediaQuery('(max-width:640px)');
+	const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1023px)');
 
 	const handleChange = (event, newValue) => {
 		dispatch(setActiveTabChange(newValue));
@@ -201,7 +202,7 @@ export default function Push() {
 					setIsConfirmationModalOpen={setIsConfirmationModalOpen}
 				/>
 			</Modal>
-			{isMobile ? (
+			{isMobile || isTablet ? (
 				<Box
 					sx={{
 						margin: '0 auto',

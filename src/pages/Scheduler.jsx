@@ -42,6 +42,8 @@ import { useAuth } from '../hooks/useAuth';
 
 const AceScheduler = () => {
 	const isMobile = useMediaQuery('(max-width: 640px)');
+	const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1023px)');
+
 	// taking our global states from the redux
 	const {
 		bookings,
@@ -290,7 +292,11 @@ const AceScheduler = () => {
 			<ScheduleComponent
 				ref={scheduleRef}
 				firstDayOfWeek={1}
-				height={isMobile ? window.innerHeight - 100 : window.innerHeight - 150}
+				height={
+					isMobile || isTablet
+						? window.innerHeight - 100
+						: window.innerHeight - 150
+				}
 				currentView={activeSearch ? 'Agenda' : 'Day'}
 				selectedDate={activeDate}
 				navigating={(args) =>
