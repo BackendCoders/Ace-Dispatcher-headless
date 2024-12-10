@@ -108,7 +108,9 @@ export default function DuplicateBookingModal({
 							bookedByName: user.currentUser.fullName,
 							recurrenceID: 0,
 							recurrenceRule: '',
+							scope: 0,
 							paymentStatus: 0,
+							accountNumber: 9999,
 						})
 					}
 				>
