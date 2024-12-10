@@ -150,15 +150,17 @@ const AceScheduler = () => {
 			const subjectElement = args.element.querySelector('.e-subject');
 
 			const badge = document.createElement('span');
-			badge.textContent = `Card - ${
-				args?.data?.paymentStatus === 0
-					? 'Unpaid'
-					: args?.data?.paymentStatus === 2
-					? 'Paid'
-					: args?.data?.paymentStatus === 3
-					? 'Unpaid'
-					: ''
-			}`;
+			badge.textContent = `Card`;
+			// - ${
+			// 	args?.data?.paymentStatus === 0
+			// 		? 'Unpaid'
+			// 		: args?.data?.paymentStatus === 2
+			// 		? 'Paid'
+			// 		: args?.data?.paymentStatus === 3
+			// 		? 'Unpaid'
+			// 		: ''
+			// }
+			// `;
 
 			const badgeColor =
 				args.data.paymentStatus === 0
