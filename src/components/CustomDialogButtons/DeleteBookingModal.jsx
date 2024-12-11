@@ -120,7 +120,8 @@ export default function DeleteBookingModal({ setDeleteModal, closeDialog }) {
 						</div>
 					</div>
 					<div className='text-center w-full'>
-						Are you sure you wish to delete all the bookings?
+						Are you sure you want to cancel all jobs going forward for this
+						customer?
 					</div>
 					<div className='w-full flex items-center justify-center gap-4'>
 						{

@@ -277,7 +277,7 @@ function CustomDialog({ closeDialog }) {
 							}
 						</h2>
 
-						{user?.currentUser?.roleId === 1 && (
+						{user?.currentUser?.roleId !== 3 && (
 							<button
 								onClick={handleSendConfirmationText}
 								className={`px-3 py-2 text-white bg-blue-700 hover:bg-opacity-80 rounded-lg`}
