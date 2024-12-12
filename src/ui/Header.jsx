@@ -52,6 +52,7 @@ const Navbar = () => {
 	// };
 
 	const handleCancelSearch = () => {
+		setOpenSearch(false);
 		dispatch(makeSearchInactive()); // Dispatch makeSearchInactive to deactivate search
 	};
 
