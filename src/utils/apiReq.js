@@ -296,6 +296,7 @@ async function getAccountList() {
       "accounts",
       JSON.stringify([{ accNo: 0, accountName: "select-233" }, ...formatedData])
     );
+    return [{ accNo: 0, accountName: "select-233" }, ...formatedData]
   }
 }
 

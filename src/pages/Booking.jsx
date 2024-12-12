@@ -18,6 +18,7 @@ import {
 	makeBookingQuoteRequest,
 	fireCallerEvent,
 	deleteSchedulerBooking,
+	getAccountList,
 } from '../utils/apiReq';
 
 // All local component utilitys
@@ -58,6 +59,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 		useState(false);
 	const [isDriverModalActive, setDriverModalActive] = useState(false);
 	const [confirmCoaModal, setConfirmCoaModal] = useState(false);
+	const [accountDetails, setAccountDetails] = useState([]);
 	const pickupRef = useRef(null);
 	const destinationRef = useRef(null);
 	const userNameRef = useRef(null);
@@ -188,6 +190,20 @@ function Booking({ bookingData, id, onBookingUpload }) {
 		ref.current.focus();
 		ref.current.select();
 	}
+
+	useEffect(() => {
+		async function getAccountListDetails() {
+			try {
+				const response = await getAccountList();
+				// console.log(response);
+				setAccountDetails(response);
+			} catch (error) {
+				console.log(error);
+			}
+		}
+
+		getAccountListDetails();
+	}, []);
 
 	// auto calculate the quotes based on Pickup and destination
 	useEffect(() => {
@@ -850,19 +866,17 @@ function Booking({ bookingData, id, onBookingUpload }) {
 											}
 											className='block w-[65%] mt-1 py-2 px-0 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm'
 										>
-											{JSON.parse(localStorage?.getItem('accounts'))?.map(
-												(el, i) => (
-													<Fragment key={i}>
-														{el.accountName && (
-															<option value={el.accNo}>
-																{el.accNo === 0
-																	? 'select'
-																	: `${el.accNo}-${el.accountName}`}
-															</option>
-														)}
-													</Fragment>
-												)
-											)}
+											{accountDetails?.map((el, i) => (
+												<Fragment key={i}>
+													{el.accountName && (
+														<option value={el.accNo}>
+															{el.accNo === 0
+																? 'select'
+																: `${el.accNo}-${el.accountName}`}
+														</option>
+													)}
+												</Fragment>
+											))}
 										</select>
 									</div>
 

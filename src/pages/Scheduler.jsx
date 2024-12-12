@@ -108,7 +108,7 @@ const AceScheduler = () => {
 			args.element.style.backgroundPosition = '0 0, 10px 10px';
 			args.element.style.backgroundColor = '#795548';
 
-			const subjectElement = args.element.querySelector('.e-subject');
+			const subjectElement = args?.element?.querySelector('.e-subject');
 			if (subjectElement) {
 				subjectElement.style.display = 'inline-block'; // Ensure it only takes the width of the text
 				subjectElement.style.padding = '0 4px'; // Add a little padding if needed
@@ -119,7 +119,7 @@ const AceScheduler = () => {
 				subjectElement.style.whiteSpace = 'wrap'; // Prevent wrapping to new lines
 			}
 
-			if (args.element.querySelector('.e-time')) {
+			if (args?.element?.querySelector('.e-time')) {
 				args.element.querySelector('.e-time').style.display = 'block';
 				args.element.querySelector('.e-time').style.backgroundColor =
 					driverColor;
@@ -147,7 +147,7 @@ const AceScheduler = () => {
 		// Apply the driver color as the background color for fallback cases
 		args.element.style.borderRadius = '10px';
 		if (args?.data?.scope === 4) {
-			const subjectElement = args.element.querySelector('.e-subject');
+			const subjectElement = args?.element?.querySelector('.e-subject');
 
 			const badge = document.createElement('span');
 			badge.textContent = `Card`;
@@ -191,20 +191,22 @@ const AceScheduler = () => {
 			subjectElement.parentNode.insertBefore(badge, subjectElement);
 		}
 		if (isLightColor(driverColor)) {
-			args.element.querySelector('.e-subject').style.color = 'black';
-			if (args.element.querySelector('.e-time'))
+			if (args?.element?.querySelector('.e-subject'))
+				args.element.querySelector('.e-subject').style.color = 'black';
+			if (args?.element?.querySelector('.e-time'))
 				args.element.querySelector('.e-time').style.color = 'black';
-			if (args.element.querySelector('.e-date-time'))
+			if (args?.element?.querySelector('.e-date-time'))
 				args.element.querySelector('.e-date-time').style.color = 'black';
-			if (args.element.querySelector('.e-icons'))
+			if (args?.element?.querySelector('.e-icons'))
 				args.element.querySelector('.e-icons').style.color = 'black';
 		} else {
-			args.element.querySelector('.e-subject').style.color = 'white';
-			if (args.element.querySelector('.e-time'))
+			if (args?.element?.querySelector('.e-subject'))
+				args.element.querySelector('.e-subject').style.color = 'white';
+			if (args?.element?.querySelector('.e-time'))
 				args.element.querySelector('.e-time').style.color = 'white';
-			if (args.element.querySelector('.e-date-time'))
+			if (args?.element?.querySelector('.e-date-time'))
 				args.element.querySelector('.e-date-time').style.color = 'white';
-			if (args.element.querySelector('.e-icons'))
+			if (args?.element?.querySelector('.e-icons'))
 				args.element.querySelector('.e-icons').style.color = 'white';
 		}
 	}
