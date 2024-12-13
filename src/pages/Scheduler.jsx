@@ -80,10 +80,14 @@ const AceScheduler = () => {
 
 	// syncfusion handler function for each render of syncfusion element on the screen
 	function onEventRendered(args) {
+		if (!args.element) {
+			console.warn('Event element is null:', args);
+			return; // Skip further execution if element is null
+		}
 		args.element;
 		let driverColor = '#795548'; // Default color if both suggestedUserId and userId are null
 
-		if (args.data.suggestedUserId && !args.data.userId) {
+		if (args?.data?.suggestedUserId && !args?.data?.userId) {
 			// If there's a suggestedUserId, use the suggested driver's color
 			const suggestedDriver = driverData.find(
 				(driver) => driver.id === args.data.suggestedUserId
@@ -91,13 +95,13 @@ const AceScheduler = () => {
 			if (suggestedDriver) {
 				driverColor = suggestedDriver.colorRGB;
 			}
-		} else if (args.data.userId) {
+		} else if (args?.data?.userId) {
 			// If suggestedUserId is null but userId exists, use the user's color
 			driverColor = args.data.backgroundColorRGB;
 		}
 
 		// Apply gradient based on activeSoftAllocate status
-		if (args.data.suggestedUserId && !args.data.userId) {
+		if (args?.data?.suggestedUserId && !args?.data?.userId) {
 			// Use a dot-pattern gradient for soft allocation
 			args.element.style.backgroundImage = `
     radial-gradient(${driverColor} 40%, transparent 40%),
@@ -118,16 +122,15 @@ const AceScheduler = () => {
 				// subjectElement.style.overflow = 'hidden'; // Hide overflow if text exceeds width
 				subjectElement.style.whiteSpace = 'wrap'; // Prevent wrapping to new lines
 			}
-
-			if (args?.element?.querySelector('.e-time')) {
-				args.element.querySelector('.e-time').style.display = 'block';
-				args.element.querySelector('.e-time').style.backgroundColor =
-					driverColor;
-				args.element.querySelector('.e-time').style.padding = '0 4px'; // Add a little padding if needed
-				args.element.querySelector('.e-time').style.borderRadius = '4px';
-				args.element.querySelector('.e-time').style.maxWidth = 'fit-content'; // Ensure it wraps to the text width
+			const timeElement = args?.element?.querySelector('.e-time');
+			if (timeElement) {
+				timeElement.style.display = 'block';
+				timeElement.style.backgroundColor = driverColor;
+				timeElement.style.padding = '0 4px'; // Add a little padding if needed
+				timeElement.style.borderRadius = '4px';
+				timeElement.style.maxWidth = 'fit-content'; // Ensure it wraps to the text width
 				// subjectElement.style.overflow = 'hidden'; // Hide overflow if text exceeds width
-				args.element.querySelector('.e-time').style.whiteSpace = 'wrap';
+				timeElement.style.whiteSpace = 'wrap';
 			}
 
 			// const subjectElement = args.element.querySelector('.e-subject');
@@ -236,7 +239,7 @@ const AceScheduler = () => {
 	}, [dispatch]);
 
 	const eventSettings = {
-		dataSource: activeSearch ? activeSearchResults : bookings,
+		dataSource: activeSearch ? activeSearchResults || [] : bookings || [],
 		fields: fieldsData,
 		allowAdding: false,
 		allowEditing: false,
