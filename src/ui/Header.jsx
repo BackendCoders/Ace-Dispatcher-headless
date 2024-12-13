@@ -54,7 +54,6 @@ const Navbar = () => {
 	const handleCancelSearch = () => {
 		setOpenSearch(false);
 		dispatch(makeSearchInactive());
-		setMenuOpen(false); // Dispatch makeSearchInactive to deactivate search
 	};
 
 	return (
@@ -250,7 +249,14 @@ const Navbar = () => {
 									Search
 								</button>
 							) : (
-								<button onClick={handleCancelSearch}>Cancel Search</button>
+								<button
+									onClick={() => {
+										handleCancelSearch();
+										setMenuOpen(false);
+									}}
+								>
+									Cancel Search
+								</button>
 							)}
 						</div>
 					)}
