@@ -316,7 +316,28 @@ function CustomDialog({ closeDialog }) {
 										</div>
 
 										<BookingOption
-											text={getTodayInEnGbFormat(data.pickupDateTime)}
+											// text={getTodayInEnGbFormat(data.pickupDateTime)}
+											text={
+												<>
+													{getTodayInEnGbFormat(data.pickupDateTime)}
+													{data.isAsap && (
+														<span
+															style={{
+																backgroundColor: 'orange',
+																color: 'white',
+																padding: '2px 5px',
+																marginLeft: '5px',
+																borderRadius: '12px',
+																fontSize: '12px',
+																fontWeight: 'semibold',
+																border: '1px solid white',
+															}}
+														>
+															ASAP
+														</span>
+													)}
+												</>
+											}
 											head='Date/Time'
 										/>
 										<BookingOption

@@ -149,11 +149,43 @@ const AceScheduler = () => {
 
 		// Apply the driver color as the background color for fallback cases
 		args.element.style.borderRadius = '10px';
-		if (args?.data?.scope === 4) {
-			const subjectElement = args?.element?.querySelector('.e-subject');
 
+		const createBadge = (text, bgColor) => {
 			const badge = document.createElement('span');
-			badge.textContent = `Card`;
+			badge.textContent = text;
+			badge.style.backgroundColor = bgColor;
+
+			badge.style.color = isLightColor(bgColor) ? 'black' : 'white';
+			// badge.style.padding = '0px 5px';
+			badge.style.padding = '2px 5px';
+			badge.style.marginLeft = '5px';
+			badge.style.border = `1px solid ${
+				isLightColor(bgColor) ? 'black' : 'white'
+			}`;
+			// badge.style.borderRadius = '50%';
+			badge.style.borderRadius = '12px';
+
+			badge.style.fontSize = '12px';
+			badge.style.fontWeight = 'bold';
+			badge.style.display = 'inline';
+			badge.style.whiteSpace = 'wrap';
+
+			return badge;
+		};
+		const subjectElement = args?.element?.querySelector('.e-subject');
+		const parentNode = subjectElement.parentNode;
+
+		if (args?.data?.scope === 4) {
+			const badgeColor =
+				args.data.paymentStatus === 0
+					? 'red'
+					: args?.data?.paymentStatus === 2
+					? 'green'
+					: args.data.paymentStatus === 3
+					? 'orange'
+					: '';
+			const cardBadge = createBadge('Card', badgeColor);
+			parentNode.insertBefore(cardBadge, subjectElement);
 			// - ${
 			// 	args?.data?.paymentStatus === 0
 			// 		? 'Unpaid'
@@ -165,33 +197,12 @@ const AceScheduler = () => {
 			// }
 			// `;
 
-			const badgeColor =
-				args.data.paymentStatus === 0
-					? 'red'
-					: args?.data?.paymentStatus === 2
-					? 'green'
-					: args.data.paymentStatus === 3
-					? 'orange'
-					: '';
-			badge.style.backgroundColor = badgeColor;
-
-			badge.style.color = isLightColor(badgeColor) ? 'black' : 'white';
-			// badge.style.padding = '0px 5px';
-			badge.style.padding = '2px 5px';
-			badge.style.marginLeft = '5px';
-			badge.style.border = `1px solid ${
-				isLightColor(badgeColor) ? 'black' : 'white'
-			}`;
-			// badge.style.borderRadius = '50%';
-			badge.style.borderRadius = '12px';
-
-			badge.style.fontSize = '12px';
-			badge.style.fontWeight = 'bold';
-			badge.style.display = 'inline';
-			badge.style.whiteSpace = 'wrap';
-
 			// subjectElement.appendChild(badge);
-			subjectElement.parentNode.insertBefore(badge, subjectElement);
+		}
+		if (args?.data?.isAsap) {
+			const asapBadge = createBadge('ASAP', 'orange');
+			parentNode.insertBefore(asapBadge, subjectElement);
+			args.element.style.border = '1px solid orange';
 		}
 		if (isLightColor(driverColor)) {
 			if (args?.element?.querySelector('.e-subject'))
