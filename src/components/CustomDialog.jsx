@@ -56,6 +56,8 @@ function CustomDialog({ closeDialog }) {
 
 	if (!data?.bookingId) return null;
 
+	console.log('Booking form data in view Booking form', data);
+
 	const handleCancelOnArrival = () => {
 		dispatch(
 			deleteSchedulerBooking(
@@ -315,7 +317,7 @@ function CustomDialog({ closeDialog }) {
 
 										<BookingOption
 											text={getTodayInEnGbFormat(data.pickupDateTime)}
-											head='Booking Date'
+											head='Date/Time'
 										/>
 										<BookingOption
 											text={`${data.pickupAddress}, ${data.pickupPostCode}`}
@@ -558,6 +560,20 @@ function CustomDialog({ closeDialog }) {
 													)}
 											</span>
 										</div>
+
+										<BookingOption
+											text={
+												data?.paymentLinkSentBy ? data?.paymentLinkSentBy : 'NA'
+											}
+											head='Payment Link Sent By'
+										/>
+
+										<BookingOption
+											text={
+												data?.paymentLinkSentOn ? data?.paymentLinkSentOn : 'NA'
+											}
+											head='Payment Link Sent On'
+										/>
 
 										<BookingOption
 											text={
