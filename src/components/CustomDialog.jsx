@@ -591,7 +591,9 @@ function CustomDialog({ closeDialog }) {
 
 										<BookingOption
 											text={
-												data?.paymentLinkSentOn ? data?.paymentLinkSentOn : 'NA'
+												data?.paymentLinkSentOn
+													? getTodayInEnGbFormat(data?.paymentLinkSentOn)
+													: 'NA'
 											}
 											head='Payment Link Sent On'
 										/>
