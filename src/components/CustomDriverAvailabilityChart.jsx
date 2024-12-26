@@ -12,16 +12,16 @@ const getPercentage = (time) => {
 
 const WrapperDiv = function ({ availabilityDate }) {
 	const [data, setData] = useState([]);
-	const { bookings, activeBookingIndex } = useSelector(
-		(state) => state.bookingForm
-	);
+	// const { bookings, activeBookingIndex } = useSelector(
+	// 	(state) => state.bookingForm
+	// );
+	const { dateControl } = useSelector((state) => state.scheduler);
 	const isMobile = useMediaQuery('(max-width:640px)');
 	const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1023px)');
 
-	const date =
-		isMobile || isTablet
-			? availabilityDate
-			: bookings[activeBookingIndex].pickupDateTime;
+	const date = isMobile || isTablet ? availabilityDate : dateControl;
+	// const date = isMobile || isTablet ? availabilityDate : bookings[activeBookingIndex].pickupDateTime;
+
 	useEffect(() => {
 		async function getData() {
 			// const response = await getDriverAvailability(
