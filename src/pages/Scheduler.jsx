@@ -34,6 +34,7 @@ import {
 	getRefreshedBookings,
 	setActiveBookingIndex,
 	setActiveSearchResult,
+	setDateControl,
 } from '../context/schedulerSlice';
 import { createBookingFromScheduler } from '../context/bookingSlice';
 import Loader from '../components/Loader';
@@ -302,7 +303,7 @@ const AceScheduler = () => {
 	useEffect(() => {
 		onCreate(); // Call onCreate to scroll when the component mounts
 	}, []);
-
+	console.log('active Date in Scheduler----', activeDate);
 	return (
 		<ProtectedRoute>
 			<Snackbar />
@@ -317,9 +318,10 @@ const AceScheduler = () => {
 				}
 				currentView={activeSearch ? 'Agenda' : 'Day'}
 				selectedDate={activeDate}
-				navigating={(args) =>
-					dispatch(changeActiveDate(new Date(args.currentDate).toISOString()))
-				}
+				navigating={(args) => {
+					dispatch(changeActiveDate(new Date(args.currentDate).toISOString()));
+					dispatch(setDateControl(new Date(args.currentDate).toISOString()));
+				}}
 				eventSettings={eventSettings}
 				eventRendered={onEventRendered}
 				eventClick={onEventClick}

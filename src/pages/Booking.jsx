@@ -42,6 +42,7 @@ import { openSnackbar } from '../context/snackbarSlice';
 import {
 	changeActiveDate,
 	getRefreshedBookings,
+	setDateControl,
 } from '../context/schedulerSlice';
 
 function Booking({ bookingData, id, onBookingUpload }) {
@@ -52,6 +53,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 	const dispatch = useDispatch();
 	const callerId = useSelector((state) => state.caller);
 	const { isGoogleApiOn } = useSelector((state) => state.bookingForm);
+	const { activeDate, dateControl } = useSelector((state) => state.scheduler);
 
 	// All Local States and Hooks for ui and fligs
 	const [isAddVIAOpen, setIsAddVIAOpen] = useState(false);
@@ -315,14 +317,29 @@ function Booking({ bookingData, id, onBookingUpload }) {
 				clearInterval(updateTimeInterval);
 				return;
 			}
+			const dateFromControl = new Date(dateControl);
+
+			// Get the current time
+			const now = new Date();
+
+			// Merge the date from dateControl and the time from now
+			dateFromControl.setHours(now.getHours(), now.getMinutes(), 0, 0);
+
+			// Dispatch the updated pickupDateTime
 			dispatch(
-				updateValueSilentMode(id, 'pickupDateTime', formatDate(new Date()))
+				updateValueSilentMode(id, 'pickupDateTime', formatDate(dateFromControl))
 			);
 		}
 		if (bookingData.bookingType === 'Current') return;
 		const updateTimeInterval = setInterval(updateToCurrentTime, 1000);
 		return () => clearInterval(updateTimeInterval);
-	}, [dispatch, id, bookingData.formBusy, bookingData.bookingType]);
+	}, [
+		dispatch,
+		id,
+		bookingData.formBusy,
+		bookingData.bookingType,
+		dateControl,
+	]);
 
 	useEffect(() => {
 		function getDateWithZeroTime(input) {
@@ -339,9 +356,12 @@ function Booking({ bookingData, id, onBookingUpload }) {
 			).toISOString();
 			if (bookingData.formBusy) {
 				dispatch(changeActiveDate(date));
+				dispatch(setDateControl(bookingData.pickupDateTime));
 			}
 		}
 	}, [bookingData.formBusy, bookingData.pickupDateTime, dispatch]);
+
+	console.log('active Date in Booking Form', activeDate);
 
 	useEffect(() => {
 		if (bookingData.formBusy) return;
@@ -393,8 +413,6 @@ function Booking({ bookingData, id, onBookingUpload }) {
 	}
 
 	if (!bookingData) return null;
-
-	console.log('booking Data in booking form----', bookingData);
 
 	return (
 		<div className='bg-background text-foreground p-3 m-auto'>

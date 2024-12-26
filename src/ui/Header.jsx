@@ -15,8 +15,10 @@ import {
 } from '../context/bookingSlice';
 
 import {
+	// changeActiveDate,
 	handleSearchBooking,
 	makeSearchInactive,
+	// setDateControl,
 	// makeSearchInactive,
 } from '../context/schedulerSlice';
 // import CancelIcon from '@mui/icons-material/Cancel';
@@ -27,6 +29,7 @@ import { useForm } from 'react-hook-form';
 import { recordTurnDown } from '../utils/apiReq';
 import { openSnackbar } from '../context/snackbarSlice';
 import PermPhoneMsgIcon from '@mui/icons-material/PermPhoneMsg';
+// import { formatDate } from '../utils/formatDate';
 const Navbar = () => {
 	const BASE_URL = import.meta.env.VITE_BASE_URL;
 	const navigate = useNavigate();
@@ -41,7 +44,7 @@ const Navbar = () => {
 	// );
 	const isGoogleApiOn = useSelector((state) => state.bookingForm.isGoogleApiOn);
 	const callerId = useSelector((state) => state.caller);
-	const { activeSearch } = useSelector((state) => state.scheduler);
+	const { activeSearch, dateControl } = useSelector((state) => state.scheduler);
 	const [openSearch, setOpenSearch] = useState(false);
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [recordTurnModal, setRecordTurnModal] = useState(false);
@@ -63,6 +66,8 @@ const Navbar = () => {
 	const handleRecordTurnDown = () => {
 		setRecordTurnModal(true);
 	};
+
+	console.log('date control---', dateControl);
 
 	return (
 		<>
@@ -132,6 +137,21 @@ const Navbar = () => {
 						<></>
 					) : (
 						<div className='flex flex-row items-center align-middle gap-8'>
+							{/* test input date */}
+							{/* <input
+								required
+								type='datetime-local'
+								className='w-full bg-input text-foreground p-2 rounded-lg border border-border text-black'
+								value={formatDate(dateControl)}
+								onChange={(event) => {
+									const selectedDate = new Date(
+										event.target.value
+									).toISOString();
+									dispatch(setDateControl(selectedDate)); // Update global dateControl
+									dispatch(changeActiveDate(selectedDate)); // Update Scheduler's activeDate
+								}}
+							/> */}
+
 							{currentUser?.roleId !== 3 && (
 								<button
 									className={`${

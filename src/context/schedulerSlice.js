@@ -13,6 +13,7 @@ import {
 	softAllocateDriver,
 } from '../utils/apiReq';
 import axios from 'axios';
+import { formatDate } from '../utils/formatDate';
 
 const isMobile = window.innerWidth <= 640;
 
@@ -42,6 +43,7 @@ const schedulerSlice = createSlice({
 		activeSearchResults: [],
 		activeSearchResult: null,
 		showDriverAvailability: false,
+		dateControl: formatDate(new Date().toISOString()),
 	},
 	reducers: {
 		insertBookings: (state, action) => {
@@ -55,6 +57,9 @@ const schedulerSlice = createSlice({
 		},
 		changeActiveDate: (state, action) => {
 			state.activeDate = new Date(action.payload).toISOString();
+		},
+		setDateControl: (state, action) => {
+			state.dateControl = new Date(action.payload).toISOString();
 		},
 		selectBookingFromScheduler: (state, action) => {
 			state.currentlySelectedBookingIndex = action.payload;
@@ -297,6 +302,7 @@ export const setActiveSearchResult = function (bookingId) {
 
 export const {
 	completeActiveBookingStatus,
+	setDateControl,
 	changeActiveDate,
 	setActiveBookingIndex,
 	selectDriver,
