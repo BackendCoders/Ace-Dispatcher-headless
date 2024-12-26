@@ -24,6 +24,9 @@ import LogoImg from '../assets/ace_taxis_v4.svg';
 import LongButton from '../components/BookingForm/LongButton';
 import SearchIcon from '@mui/icons-material/Search';
 import { useForm } from 'react-hook-form';
+import { recordTurnDown } from '../utils/apiReq';
+import { openSnackbar } from '../context/snackbarSlice';
+import PermPhoneMsgIcon from '@mui/icons-material/PermPhoneMsg';
 const Navbar = () => {
 	const BASE_URL = import.meta.env.VITE_BASE_URL;
 	const navigate = useNavigate();
@@ -41,6 +44,7 @@ const Navbar = () => {
 	const { activeSearch } = useSelector((state) => state.scheduler);
 	const [openSearch, setOpenSearch] = useState(false);
 	const [menuOpen, setMenuOpen] = useState(false);
+	const [recordTurnModal, setRecordTurnModal] = useState(false);
 	// const [searchData, setSearchData] = useState({});
 	// const inputRef = useRef(null);
 
@@ -54,6 +58,10 @@ const Navbar = () => {
 	const handleCancelSearch = () => {
 		setOpenSearch(false);
 		dispatch(makeSearchInactive());
+	};
+
+	const handleRecordTurnDown = () => {
+		setRecordTurnModal(true);
 	};
 
 	return (
@@ -72,6 +80,14 @@ const Navbar = () => {
 							// handleKeyPress={handleKeyPress}
 							setOpenSearch={setOpenSearch}
 						/>
+					</Modal>
+				)}
+				{recordTurnModal && (
+					<Modal
+						setOpen={setRecordTurnModal}
+						open={recordTurnModal}
+					>
+						<RecordTurn setRecordTurnModal={setRecordTurnModal} />
 					</Modal>
 				)}
 			</>
@@ -116,6 +132,18 @@ const Navbar = () => {
 						<></>
 					) : (
 						<div className='flex flex-row items-center align-middle gap-8'>
+							{currentUser?.roleId !== 3 && (
+								<button
+									className={`${
+										BASE_URL.includes('api.acetaxisdorset')
+											? 'bg-[#424242] text-[#C74949] border border-[#C74949]'
+											: 'bg-[#C74949] text-white border border-white'
+									} px-4 py-2 rounded-lg uppercase text-xs sm:text-sm`}
+									onClick={handleRecordTurnDown}
+								>
+									No
+								</button>
+							)}
 							{callerId.length > 0 && (
 								<Badge
 									badgeContent={callerId.length}
@@ -261,6 +289,19 @@ const Navbar = () => {
 						</div>
 					)}
 
+					{currentUser?.roleId !== 3 && (
+						<div className='flex gap-4 mb-4'>
+							<button
+								onClick={() => {
+									handleRecordTurnDown();
+									setMenuOpen(false);
+								}}
+							>
+								No
+							</button>
+						</div>
+					)}
+
 					{/* Google API Toggle */}
 					{currentUser?.roleId !== 3 && (
 						<div className='flex justify-start items-center gap-2 mb-4'>
@@ -303,6 +344,90 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+function RecordTurn({ setRecordTurnModal }) {
+	// const dispatch = useDispatch();
+	const {
+		register,
+		handleSubmit,
+		reset,
+		formState: { isSubmitSuccessful, errors }, // Access form errors
+	} = useForm({
+		defaultValues: {
+			amount: '',
+		},
+	});
+
+	const handleSubmitForm = async (data) => {
+		const newinputData = {
+			amount: Number(data.amount),
+		};
+
+		// Dispatch search action only if some data is entered
+		if (data.amount) {
+			// if (isMobile || isTablet) {
+			// 	setActiveSectionMobileView('Scheduler');
+			// }
+			const response = await recordTurnDown(newinputData);
+			console.log('recordTurnDown Response---', response);
+			setRecordTurnModal(false);
+			openSnackbar('Record Send Successfully', 'success');
+			// Close the modal after search
+		} else {
+			console.log('Please enter search criteria');
+		}
+	};
+
+	useEffect(() => {
+		if (isSubmitSuccessful) {
+			reset({
+				amount: '',
+			});
+		}
+	}, [reset, isSubmitSuccessful]);
+
+	return (
+		<div className='bg-white p-6 rounded-lg shadow-lg w-[90vw] md:w-[45vw] sm:w-[25vw] max-w-md mx-auto'>
+			<h2 className='text-2xl font-semibold mb-4 flex gap-1 items-center'>
+				<PermPhoneMsgIcon />
+				Record Turn Down
+			</h2>
+			<form onSubmit={handleSubmit(handleSubmitForm)}>
+				<Box
+					mt={2}
+					display='flex'
+					justifyContent='space-between'
+					gap={2}
+				>
+					<TextField
+						label='Amount'
+						fullWidth
+						error={!!errors.amount} // Show error if validation fails
+						helperText={errors.amount ? 'Amount is required' : ''}
+						{...register('amount', {
+							required: true,
+						})}
+					/>
+				</Box>
+
+				<div className='mt-4 flex gap-1'>
+					<LongButton
+						type='submit'
+						color='bg-green-700'
+					>
+						Submit
+					</LongButton>
+					<LongButton
+						color='bg-red-700'
+						onClick={() => setRecordTurnModal(false)} // Close modal on Cancel
+					>
+						Cancel
+					</LongButton>
+				</div>
+			</form>
+		</div>
+	);
+}
 
 function SearchModal({ setOpenSearch }) {
 	const isMobile = useMediaQuery('(max-width: 640px)');
@@ -373,7 +498,7 @@ function SearchModal({ setOpenSearch }) {
 
 	return (
 		<div className='bg-white p-6 rounded-lg shadow-lg w-[90vw] md:w-[45vw] sm:w-[25vw] max-w-md mx-auto'>
-			<h2 className='text-2xl font-semibold mb-4 flex items-center'>
+			<h2 className='text-2xl font-semibold mb-4 flex gap-1 items-center'>
 				<SearchIcon />
 				Search Bookings
 			</h2>

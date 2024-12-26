@@ -598,6 +598,26 @@ async function sendReminderForPayment(data) {
 	return await handleGetReq(URL);
 }
 
+async function recordTurnDown(data) {
+	const reqData = {
+		amount: data.amount || 0,
+	};
+	const URL = `${BASE}/api/bookings/recordTurndown`;
+	const res = await handlePostReq(URL, data);
+	if (res.status === 'success') {
+		sendLogs(
+			{
+				url: URL,
+				requestBody: reqData,
+				headers: setHeaders(),
+				response: res,
+			},
+			'info'
+		);
+		return res;
+	}
+}
+
 export {
 	getBookingData,
 	makeBooking,
@@ -625,4 +645,5 @@ export {
 	getAvailabilityDriverOld,
 	sendConfirmationText,
 	sendReminderForPayment,
+	recordTurnDown,
 };
