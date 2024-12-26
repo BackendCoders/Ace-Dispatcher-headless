@@ -394,6 +394,8 @@ function Booking({ bookingData, id, onBookingUpload }) {
 
 	if (!bookingData) return null;
 
+	console.log('booking Data in booking form----', bookingData);
+
 	return (
 		<div className='bg-background text-foreground p-3 m-auto'>
 			<form
@@ -478,6 +480,37 @@ function Booking({ bookingData, id, onBookingUpload }) {
 									className='w-full bg-input text-foreground p-2 rounded-lg border border-border'
 								/>
 							) : null}
+							<div className='flex justify-center items-center'>
+								<span
+									className={`${
+										bookingData.isASAP ? 'text-[#228B22]' : ''
+									} mr-2`}
+								>
+									ASAP
+								</span>
+								<Switch
+									sx={{
+										'& .MuiSwitch-switchBase.Mui-checked': {
+											color: '#228B22', // Thumb color
+										},
+										'& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+											backgroundColor: '#228B22', // Track color
+										},
+									}}
+									checked={bookingData.isASAP}
+									onClick={() => {
+										// !bookingData.isAsap
+										// 	? updateData(
+										// 			'isAsap',
+										// 			!bookingData.isAsap
+										// 			// convertToOneHourLaterFromPickUp()
+										// 			// eslint-disable-next-line no-mixed-spaces-and-tabs
+										// 	  )
+										// 	: null;
+										updateData('isASAP', !bookingData.isASAP);
+									}}
+								/>
+							</div>
 						</div>
 						<div className='flex gap-5 flex-col md:flex-row justify-between items-center align-middle'>
 							<div className='bg-red-700 hover:bg-opacity-80 rounded-lg flex  text-white'>

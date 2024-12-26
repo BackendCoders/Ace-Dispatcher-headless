@@ -199,10 +199,10 @@ const AceScheduler = () => {
 
 			// subjectElement.appendChild(badge);
 		}
-		if (args?.data?.isAsap) {
-			const asapBadge = createBadge('ASAP', 'orange');
-			parentNode.insertBefore(asapBadge, subjectElement);
-			args.element.style.border = '1px solid orange';
+		if (args?.data?.isASAP) {
+			// const asapBadge = createBadge('ASAP', '#228B22');
+			// parentNode.insertBefore(asapBadge, subjectElement);
+			args.element.style.border = '3px dashed #228B22';
 		}
 		if (isLightColor(driverColor)) {
 			if (args?.element?.querySelector('.e-subject'))

@@ -320,10 +320,10 @@ function CustomDialog({ closeDialog }) {
 											text={
 												<>
 													{getTodayInEnGbFormat(data.pickupDateTime)}
-													{data.isAsap && (
+													{data.isASAP && (
 														<span
 															style={{
-																backgroundColor: 'orange',
+																backgroundColor: '#228B22',
 																color: 'white',
 																padding: '2px 5px',
 																marginLeft: '5px',
