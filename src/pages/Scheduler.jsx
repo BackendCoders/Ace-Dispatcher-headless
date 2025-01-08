@@ -29,6 +29,7 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import isLightColor from '../utils/isLight';
 import { Switch, useMediaQuery } from '@mui/material';
 import {
+	allocateActiveBookingStatus,
 	changeActiveDate,
 	completeActiveBookingStatus,
 	getRefreshedBookings,
@@ -49,6 +50,7 @@ const AceScheduler = () => {
 	const {
 		bookings,
 		activeComplete,
+		activeAllocate,
 		activeDate,
 		activeSearch,
 		activeSearchResults,
@@ -361,6 +363,22 @@ const AceScheduler = () => {
 				)}
 				<Inject services={[Day, Agenda]} />
 			</ScheduleComponent>
+			<div className='flex justify-end w-[10%] fixed top-[100px] right-[0px] sm:top-[125px] sm:right-[350px] z-[40]'>
+				{(!isMobile || user?.currentUser?.roleId !== 3) && !activeSearch && (
+					<span className='flex flex-row gap-2 items-center align-middle'>
+						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
+							Show Allocated
+						</span>
+						<Switch
+							checked={activeAllocate}
+							onChange={() => {
+								dispatch(allocateActiveBookingStatus(!activeAllocate));
+							}}
+							className='text-sm'
+						/>
+					</span>
+				)}
+			</div>
 			{/* Changed by Tanya - (9 Aug) */}
 			<div className='flex justify-end w-[10%] fixed top-[120px] right-[0px] sm:top-[125px] sm:right-[160px] z-[40]'>
 				{(!isMobile || user?.currentUser?.roleId !== 3) && !activeSearch && (

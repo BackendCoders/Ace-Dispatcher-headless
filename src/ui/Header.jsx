@@ -471,14 +471,15 @@ function SearchModal({ setOpenSearch }) {
 	});
 
 	const handleSubmitForm = async (data) => {
+		console.log('form Data', data);
 		const newinputData = {
-			pickupAddress: data.pickupAddress || '',
-			pickupPostcode: data.pickupPostcode || '',
-			destinationAddress: data.destinationAddress || '',
-			destinationPostcode: data.destinationPostcode || '',
-			passenger: data.passenger || '',
-			phoneNumber: data.phoneNumber || '',
-			details: data.details || '',
+			pickupAddress: data?.pickupAddress || '',
+			pickupPostcode: data?.pickupPostcode || '',
+			destinationAddress: data?.destinationAddress || '',
+			destinationPostcode: data?.destinationPostcode || '',
+			passenger: data?.passenger || '',
+			phoneNumber: data?.phoneNumber || '',
+			details: data?.details || '',
 		};
 
 		// Dispatch search action only if some data is entered

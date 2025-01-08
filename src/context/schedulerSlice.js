@@ -38,6 +38,7 @@ const schedulerSlice = createSlice({
 		selectedDriver: null,
 		activeDate: new Date().toISOString(),
 		activeComplete: isMobile ? true : false,
+		activeAllocate: isMobile ? true : false,
 		activeSearch: false,
 		activeSoftAllocate: false,
 		activeSearchResults: [],
@@ -54,6 +55,9 @@ const schedulerSlice = createSlice({
 		},
 		completeActiveBookingStatus: (state, action) => {
 			state.activeComplete = action.payload;
+		},
+		allocateActiveBookingStatus: (state, action) => {
+			state.activeAllocate = action.payload;
 		},
 		changeActiveDate: (state, action) => {
 			state.activeDate = new Date(action.payload).toISOString();
@@ -302,6 +306,7 @@ export const setActiveSearchResult = function (bookingId) {
 
 export const {
 	completeActiveBookingStatus,
+	allocateActiveBookingStatus,
 	setDateControl,
 	changeActiveDate,
 	setActiveBookingIndex,

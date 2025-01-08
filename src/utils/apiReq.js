@@ -503,7 +503,7 @@ async function bookingFindByBookings(data) {
 		pickupAddress: data.pickupAddress || '',
 		pickupPostcode: data.pickupPostcode || '',
 		destinationAddress: data.destinationAddress || '',
-		destinationPostcode: data.destinationPostCode || '',
+		destinationPostcode: data.destinationPostcode || '',
 		passenger: data.passenger || '',
 		phoneNumber: data.phoneNumber || '',
 		details: data.details || '',
