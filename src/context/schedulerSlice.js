@@ -38,7 +38,7 @@ const schedulerSlice = createSlice({
 		selectedDriver: null,
 		activeDate: new Date().toISOString(),
 		activeComplete: isMobile ? true : false,
-		activeAllocate: isMobile ? true : false,
+		activeAllocate: true,
 		activeSearch: false,
 		activeSoftAllocate: false,
 		activeSearchResults: [],
@@ -113,23 +113,34 @@ const schedulerSlice = createSlice({
 export function getRefreshedBookings() {
 	return async (dispatch, getState) => {
 		// const activeTestMode = getState().bookingForm.isActiveTestMode;
-		const { activeDate, activeComplete } = getState().scheduler;
+		const { activeDate, activeComplete, activeAllocate } = getState().scheduler;
 
 		// const response = await getBookingData(activeDate, activeTestMode);
 		const response = await getBookingData(activeDate);
 
 		if (response.status === 'success') {
 			let filteredBookings = [];
-			if (activeComplete) {
+			if (activeComplete && activeAllocate) {
+				// Case 1: Show all bookings
 				filteredBookings = response.bookings;
-				// filteredBookings = response.bookings.filter(
-				// 	(booking) => booking.status === 3
-				// );
-			} else {
+			} else if (activeComplete && !activeAllocate) {
+				// Case 2: Show all bookings except those that have a userId
+				filteredBookings = response.bookings.filter(
+					(booking) => !booking?.userId
+				);
+			} else if (!activeComplete && activeAllocate) {
+				// Case 3: Show all bookings except those with status === 3
 				filteredBookings = response.bookings.filter(
 					(booking) => booking.status !== 3
 				);
+			} else if (!activeComplete && !activeAllocate) {
+				// Case 4: Show bookings that have status !== 3 and no userId
+				filteredBookings = response.bookings.filter(
+					(booking) => booking.status !== 3 && !booking?.userId
+				);
 			}
+			console.log('Filtered Bookings:', filteredBookings);
+
 			dispatch(schedulerSlice.actions.insertBookings(filteredBookings));
 		}
 		return response;
