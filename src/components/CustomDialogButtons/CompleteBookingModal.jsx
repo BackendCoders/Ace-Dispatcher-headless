@@ -32,7 +32,10 @@ export default function CompleteBookingModal({
 	const dispatch = useDispatch();
 
 	const disableInput = () => {
-		if (data?.scope === 1 && user?.currentUser?.roleId === 3) {
+		if (
+			(data?.scope === 1 || data?.scope === 4) &&
+			user?.currentUser?.roleId === 3
+		) {
 			return true;
 		} else if (data.scope !== 1) {
 			return false;

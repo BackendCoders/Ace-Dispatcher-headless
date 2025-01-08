@@ -52,7 +52,9 @@ function Booking({ bookingData, id, onBookingUpload }) {
 	// console.log(currentUser);
 	const dispatch = useDispatch();
 	const callerId = useSelector((state) => state.caller);
-	const { isGoogleApiOn } = useSelector((state) => state.bookingForm);
+	const { isGoogleApiOn, isBookingOpenInEditMode } = useSelector(
+		(state) => state.bookingForm
+	);
 	const { activeDate, dateControl } = useSelector((state) => state.scheduler);
 
 	// All Local States and Hooks for ui and fligs
@@ -734,6 +736,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 										})()
 									)
 								}
+								disabled={isBookingOpenInEditMode && currentUser?.roleId === 3}
 							/>
 						</div>
 

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
 	addDataFromSchedulerInEditMode,
 	setActiveSectionMobileView,
+	setIsBookingOpenInEditMode,
 } from '../../context/bookingSlice';
 
 function EditBookingModal({ setEditBookingModal, closeDialog }) {
@@ -27,6 +28,7 @@ function EditBookingModal({ setEditBookingModal, closeDialog }) {
 		};
 		dispatch(addDataFromSchedulerInEditMode(filterData));
 		dispatch(setActiveSectionMobileView('Booking'));
+		dispatch(setIsBookingOpenInEditMode((prev) => !prev));
 		closeDialog(false);
 		setEditBookingModal(false);
 	}
@@ -34,7 +36,7 @@ function EditBookingModal({ setEditBookingModal, closeDialog }) {
 		// console.log('Handle edit all booking Data', data);
 		dispatch(addDataFromSchedulerInEditMode({ editBlock: true, ...data }));
 		dispatch(setActiveSectionMobileView('Booking'));
-
+		dispatch(setIsBookingOpenInEditMode((prev) => !prev));
 		closeDialog(false);
 		setEditBookingModal(false);
 	}

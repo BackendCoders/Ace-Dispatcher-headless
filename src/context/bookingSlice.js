@@ -54,6 +54,7 @@ const initialState = {
 	isLoading: false,
 	error: null,
 	activeBookingIndex: 0,
+	isBookingOpenInEditMode: false,
 	// isActiveTestMode: true,
 	isGoogleApiOn: false,
 	activeSectionMobileView: 'Scheduler',
@@ -92,6 +93,9 @@ const bookingFormSlice = createSlice({
 
 			state.bookings.push({ ...data, ...action.payload });
 			state.activeBookingIndex = state.bookings.length - 1;
+		},
+		setIsBookingOpenInEditMode(state, action) {
+			state.isBookingOpenInEditMode = action.payload;
 		},
 		// to remove a booking session from the booking form data and from the UI
 		endBooking(state) {
@@ -217,6 +221,7 @@ export const {
 	setIsGoogleApiOn,
 	updateBookingData,
 	addDataFromSchedulerInEditMode,
+	setIsBookingOpenInEditMode,
 	createBookingFromScheduler,
 } = bookingFormSlice.actions;
 
