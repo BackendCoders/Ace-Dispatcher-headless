@@ -321,8 +321,8 @@ const AceScheduler = () => {
 				currentView={activeSearch ? 'Agenda' : 'Day'}
 				selectedDate={activeDate}
 				navigating={(args) => {
-					dispatch(changeActiveDate(new Date(args.currentDate).toISOString()));
 					dispatch(setDateControl(new Date(args.currentDate).toISOString()));
+					dispatch(changeActiveDate(new Date(args.currentDate).toISOString()));
 				}}
 				eventSettings={eventSettings}
 				eventRendered={onEventRendered}

@@ -499,8 +499,9 @@ function CustomDialog({ closeDialog }) {
 										<BookingOption
 											text={
 												data.durationMinutes
-													? Math.floor(Number(data.durationMinutes) / 60) +
-													  ' Hour(s)'
+													? `${Math.floor(data.durationMinutes / 60)} Hour(s) ${
+															data.durationMinutes % 60
+													  } Minute(s)`
 													: 'NA'
 											}
 											head='Time'
