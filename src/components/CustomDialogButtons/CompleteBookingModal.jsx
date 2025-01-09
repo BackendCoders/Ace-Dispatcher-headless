@@ -93,7 +93,7 @@ export default function CompleteBookingModal({
 						<input
 							type='number'
 							value={parkingCharge === 0 ? '' : parkingCharge}
-							onChange={(e) => setParkingCharge(+e.target.value)}
+							onChange={(e) => setParkingCharge(parseFloat(e.target.value))}
 							min='0'
 							className='w-full pl-10 pr-4 py-2 p-2 border border-gray-500 rounded-md placeholder:text-slate-900'
 							disabled={user?.currentUser?.roleId === 3 ? true : false}
