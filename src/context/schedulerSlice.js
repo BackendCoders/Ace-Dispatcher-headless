@@ -139,7 +139,7 @@ export function getRefreshedBookings() {
 					(booking) => booking.status !== 3 && !booking?.userId
 				);
 			}
-			console.log('Filtered Bookings:', filteredBookings);
+			// console.log('Filtered Bookings:', filteredBookings);
 
 			dispatch(schedulerSlice.actions.insertBookings(filteredBookings));
 		}

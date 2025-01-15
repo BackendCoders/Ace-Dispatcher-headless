@@ -55,7 +55,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 	const { isGoogleApiOn, isBookingOpenInEditMode } = useSelector(
 		(state) => state.bookingForm
 	);
-	const { activeDate, dateControl } = useSelector((state) => state.scheduler);
+	const { dateControl } = useSelector((state) => state.scheduler);
 
 	// All Local States and Hooks for ui and fligs
 	const [isAddVIAOpen, setIsAddVIAOpen] = useState(false);
@@ -363,7 +363,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 		}
 	}, [bookingData.formBusy, bookingData.pickupDateTime, dispatch]);
 
-	console.log('active Date in Booking Form', activeDate);
+	// console.log('active Date in Booking Form', activeDate);
 
 	useEffect(() => {
 		if (bookingData.formBusy) return;

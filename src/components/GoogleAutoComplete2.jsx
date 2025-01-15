@@ -182,7 +182,7 @@
 
 // export default GoogleAutoComplete;
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { TextField } from '@mui/material';
 import {
 	getAddressSuggestions,
@@ -204,44 +204,53 @@ function GoogleAutoComplete({
 	const [showOption, setShowOption] = useState(false);
 	const [highlightedIndex, setHighlightedIndex] = useState(-1);
 	const [blur, setBlur] = useState(false);
+	const cacheRef = useRef({});
 
 	// Handle input change and fetch address suggestions from both sources
 	const handleInputChange = async (event) => {
 		onChange(event); // Update the input field in the parent component
-		const input = event.target.value;
+		const input = event.target.value.trim().toLowerCase();
 		setHighlightedIndex(-1); // Reset highlighted index
 
 		// Fetch suggestions if input length is greater than or equal to 4
 		if (input.length >= 4) {
-			try {
-				// Fetch local API suggestions (getPoi)
-				const localSuggestions = await getPoi(input);
-				const localFormatted = localSuggestions.map((poi) => ({
-					label: `${poi.address}, ${poi.postcode || 'No Postcode'}`,
-					id: poi.id,
-					name: poi.name,
-					address: poi.address || 'Unknown Address',
-					postcode: poi.postcode || 'No Postcode',
-					longitude: poi.longitude,
-					latitude: poi.latitude,
-					source: 'local',
-				}));
+			if (cacheRef.current[input]) {
+				setSuggestions(cacheRef.current[input]);
+				setShowOption(true);
+			} else {
+				try {
+					// Fetch local API suggestions (getPoi)
+					const localSuggestions = await getPoi(input);
+					const localFormatted = localSuggestions.map((poi) => ({
+						label: `${poi.address}, ${poi.postcode || 'No Postcode'}`,
+						id: poi.id,
+						name: poi.name,
+						address: poi.address || 'Unknown Address',
+						postcode: poi.postcode || 'No Postcode',
+						longitude: poi.longitude,
+						latitude: poi.latitude,
+						source: 'local',
+					}));
 
-				// Fetch getAddress.io suggestions
-				const addressSuggestions = await getAddressSuggestions(input);
-				const addressFormatted = addressSuggestions.map((suggestion) => ({
-					label: suggestion.address, // Use the address directly
-					id: suggestion.id,
-					address: suggestion.address || 'Unknown Address',
-					source: 'getAddress',
-				}));
+					// Fetch getAddress.io suggestions
+					const addressSuggestions = await getAddressSuggestions(input);
+					const addressFormatted = addressSuggestions.map((suggestion) => ({
+						label: suggestion.address, // Use the address directly
+						id: suggestion.id,
+						address: suggestion.address || 'Unknown Address',
+						source: 'getAddress',
+					}));
 
-				// Combine local suggestions first, followed by getAddress.io suggestions
-				const combinedSuggestions = [...localFormatted, ...addressFormatted];
-				setSuggestions(combinedSuggestions);
-			} catch (error) {
-				console.error('Error fetching address suggestions:', error);
-				setSuggestions([]); // Clear suggestions on error
+					// Combine local suggestions first, followed by getAddress.io suggestions
+					const combinedSuggestions = [...localFormatted, ...addressFormatted];
+					setSuggestions(combinedSuggestions);
+
+					//Store the suggestions in the cache
+					cacheRef.current[input] = combinedSuggestions;
+				} catch (error) {
+					console.error('Error fetching address suggestions:', error);
+					setSuggestions([]); // Clear suggestions on error
+				}
 			}
 		} else {
 			setSuggestions([]); // Clear suggestions if input is too short
@@ -252,7 +261,7 @@ function GoogleAutoComplete({
 	const handleSuggestionSelect = async (suggestion) => {
 		let selectedAddress = suggestion.address || 'Unknown Address';
 		let selectedPostcode = suggestion.postcode || 'No Postcode';
-
+		console.log('Selected Suggestion:', suggestion);
 		// If the suggestion is from getAddress.io, fetch full details before updating the form
 		if (suggestion.source === 'getAddress') {
 			try {
@@ -288,7 +297,7 @@ function GoogleAutoComplete({
 		setTimeout(() => {
 			setBlur(true);
 			setShowOption(false);
-		}, 100); // Delay to allow click to register
+		}, 200); // Delay to allow click to register
 	};
 
 	// Handle keyboard navigation in the suggestions list
@@ -310,6 +319,8 @@ function GoogleAutoComplete({
 			}
 		}
 	};
+
+	// console.log('cache address', cacheRef.current);
 
 	// Show the suggestions dropdown if there are suggestions and no blur
 	useEffect(() => {
@@ -343,7 +354,10 @@ function GoogleAutoComplete({
 					{suggestions.map((option, index) => (
 						<li
 							key={index}
-							onClick={() => handleSuggestionSelect(option)}
+							onClick={() => {
+								console.log('Clicked Option:', option);
+								handleSuggestionSelect(option);
+							}}
 							onMouseOver={() => setHighlightedIndex(index)}
 							className={`px-4 py-2 cursor-pointer ${
 								index === highlightedIndex ? 'bg-gray-100' : ''

@@ -305,7 +305,7 @@ const AceScheduler = () => {
 	useEffect(() => {
 		onCreate(); // Call onCreate to scroll when the component mounts
 	}, []);
-	console.log('active Date in Scheduler----', activeDate);
+	// console.log('active Date in Scheduler----', activeDate);
 	return (
 		<ProtectedRoute>
 			<Snackbar />

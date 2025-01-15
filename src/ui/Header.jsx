@@ -44,7 +44,7 @@ const Navbar = () => {
 	// );
 	const isGoogleApiOn = useSelector((state) => state.bookingForm.isGoogleApiOn);
 	const callerId = useSelector((state) => state.caller);
-	const { activeSearch, dateControl } = useSelector((state) => state.scheduler);
+	const { activeSearch } = useSelector((state) => state.scheduler);
 	const [openSearch, setOpenSearch] = useState(false);
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [recordTurnModal, setRecordTurnModal] = useState(false);
@@ -67,7 +67,7 @@ const Navbar = () => {
 		setRecordTurnModal(true);
 	};
 
-	console.log('date control---', dateControl);
+	// console.log('date control---', dateControl);
 
 	return (
 		<>
