@@ -618,6 +618,11 @@ async function recordTurnDown(data) {
 	}
 }
 
+async function sendPayReceipt(bookingId) {
+	const URL = `${BASE}/api/Bookings/SendPaymentReceipt?bookingId=${bookingId}`;
+	return await handleGetReq(URL);
+}
+
 export {
 	getBookingData,
 	makeBooking,
@@ -646,4 +651,5 @@ export {
 	sendConfirmationText,
 	sendReminderForPayment,
 	recordTurnDown,
+	sendPayReceipt,
 };

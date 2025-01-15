@@ -27,6 +27,7 @@ import {
 	driverArrived,
 	sendConfirmationText,
 	sendPaymentLink,
+	sendPayReceipt,
 	sendRefundLink,
 	sendReminderForPayment,
 } from '../utils/apiReq';
@@ -56,7 +57,7 @@ function CustomDialog({ closeDialog }) {
 
 	if (!data?.bookingId) return null;
 
-	console.log('Booking form data in view Booking form', data);
+	// console.log('Booking form data in view Booking form', data);
 
 	const handleCancelOnArrival = () => {
 		dispatch(
@@ -196,6 +197,19 @@ function CustomDialog({ closeDialog }) {
 		)}&travelmode=driving&dir_action=navigate`;
 	};
 
+	const sendPaymentReceipt = async () => {
+		try {
+			const response = await sendPayReceipt(data.bookingId);
+			if (response.status === 'success') {
+				dispatch(openSnackbar('Payment Receipt Sent', 'success'));
+				dispatch(getRefreshedBookings());
+			}
+		} catch (error) {
+			console.log(error);
+			dispatch(openSnackbar('Error in Sending Pay Receipt', 'error'));
+		}
+	};
+
 	return (
 		<div className='fixed sm:left-[-35vw] left-[-45vw] inset-0 w-[90vw] sm:w-[70vw] mx-auto z-50 flex items-center justify-center p-1 sm:p-4 bg-background bg-opacity-50'>
 			<div className='relative w-full max-w-7xl p-3 sm:p-6 bg-card rounded-lg shadow-lg dark:bg-popover bg-white max-h-[90vh] overflow-y-auto sm:overflow-hidden'>
@@ -287,6 +301,16 @@ function CustomDialog({ closeDialog }) {
 								Send Confirmation Text
 							</button>
 						)}
+
+						{user?.currentUser?.roleId !== 3 &&
+							(data?.scope === 0 || data?.scope === 4) && (
+								<button
+									onClick={sendPaymentReceipt}
+									className={`px-3 py-2 text-white bg-blue-700 hover:bg-opacity-80 rounded-lg`}
+								>
+									Send Payment Receipt
+								</button>
+							)}
 					</div>
 
 					<button
