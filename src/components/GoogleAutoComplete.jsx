@@ -26,13 +26,17 @@ function PlaceAutocomplete({
 	const [showOption, setShowOption] = useState(false);
 	const [highlightedIndex, setHighlightedIndex] = useState(-1);
 	const [blur, setBlur] = useState(false);
-
+	const [cache, setCache] = useState({});
 	const handleInputChange = async (event) => {
 		onChange(event);
 		const input = event.target.value;
 		let tempSuggestions = [];
 		setHighlightedIndex(-1);
 		if (input.length >= 4) {
+			if (cache[input]) {
+				setSuggestions(cache[input]);
+				return;
+			}
 			const res = await getPoi(input);
 			tempSuggestions = res.map((poi) => ({
 				label: `${poi.address}, ${poi.postcode}`,
@@ -63,6 +67,10 @@ function PlaceAutocomplete({
 								(prediction) => prediction && prediction.postcode
 							);
 							tempSuggestions = [...tempSuggestions, ...filteredPredictions];
+							setCache((prevCache) => ({
+								...prevCache,
+								[input]: tempSuggestions,
+							}));
 							setSuggestions(tempSuggestions);
 						});
 					} else {
