@@ -154,8 +154,8 @@ const bookingFormSlice = createSlice({
 // Action Creator that will indirectly call the updateDataValue with and set FormBusy
 export const updateValue = function (itemIndex, property, value) {
 	return function (dispatch, getState) {
-		const targetBooking = getState().bookingForm.bookings[itemIndex];
-		if (!targetBooking.formBusy) {
+		const targetBooking = getState().bookingForm?.bookings[itemIndex];
+		if (!targetBooking?.formBusy) {
 			dispatch(
 				bookingFormSlice.actions.updateDataValue(itemIndex, 'formBusy', true)
 			);

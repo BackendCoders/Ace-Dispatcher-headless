@@ -352,6 +352,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 
 			return date;
 		}
+
 		if (bookingData.pickupDateTime) {
 			const date = new Date(
 				getDateWithZeroTime(bookingData.pickupDateTime)
@@ -519,15 +520,23 @@ function Booking({ bookingData, id, onBookingUpload }) {
 									}}
 									checked={bookingData.isASAP}
 									onClick={() => {
-										// !bookingData.isAsap
-										// 	? updateData(
-										// 			'isAsap',
-										// 			!bookingData.isAsap
-										// 			// convertToOneHourLaterFromPickUp()
-										// 			// eslint-disable-next-line no-mixed-spaces-and-tabs
-										// 	  )
-										// 	: null;
-										updateData('isASAP', !bookingData.isASAP);
+										if (!bookingData.isASAP) {
+											// Calculate new pickupDateTime
+											const currentDateTime = new Date(
+												bookingData.pickupDateTime
+											);
+											currentDateTime.setMinutes(
+												currentDateTime.getMinutes() + 5
+											);
+											const newPickupDateTime = formatDate(currentDateTime);
+
+											// Update isASAP and pickupDateTime
+											updateData('isASAP', true); // Set isASAP to true
+											updateData('pickupDateTime', newPickupDateTime); // Update pickupDateTime
+										} else {
+											// Simply toggle off isASAP without updating pickupDateTime
+											updateData('isASAP', false);
+										}
 									}}
 								/>
 							</div>
