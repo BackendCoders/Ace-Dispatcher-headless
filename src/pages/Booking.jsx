@@ -326,17 +326,18 @@ function Booking({ bookingData, id, onBookingUpload }) {
 
 			// Merge the date from dateControl and the time from now
 			dateFromControl.setHours(now.getHours(), now.getMinutes(), 0, 0);
-
+			const newDateTime = formatDate(dateFromControl);
 			// Dispatch the updated pickupDateTime
-			dispatch(
-				updateValueSilentMode(id, 'pickupDateTime', formatDate(dateFromControl))
-			);
+			if (newDateTime !== bookingData.pickupDateTime) {
+				dispatch(updateValueSilentMode(id, 'pickupDateTime', newDateTime));
+			}
 		}
 		if (bookingData.bookingType === 'Current') return;
 		const updateTimeInterval = setInterval(updateToCurrentTime, 1000);
 		return () => clearInterval(updateTimeInterval);
 	}, [
 		dispatch,
+		bookingData.pickupDateTime,
 		id,
 		bookingData.formBusy,
 		bookingData.bookingType,
@@ -519,7 +520,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 										},
 									}}
 									checked={bookingData.isASAP}
-									onClick={() => {
+									onChange={() => {
 										if (!bookingData.isASAP) {
 											// Calculate new pickupDateTime
 											const currentDateTime = new Date(

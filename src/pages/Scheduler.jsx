@@ -241,7 +241,7 @@ const AceScheduler = () => {
 			});
 		}
 		helper();
-	}, [activeDate, dispatch, activeComplete]);
+	}, [activeDate, dispatch, activeComplete, activeAllocate]);
 	// }, [activeTestMode, activeDate, dispatch, activeComplete]);
 	// refresh the booking every 10000 (10 sec)
 	useEffect(() => {
