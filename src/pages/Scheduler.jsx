@@ -31,6 +31,7 @@ import { Switch, useMediaQuery } from '@mui/material';
 import {
 	allocateActiveBookingStatus,
 	changeActiveDate,
+	changeShowDriverAvailability,
 	completeActiveBookingStatus,
 	getRefreshedBookings,
 	setActiveBookingIndex,
@@ -54,6 +55,7 @@ const AceScheduler = () => {
 		activeDate,
 		activeSearch,
 		activeSearchResults,
+		showDriverAvailability,
 		// activeSoftAllocate,
 		loading: searchLoading,
 	} = useSelector((state) => state.scheduler);
@@ -395,6 +397,23 @@ const AceScheduler = () => {
 						/>
 					</span>
 				)}
+			</div>
+
+			<div className='flex justify-end w-[10%] fixed top-[120px] right-[0px] sm:top-[80px] sm:right-[350px] z-[40]'>
+				{
+					<span className='flex flex-row gap-2 items-center align-middle'>
+						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
+							Availability
+						</span>
+						<Switch
+							checked={showDriverAvailability}
+							onChange={() => {
+								dispatch(changeShowDriverAvailability(!showDriverAvailability));
+							}}
+							className='text-sm'
+						/>
+					</span>
+				}
 			</div>
 		</ProtectedRoute>
 	);
