@@ -696,7 +696,7 @@ function SearchModal({ setOpenSearch }) {
 	}, [reset, isSubmitSuccessful]);
 
 	return (
-		<div className='bg-white fixed right-[-167px] top-[-260px] p-6 rounded-lg shadow-lg w-[90vw] md:w-[45vw] sm:w-[25vw] max-w-md mx-auto'>
+		<div className='bg-white fixed right-[-167px] top-[-290px] p-6 rounded-lg shadow-lg w-[90vw] md:w-[45vw] sm:w-[25vw] max-w-md mx-auto'>
 			<h2 className='text-2xl font-semibold mb-4 flex gap-1 items-center'>
 				<SearchIcon />
 				Search Bookings
