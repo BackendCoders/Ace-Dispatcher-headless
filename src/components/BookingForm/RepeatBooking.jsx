@@ -98,13 +98,13 @@ function RepeatBooking({ onSet }) {
 	const [repeatEndValue, setRepeatEndValue] = useState(rev);
 	const [selectedDays, setSelectedDays] = useState(sd);
 	const dayLabels = [
-		{ key: 'sun', label: 'S' },
 		{ key: 'mon', label: 'M' },
 		{ key: 'tue', label: 'T' },
 		{ key: 'wed', label: 'W' },
 		{ key: 'thu', label: 'T' },
 		{ key: 'fri', label: 'F' },
 		{ key: 'sat', label: 'S' },
+		{ key: 'sun', label: 'S' },
 	];
 
 	// funciton to handle the selected days from week days
