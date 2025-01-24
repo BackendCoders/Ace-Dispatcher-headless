@@ -158,18 +158,15 @@ const AuthProvider = ({ children }) => {
 
 			// Validate the origin of the message
 			if (event.origin === allowedOrigin) {
-				const { token } = event.data; // Token sent by parent app
-
-				if (token) {
-					setToken(token); // Store token in localStorage
-					console.log('Token received via postMessage:', token);
-
-					// Optionally fetch user details if needed
-					const username = getUsername(); // If username is already in localStorage
-					if (username) {
+				const { token, user } = event.data; // Token sent by parent app
+				if (user) {
+					setUsername(user.username);
+					localStorage.setItem('user', JSON.stringify(user));
+					const username = user.username || getUsername();
+					if (username && token) {
 						getUser(token, username); // Fetch user details
 					} else {
-						setIsAuth(true); // Just set authentication if user is not fetched
+						setIsAuth(true); // Set authentication status if fetching is unnecessary
 					}
 				}
 			} else {
