@@ -431,7 +431,7 @@ const AceScheduler = () => {
 				)}
 			</div>
 
-			<div className='flex justify-end w-[10%] fixed top-[60px] right-[235px] sm:top-[5px] sm:right-[510px] z-[40]'>
+			<div className='flex justify-end w-[10%] fixed top-[60px] right-[235px] sm:top-[15px] sm:right-[440px] z-[40]'>
 				{callerId.length > 0 && (
 					<Badge
 						badgeContent={callerId.length}
