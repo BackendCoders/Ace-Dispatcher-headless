@@ -170,6 +170,8 @@ const AuthProvider = ({ children }) => {
 
 					// Save user data to state and local storage
 					setCurrentUser(userData);
+					getUserRole(userData);
+					getAccountList();
 					localStorage.setItem('userData', JSON.stringify(userData));
 
 					// Set authentication status to true
