@@ -26,7 +26,7 @@ export default function DeleteBookingModal({ setDeleteModal, closeDialog }) {
 		dispatch(
 			deleteSchedulerBooking(
 				false,
-				user.currentUser.fullName,
+				user.currentUser?.fullName,
 				user.currentUser.id
 			)
 		);
@@ -38,7 +38,7 @@ export default function DeleteBookingModal({ setDeleteModal, closeDialog }) {
 		dispatch(
 			deleteSchedulerBooking(
 				true,
-				user.currentUser.fullName,
+				user.currentUser?.fullName,
 				user.currentUser.id
 			)
 		);

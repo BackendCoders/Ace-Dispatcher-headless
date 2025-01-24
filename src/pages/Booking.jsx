@@ -279,13 +279,13 @@ function Booking({ bookingData, id, onBookingUpload }) {
 	// This Function sets the user name to the booking form
 	useEffect(() => {
 		if (!isAuth) return;
-		if (currentUser && !currentUser.fullName) return;
+		if (currentUser && !currentUser?.fullName) return;
 		if (bookingData.bookingType === 'current') {
 			dispatch(
-				updateValueSilentMode(id, 'updatedByName', currentUser.fullName)
+				updateValueSilentMode(id, 'updatedByName', currentUser?.fullName)
 			);
 		} else {
-			dispatch(updateValueSilentMode(id, 'bookedByName', currentUser.fullName));
+			dispatch(updateValueSilentMode(id, 'bookedByName', currentUser?.fullName));
 		}
 	}, [isAuth, currentUser, bookingData.bookingType, dispatch, id]);
 

@@ -63,7 +63,7 @@ function CustomDialog({ closeDialog }) {
 		dispatch(
 			deleteSchedulerBooking(
 				false,
-				user.currentUser.fullName,
+				user.currentUser?.fullName,
 				user.currentUser.id,
 				true
 			)

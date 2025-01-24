@@ -179,7 +179,7 @@ function BookingProvider({ children }) {
 		const res = await deleteSchedulerBooking(
 			{
 				bookingId,
-				cancelledByName: currentUser.fullName,
+				cancelledByName: currentUser?.fullName,
 				cancelBlock,
 				actionByUserId: currentUser.id,
 			},

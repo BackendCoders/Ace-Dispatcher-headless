@@ -95,7 +95,7 @@ const TimeBar = ({ driver }) => {
 		});
 	};
 	const availableHours = driver.availableHours;
-	const driverName = driver.fullName.split(' ')[0];
+	const driverName = driver?.fullName.split(' ')[0];
 	const driverId = driver.userId;
 	const driverColor = driver.colorCode;
 	const vehicleType = driver.vehicleType;
@@ -122,7 +122,7 @@ const TimeBar = ({ driver }) => {
 				const heightPercent = toPercent - fromPercent;
 				const formattedFrom = formatTime(slot.from);
 				const formattedTo = formatTime(slot.to);
-				const toolTip = `(${driver.userId})${driver.fullName}\n(${formattedFrom} - ${formattedTo})\n${slot.note}`;
+				const toolTip = `(${driver.userId})${driver?.fullName}\n(${formattedFrom} - ${formattedTo})\n${slot.note}`;
 
 				return (
 					<div

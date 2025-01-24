@@ -483,7 +483,7 @@ function ConfirmAllocationModal({
 				</div>
 			</div>
 			<div className='text-center w-full'>
-				Are you sure you wish to select {driver.fullName} as the driver?
+				Are you sure you wish to select {driver?.fullName} as the driver?
 			</div>
 			<div className='w-full flex items-center justify-center gap-4'>
 				<Button

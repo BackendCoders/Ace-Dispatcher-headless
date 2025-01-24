@@ -207,7 +207,7 @@ function CurrentTable({ bookings, selectedRow, selectRow, activeTab }) {
 			try {
 				const data = {
 					bookingId: bookingToCancel.Id,
-					cancelledByName: user.currentUser.fullName,
+					cancelledByName: user.currentUser?.fullName,
 					actionByUserId: user.currentUser.id,
 					cancelBlock: false,
 					cancelledOnArrival: false,

@@ -54,7 +54,7 @@ const DriverAllocation = () => {
 			return data.flatMap((item) => {
 				return item.availableHours.map((hours) => ({
 					userId: item.userId,
-					fullName: item.fullName,
+					fullName: item?.fullName,
 					date: item.date,
 					colorCode: item.colorCode,
 					vehicleType: item.vehicleType,
@@ -85,7 +85,7 @@ const DriverAllocation = () => {
 					}));
 					const formattedEmployeeData = data
 						.map((driver) => ({
-							Text: driver.fullName,
+							Text: driver?.fullName,
 							Id: driver.userId,
 							Color: '#4CAF50',
 							...driver,
