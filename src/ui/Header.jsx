@@ -380,7 +380,7 @@ function RecordTurn({ setRecordTurnModal }) {
 
 	const handleSubmitForm = async (data) => {
 		const newinputData = {
-			amount: Number(data.amount),
+			amount: Number(data.amount) || 0,
 		};
 
 		// Dispatch search action only if some data is entered
@@ -424,9 +424,7 @@ function RecordTurn({ setRecordTurnModal }) {
 						fullWidth
 						error={!!errors.amount} // Show error if validation fails
 						helperText={errors.amount ? 'Amount is required' : ''}
-						{...register('amount', {
-							required: true,
-						})}
+						{...register('amount')}
 					/>
 				</Box>
 

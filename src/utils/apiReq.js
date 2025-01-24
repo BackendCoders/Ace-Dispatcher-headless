@@ -602,8 +602,8 @@ async function recordTurnDown(data) {
 	const reqData = {
 		amount: data.amount || 0,
 	};
-	const URL = `${BASE}/api/bookings/recordTurndown`;
-	const res = await handlePostReq(URL, data);
+	const URL = `${BASE}/api/bookings/recordTurndown?amount=${data?.amount}`;
+	const res = await handleGetReq(URL);
 	if (res.status === 'success') {
 		sendLogs(
 			{
