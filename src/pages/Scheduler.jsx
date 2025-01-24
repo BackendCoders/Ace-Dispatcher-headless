@@ -9,8 +9,11 @@ import {
 import { registerLicense } from '@syncfusion/ej2-base';
 import Modal from '../components/Modal';
 import CustomDialog from '../components/CustomDialog';
-
+import { recordTurnDown } from '../utils/apiReq';
+import LongButton from '../components/BookingForm/LongButton';
+import SearchIcon from '@mui/icons-material/Search';
 registerLicense(import.meta.env.VITE_SYNCFUSION_KEY);
+import PermPhoneMsgIcon from '@mui/icons-material/PermPhoneMsg';
 
 import './scheduler.css';
 import ProtectedRoute from '../utils/Protected';
@@ -19,7 +22,8 @@ import Snackbar from '../components/Snackbar-v2';
 import { useDispatch, useSelector } from 'react-redux';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-
+import CallIcon from '@mui/icons-material/Call';
+import Badge from '@mui/material/Badge';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import Button from '@mui/material/Button';
 import WatchLaterOutlinedIcon from '@mui/icons-material/WatchLaterOutlined';
@@ -27,7 +31,7 @@ import LocalTaxiOutlinedIcon from '@mui/icons-material/LocalTaxiOutlined';
 import CurrencyPoundOutlinedIcon from '@mui/icons-material/CurrencyPoundOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import isLightColor from '../utils/isLight';
-import { Switch, useMediaQuery } from '@mui/material';
+import { TextField, Box, Switch, useMediaQuery } from '@mui/material';
 import {
 	allocateActiveBookingStatus,
 	changeActiveDate,
@@ -38,14 +42,31 @@ import {
 	setActiveSearchResult,
 	setDateControl,
 } from '../context/schedulerSlice';
-import { createBookingFromScheduler } from '../context/bookingSlice';
+import {
+	createBookingFromScheduler,
+	setActiveSectionMobileView,
+	setIsGoogleApiOn,
+} from '../context/bookingSlice';
 import Loader from '../components/Loader';
 import { getAllDrivers } from '../utils/apiReq';
 import { useAuth } from '../hooks/useAuth';
-
+import { useForm } from 'react-hook-form';
+import { openSnackbar } from '../context/snackbarSlice';
+import {
+	// changeActiveDate,
+	handleSearchBooking,
+	makeSearchInactive,
+	// setDateControl,
+	// makeSearchInactive,
+} from '../context/schedulerSlice';
 const AceScheduler = () => {
+	const BASE_URL = import.meta.env.VITE_BASE_URL;
 	const isMobile = useMediaQuery('(max-width: 640px)');
 	const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1023px)');
+	const [recordTurnModal, setRecordTurnModal] = useState(false);
+	const [openSearch, setOpenSearch] = useState(false);
+	const callerId = useSelector((state) => state.caller);
+	const isGoogleApiOn = useSelector((state) => state.bookingForm.isGoogleApiOn);
 
 	// taking our global states from the redux
 	const {
@@ -230,6 +251,15 @@ const AceScheduler = () => {
 		}
 	}
 
+	const handleCancelSearch = () => {
+		setOpenSearch(false);
+		dispatch(makeSearchInactive());
+	};
+
+	const handleRecordTurnDown = () => {
+		setRecordTurnModal(true);
+	};
+
 	// refresh the booking when activeTestMode, currentDate, dispatch, activeComplete changes
 	useEffect(() => {
 		async function helper() {
@@ -365,11 +395,11 @@ const AceScheduler = () => {
 				)}
 				<Inject services={[Day, Agenda]} />
 			</ScheduleComponent>
-			<div className='flex justify-end w-[10%] fixed top-[100px] right-[0px] sm:top-[125px] sm:right-[350px] z-[40]'>
+			<div className='flex justify-end w-[10%] fixed top-[35px] right-[0px] sm:top-[55px] sm:right-[350px] z-[40]'>
 				{(!isMobile || user?.currentUser?.roleId !== 3) && !activeSearch && (
-					<span className='flex flex-row gap-2 items-center align-middle'>
+					<span className='flex flex-row gap-0 sm:gap-2 items-center align-middle'>
 						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
-							Show Allocated
+							{isMobile ? 'Allocated' : 'Show Allocated'}
 						</span>
 						<Switch
 							checked={activeAllocate}
@@ -382,11 +412,11 @@ const AceScheduler = () => {
 				)}
 			</div>
 			{/* Changed by Tanya - (9 Aug) */}
-			<div className='flex justify-end w-[10%] fixed top-[120px] right-[0px] sm:top-[125px] sm:right-[160px] z-[40]'>
+			<div className='flex justify-end w-[10%] fixed top-[55px] right-[0px] sm:top-[55px] sm:right-[160px] z-[40]'>
 				{(!isMobile || user?.currentUser?.roleId !== 3) && !activeSearch && (
-					<span className='flex flex-row gap-2 items-center align-middle'>
+					<span className='flex flex-row gap-0 sm:gap-2 items-center align-middle'>
 						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
-							Show Completed
+							{isMobile ? 'Completed' : 'Show Completed'}
 						</span>
 						<Switch
 							checked={activeComplete}
@@ -399,9 +429,21 @@ const AceScheduler = () => {
 				)}
 			</div>
 
-			<div className='flex justify-end w-[10%] fixed top-[120px] right-[0px] sm:top-[80px] sm:right-[350px] z-[40]'>
+			<div className='flex justify-end w-[10%] fixed top-[100px] right-[120px] sm:top-[5px] sm:right-[510px] z-[40]'>
+				{callerId.length > 0 && (
+					<Badge
+						badgeContent={callerId.length}
+						color='error'
+						className='cursor-pointer select-none animate-bounce'
+					>
+						<CallIcon />
+					</Badge>
+				)}
+			</div>
+
+			<div className='flex justify-end w-[10%] fixed top-[35px] right-[120px] sm:top-[5px] sm:right-[350px] z-[40]'>
 				{
-					<span className='flex flex-row gap-2 items-center align-middle'>
+					<span className='flex flex-row gap-0 sm:gap-2 items-center align-middle'>
 						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
 							Availability
 						</span>
@@ -415,10 +457,386 @@ const AceScheduler = () => {
 					</span>
 				}
 			</div>
+			<div className='flex justify-end w-[10%] fixed top-[55px] right-[120px] sm:top-[5px] sm:right-[180px] z-[40]'>
+				{user?.currentUser?.roleId !== 3 && (
+					<span className='flex flex-row gap-0 sm:gap-2 items-center align-middle'>
+						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
+							{isMobile ? 'Google Api' : 'Use Google Api'}
+						</span>
+						<Switch
+							checked={isGoogleApiOn}
+							onChange={(e) => {
+								dispatch(setIsGoogleApiOn(e.target.checked));
+							}}
+							className='text-sm'
+						/>
+					</span>
+				)}
+			</div>
+			<div className='flex justify-end fixed top-[15px] right-[140px] sm:top-[10px] sm:right-[135px] z-[40]'>
+				{user?.currentUser?.roleId !== 3 && (
+					<div className='flex justify-center items-center uppercase'>
+						{!activeSearch && (
+							<button
+								onClick={() => setOpenSearch(true)}
+								// className='text-sm'
+							>
+								Search
+							</button>
+						)}
+						{activeSearch && (
+							<button
+								onClick={handleCancelSearch}
+								// className='text-sm'
+							>
+								Cancel Search
+							</button>
+						)}
+					</div>
+				)}
+			</div>
+
+			<div className='flex justify-end fixed top-[10px] right-[80px] sm:top-[5px] sm:right-[70px] z-[40]'>
+				{user?.currentUser?.roleId !== 3 && (
+					<button
+						className={`${
+							BASE_URL.includes('api.acetaxisdorset')
+								? 'bg-[#424242] text-[#C74949] border border-[#C74949]'
+								: 'bg-[#C74949] text-white border border-white'
+						} px-4 py-2 rounded-lg uppercase text-xs sm:text-sm`}
+						onClick={handleRecordTurnDown}
+					>
+						No
+					</button>
+				)}
+			</div>
+
+			{openSearch && (
+				<Modal
+					open={openSearch}
+					setOpen={setOpenSearch}
+				>
+					<SearchModal
+						// handleClick={handleClick}
+						openSearch={openSearch}
+						// inputRef={inputRef}
+						// setSearchData={setSearchData}
+						// handleKeyPress={handleKeyPress}
+						setOpenSearch={setOpenSearch}
+					/>
+				</Modal>
+			)}
+			{recordTurnModal && (
+				<Modal
+					setOpen={setRecordTurnModal}
+					open={recordTurnModal}
+				>
+					<RecordTurn setRecordTurnModal={setRecordTurnModal} />
+				</Modal>
+			)}
 		</ProtectedRoute>
 	);
 };
 export default AceScheduler;
+
+function RecordTurn({ setRecordTurnModal }) {
+	// const dispatch = useDispatch();
+	const {
+		register,
+		handleSubmit,
+		reset,
+		formState: { isSubmitSuccessful, errors }, // Access form errors
+	} = useForm({
+		defaultValues: {
+			amount: '',
+		},
+	});
+
+	const handleSubmitForm = async (data) => {
+		const newinputData = {
+			amount: Number(data.amount),
+		};
+
+		// Dispatch search action only if some data is entered
+		if (data.amount) {
+			// if (isMobile || isTablet) {
+			// 	setActiveSectionMobileView('Scheduler');
+			// }
+			const response = await recordTurnDown(newinputData);
+			console.log('recordTurnDown Response---', response);
+			setRecordTurnModal(false);
+			openSnackbar('Record Send Successfully', 'success');
+			// Close the modal after search
+		} else {
+			console.log('Please enter search criteria');
+		}
+	};
+
+	useEffect(() => {
+		if (isSubmitSuccessful) {
+			reset({
+				amount: '',
+			});
+		}
+	}, [reset, isSubmitSuccessful]);
+
+	return (
+		<div className='bg-white p-6 rounded-lg shadow-lg w-[90vw] md:w-[45vw] sm:w-[25vw] max-w-md mx-auto'>
+			<h2 className='text-2xl font-semibold mb-4 flex gap-1 items-center'>
+				<PermPhoneMsgIcon />
+				Record Turn Down
+			</h2>
+			<form onSubmit={handleSubmit(handleSubmitForm)}>
+				<Box
+					mt={2}
+					display='flex'
+					justifyContent='space-between'
+					gap={2}
+				>
+					<TextField
+						label='Amount'
+						fullWidth
+						error={!!errors.amount} // Show error if validation fails
+						helperText={errors.amount ? 'Amount is required' : ''}
+						{...register('amount', {
+							required: true,
+						})}
+					/>
+				</Box>
+
+				<div className='mt-4 flex gap-1'>
+					<LongButton
+						type='submit'
+						color='bg-green-700'
+					>
+						Submit
+					</LongButton>
+					<LongButton
+						color='bg-red-700'
+						onClick={() => setRecordTurnModal(false)} // Close modal on Cancel
+					>
+						Cancel
+					</LongButton>
+				</div>
+			</form>
+		</div>
+	);
+}
+
+function SearchModal({ setOpenSearch }) {
+	const isMobile = useMediaQuery('(max-width: 640px)');
+	const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1023px)');
+	const dispatch = useDispatch();
+	const {
+		register,
+		handleSubmit,
+		reset,
+		formState: { isSubmitSuccessful, errors }, // Access form errors
+	} = useForm({
+		defaultValues: {
+			pickupAddress: '',
+			pickupPostcode: '',
+			destinationAddress: '',
+			destinationPostcode: '',
+			passenger: '',
+			phoneNumber: '',
+			details: '',
+		},
+	});
+
+	const handleSubmitForm = async (data) => {
+		console.log('form Data', data);
+		const newinputData = {
+			pickupAddress: data?.pickupAddress || '',
+			pickupPostcode: data?.pickupPostcode || '',
+			destinationAddress: data?.destinationAddress || '',
+			destinationPostcode: data?.destinationPostcode || '',
+			passenger: data?.passenger || '',
+			phoneNumber: data?.phoneNumber || '',
+			details: data?.details || '',
+		};
+
+		// Dispatch search action only if some data is entered
+		if (
+			newinputData.pickupAddress ||
+			newinputData.pickupPostcode ||
+			newinputData.destinationAddress ||
+			newinputData.destinationPostcode ||
+			newinputData.passenger ||
+			newinputData.phoneNumber ||
+			newinputData.details
+		) {
+			dispatch(handleSearchBooking(newinputData));
+			if (isMobile || isTablet) {
+				setActiveSectionMobileView('Scheduler');
+			}
+			setOpenSearch(false);
+			// Close the modal after search
+		} else {
+			console.log('Please enter search criteria');
+		}
+	};
+
+	useEffect(() => {
+		if (isSubmitSuccessful) {
+			reset({
+				pickupAddress: '',
+				pickupPostcode: '',
+				destinationAddress: '',
+				destinationPostcode: '',
+				passenger: '',
+				phoneNumber: '',
+				details: '',
+			});
+		}
+	}, [reset, isSubmitSuccessful]);
+
+	return (
+		<div className='bg-white p-6 rounded-lg shadow-lg w-[90vw] md:w-[45vw] sm:w-[25vw] max-w-md mx-auto'>
+			<h2 className='text-2xl font-semibold mb-4 flex gap-1 items-center'>
+				<SearchIcon />
+				Search Bookings
+			</h2>
+			<form onSubmit={handleSubmit(handleSubmitForm)}>
+				<Box
+					mt={2}
+					display='flex'
+					justifyContent='space-between'
+					gap={2}
+				>
+					<TextField
+						label='Pickup Address'
+						fullWidth
+						error={!!errors.pickupAddress} // Show error if validation fails
+						helperText={
+							errors.pickupAddress ? 'Must be at least 3 characters' : ''
+						}
+						{...register('pickupAddress', {
+							minLength: {
+								value: 3,
+								message: 'Must be at least 3 characters',
+							},
+						})}
+					/>
+					<TextField
+						label='Pickup Postcode'
+						fullWidth
+						error={!!errors.pickupPostcode}
+						helperText={
+							errors.pickupPostcode ? 'Must be at least 3 Numbers' : ''
+						}
+						{...register('pickupPostcode', {
+							minLength: {
+								value: 3,
+								message: 'Must be at least 3 Numbers',
+							},
+						})}
+					/>
+				</Box>
+				<Box
+					mt={2}
+					display='flex'
+					justifyContent='space-between'
+					gap={2}
+				>
+					<TextField
+						label='Destination Address'
+						fullWidth
+						error={!!errors.destinationAddress}
+						helperText={
+							errors.destinationAddress ? 'Must be at least 3 characters' : ''
+						}
+						{...register('destinationAddress', {
+							minLength: {
+								value: 3,
+								message: 'Must be at least 3 characters',
+							},
+						})}
+					/>
+					<TextField
+						label='Destination Postcode'
+						fullWidth
+						error={!!errors.destinationPostcode}
+						helperText={
+							errors.destinationPostcode ? 'Must be at least 3 Numbers' : ''
+						}
+						{...register('destinationPostcode', {
+							minLength: {
+								value: 3,
+								message: 'Must be at least 3 Numbers',
+							},
+						})}
+					/>
+				</Box>
+				<Box
+					mt={2}
+					display='flex'
+					justifyContent='space-between'
+					gap={2}
+				>
+					<TextField
+						label='Passenger'
+						fullWidth
+						error={!!errors.passenger}
+						helperText={errors.passenger ? 'Must be at least 3 characters' : ''}
+						{...register('passenger', {
+							minLength: {
+								value: 3,
+								message: 'Must be at least 3 characters',
+							},
+						})}
+					/>
+					<TextField
+						label='Phone Number'
+						fullWidth
+						error={!!errors.phoneNumber}
+						helperText={errors.phoneNumber ? 'Must be at least 3 Numbers' : ''}
+						{...register('phoneNumber', {
+							minLength: {
+								value: 3,
+								message: 'Must be at least 3 Numbers',
+							},
+						})}
+					/>
+				</Box>
+				<Box
+					mt={2}
+					display='flex'
+					justifyContent='space-between'
+					gap={2}
+				>
+					<TextField
+						label='Details'
+						fullWidth
+						error={!!errors.details}
+						helperText={errors.details ? 'Must be at least 3 characters' : ''}
+						{...register('details', {
+							minLength: {
+								value: 3,
+								message: 'Must be at least 3 characters',
+							},
+						})}
+					/>
+				</Box>
+
+				<div className='mt-4 flex gap-1'>
+					<LongButton
+						type='submit'
+						color='bg-green-700'
+					>
+						Search
+					</LongButton>
+					<LongButton
+						color='bg-red-700'
+						onClick={() => setOpenSearch(false)} // Close modal on Cancel
+					>
+						Cancel
+					</LongButton>
+				</div>
+			</form>
+		</div>
+	);
+}
 
 function ViewBookingModal({ data, setViewBookingModal }) {
 	return (

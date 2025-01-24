@@ -1,13 +1,13 @@
 /** @format */
 
 import { Outlet } from 'react-router-dom';
-import Header from './ui/Header';
+// import Header from './ui/Header';
 import { AuthProvider } from './context/AuthContext';
 import { BookingProvider } from './context/BookingContext';
 import CallerIdPopUp from './components/CallerIdPopUp';
 import { Provider } from 'react-redux';
 import store from './store';
-// import Footer from './ui/Footer';
+import Footer from './ui/Footer';
 import { checkPreviousLogs } from './utils/getLogs';
 
 function AppLayout() {
@@ -17,9 +17,9 @@ function AppLayout() {
 			<BookingProvider>
 				<Provider store={store}>
 					<CallerIdPopUp />
-					<Header />
+					{/* <Header /> */}
 					<Outlet />
-					{/* <Footer /> */}
+					<Footer />
 				</Provider>
 			</BookingProvider>
 		</AuthProvider>
