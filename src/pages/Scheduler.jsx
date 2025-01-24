@@ -395,7 +395,7 @@ const AceScheduler = () => {
 				)}
 				<Inject services={[Day, Agenda]} />
 			</ScheduleComponent>
-			<div className='flex justify-end w-[10%] fixed top-[35px] right-[0px] sm:top-[55px] sm:right-[350px] z-[40]'>
+			<div className='flex justify-end w-[10%] fixed top-[45px] right-[0px] sm:top-[55px] sm:right-[350px] z-[40]'>
 				{(!isMobile || user?.currentUser?.roleId !== 3) && !activeSearch && (
 					<span className='flex flex-row gap-0 sm:gap-2 items-center align-middle'>
 						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
@@ -407,12 +407,13 @@ const AceScheduler = () => {
 								dispatch(allocateActiveBookingStatus(!activeAllocate));
 							}}
 							className='text-sm'
+							size={isMobile ? 'small' : 'large'}
 						/>
 					</span>
 				)}
 			</div>
 			{/* Changed by Tanya - (9 Aug) */}
-			<div className='flex justify-end w-[10%] fixed top-[55px] right-[0px] sm:top-[55px] sm:right-[160px] z-[40]'>
+			<div className='flex justify-end w-[10%] fixed top-[65px] right-[0px] sm:top-[55px] sm:right-[160px] z-[40]'>
 				{(!isMobile || user?.currentUser?.roleId !== 3) && !activeSearch && (
 					<span className='flex flex-row gap-0 sm:gap-2 items-center align-middle'>
 						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
@@ -424,12 +425,13 @@ const AceScheduler = () => {
 								dispatch(completeActiveBookingStatus(!activeComplete));
 							}}
 							className='text-sm'
+							size={isMobile ? 'small' : 'large'}
 						/>
 					</span>
 				)}
 			</div>
 
-			<div className='flex justify-end w-[10%] fixed top-[100px] right-[120px] sm:top-[5px] sm:right-[510px] z-[40]'>
+			<div className='flex justify-end w-[10%] fixed top-[60px] right-[235px] sm:top-[5px] sm:right-[510px] z-[40]'>
 				{callerId.length > 0 && (
 					<Badge
 						badgeContent={callerId.length}
@@ -441,7 +443,7 @@ const AceScheduler = () => {
 				)}
 			</div>
 
-			<div className='flex justify-end w-[10%] fixed top-[35px] right-[120px] sm:top-[5px] sm:right-[280px] z-[40]'>
+			<div className='flex justify-end w-[10%] fixed top-[45px] right-[110px] sm:top-[5px] sm:right-[280px] z-[40]'>
 				{
 					<span className='flex flex-row gap-0 sm:gap-2 items-center align-middle'>
 						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
@@ -453,11 +455,12 @@ const AceScheduler = () => {
 								dispatch(changeShowDriverAvailability(!showDriverAvailability));
 							}}
 							className='text-sm'
+							size={isMobile ? 'small' : 'large'}
 						/>
 					</span>
 				}
 			</div>
-			<div className='flex justify-end w-[10%] fixed top-[55px] right-[120px] sm:top-[5px] sm:right-[130px] z-[40]'>
+			<div className='flex justify-end w-[10%] fixed top-[65px] right-[110px] sm:top-[5px] sm:right-[130px] z-[40]'>
 				{user?.currentUser?.roleId !== 3 && (
 					<span className='flex flex-row gap-0 sm:gap-2 items-center align-middle'>
 						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
@@ -469,6 +472,7 @@ const AceScheduler = () => {
 								dispatch(setIsGoogleApiOn(e.target.checked));
 							}}
 							className='text-sm'
+							size={isMobile ? 'small' : 'large'}
 						/>
 					</span>
 				)}
@@ -481,7 +485,7 @@ const AceScheduler = () => {
 								onClick={() => setOpenSearch(true)}
 								// className='text-sm'
 							>
-								Search
+								{isMobile ? <SearchIcon /> : 'Search'}
 							</button>
 						)}
 						{activeSearch && (
@@ -581,7 +585,7 @@ function RecordTurn({ setRecordTurnModal }) {
 	}, [reset, isSubmitSuccessful]);
 
 	return (
-		<div className='bg-white p-6 rounded-lg shadow-lg w-[90vw] md:w-[45vw] sm:w-[25vw] max-w-md mx-auto'>
+		<div className='bg-white fixed right-[-167px] top-[-190px] p-6 rounded-lg shadow-lg w-[90vw] md:w-[45vw] sm:w-[25vw] max-w-md mx-auto'>
 			<h2 className='text-2xl font-semibold mb-4 flex gap-1 items-center'>
 				<PermPhoneMsgIcon />
 				Record Turn Down
@@ -692,7 +696,7 @@ function SearchModal({ setOpenSearch }) {
 	}, [reset, isSubmitSuccessful]);
 
 	return (
-		<div className='bg-white p-6 rounded-lg shadow-lg w-[90vw] md:w-[45vw] sm:w-[25vw] max-w-md mx-auto'>
+		<div className='bg-white fixed right-[-167px] top-[-230px] p-6 rounded-lg shadow-lg w-[90vw] md:w-[45vw] sm:w-[25vw] max-w-md mx-auto'>
 			<h2 className='text-2xl font-semibold mb-4 flex gap-1 items-center'>
 				<SearchIcon />
 				Search Bookings
