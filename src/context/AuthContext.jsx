@@ -158,16 +158,35 @@ const AuthProvider = ({ children }) => {
 
 			// Validate the origin of the message
 			if (event.origin === allowedOrigin) {
-				const { token, user } = event.data; // Token sent by parent app
-				if (user) {
-					setUsername(user.username);
-					localStorage.setItem('user', JSON.stringify(user));
-					const username = user.username || getUsername();
-					if (username && token) {
-						getUser(token, username); // Fetch user details
-					} else {
-						setIsAuth(true); // Set authentication status if fetching is unnecessary
-					}
+				const { token, userData, username } = event.data; // Token sent by parent app
+				if (token && userData && username) {
+					// Save token to local storage
+					setToken(token);
+					localStorage.setItem('authToken', token);
+
+					// Save username to state and local storage
+					setUsername(username);
+					localStorage.setItem('username', username);
+
+					// Save user data to state and local storage
+					setCurrentUser(userData);
+					localStorage.setItem('userData', JSON.stringify(userData));
+
+					// Set authentication status to true
+					setIsAuth(true);
+
+					// Optionally fetch additional user details if needed
+					getUser(token, username); // Fetch user details using the token and username
+					console.log('User data and token received via postMessage:', {
+						token,
+						userData,
+						username,
+					});
+				} else {
+					console.warn(
+						'Invalid message data received. Missing token, userData, or username:',
+						event.data
+					);
 				}
 			} else {
 				console.warn('Untrusted origin:', event.origin);
