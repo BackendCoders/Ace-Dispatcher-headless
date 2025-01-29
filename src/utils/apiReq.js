@@ -623,6 +623,11 @@ async function sendPayReceipt(bookingId) {
 	return await handleGetReq(URL);
 }
 
+async function driverShift() {
+	const URL = `${BASE}/api/AdminUI/DriversOnShift`;
+	return await handleGetReq(URL);
+}
+
 export {
 	getBookingData,
 	makeBooking,
@@ -652,4 +657,5 @@ export {
 	sendReminderForPayment,
 	recordTurnDown,
 	sendPayReceipt,
+	driverShift,
 };

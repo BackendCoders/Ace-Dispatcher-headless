@@ -36,6 +36,7 @@ import { loadGoogleMapsScript } from '../utils/googleMap';
 import { sendLogs } from '../utils/getLogs';
 import AvailbilityChartMobileView from '../components/AvailbilityChartMobileView';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import DriverStatus from '../components/DriverStatus';
 
 const pusher = new Pusher('8d1879146140a01d73cf', {
 	cluster: 'eu',
@@ -53,6 +54,7 @@ export default function Push() {
 	const { showDriverAvailability } = useSelector((state) => state.scheduler);
 	const dispatch = useDispatch();
 	const [secondaryTab, setSecondaryTab] = useState(1);
+	const [thirdTab, setThirdTab] = useState(0);
 	const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 	const activeSectionMobileView = useSelector(
 		(state) => state.bookingForm.activeSectionMobileView
@@ -421,7 +423,7 @@ export default function Push() {
 									}}
 								>
 									<Tabs
-										value={0}
+										value={thirdTab}
 										sx={{
 											'backgroundColor': '#e5e7eb',
 											'height': '50px',
@@ -432,24 +434,38 @@ export default function Push() {
 												minHeight: '50px',
 											},
 										}}
-										onChange={handleChange}
+										onChange={(e, value) => setThirdTab(value)}
 										variant='scrollable'
 										scrollButtons
 										allowScrollButtonsMobile
 										aria-label='scrollable force tabs example'
 									>
 										<Tab label='Availability' />
+										<Tab label='Status' />
 									</Tabs>
-									<Box
-										sx={{
-											display: 'flex',
-											justifyContent: 'space-evenly',
-											margin: 'auto',
-											alignContent: 'center',
-										}}
-									>
-										<CustomDriverAvailabilityChart />
-									</Box>
+									{thirdTab === 0 ? (
+										<Box
+											sx={{
+												display: 'flex',
+												justifyContent: 'space-evenly',
+												margin: 'auto',
+												alignContent: 'center',
+											}}
+										>
+											<CustomDriverAvailabilityChart />
+										</Box>
+									) : (
+										<Box
+											sx={{
+												display: 'flex',
+												justifyContent: 'space-evenly',
+												margin: 'auto',
+												alignContent: 'center',
+											}}
+										>
+											<DriverStatus />
+										</Box>
+									)}
 								</Box>
 							)}
 						</>
