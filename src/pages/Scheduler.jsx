@@ -443,7 +443,7 @@ const AceScheduler = () => {
 				)}
 			</div>
 
-			<div className='flex justify-end w-[10%] fixed top-[45px] right-[110px] sm:top-[5px] sm:right-[280px] z-[40]'>
+			<div className='flex justify-end fixed top-[45px] right-[110px] sm:top-[5px] sm:right-[280px] z-[40]'>
 				{
 					<span className='flex flex-row gap-0 sm:gap-2 items-center align-middle'>
 						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
@@ -460,7 +460,7 @@ const AceScheduler = () => {
 					</span>
 				}
 			</div>
-			<div className='flex justify-end w-[10%] fixed top-[65px] right-[110px] sm:top-[5px] sm:right-[130px] z-[40]'>
+			<div className='flex justify-end fixed top-[65px] right-[110px] sm:top-[5px] sm:right-[130px] z-[40]'>
 				{user?.currentUser?.roleId !== 3 && (
 					<span className='flex flex-row gap-0 sm:gap-2 items-center align-middle'>
 						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
