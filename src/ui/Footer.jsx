@@ -8,6 +8,7 @@ import { setActiveSectionMobileView } from '../context/bookingSlice';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import EditCalendarIcon from '@mui/icons-material/EditCalendar';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import { PersonOutlineOutlined } from '@mui/icons-material';
 
 function Footer() {
 	// const user = useAuth();
@@ -91,6 +92,18 @@ function Footer() {
 					>
 						<EventAvailableIcon fontSize='14px' />
 						<span className='font-medium text-[.8rem]'>Availability</span>
+					</button>
+					<button
+						className='flex flex-col items-center text-gray-200'
+						onClick={() => {
+							if (showDriverAvailability) {
+								dispatch(changeShowDriverAvailability(!showDriverAvailability));
+							}
+							dispatch(setActiveSectionMobileView('DriverStatus'));
+						}}
+					>
+						<PersonOutlineOutlined fontSize='14px' />
+						<span className='font-medium text-[.8rem]'>Driver Status</span>
 					</button>
 					<button
 						className='flex flex-col items-center text-gray-200'

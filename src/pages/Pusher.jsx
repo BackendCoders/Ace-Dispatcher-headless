@@ -320,6 +320,19 @@ export default function Push() {
 										<SimpleSnackbar />
 									</Box>
 								</>
+							) : activeSectionMobileView === 'DriverStatus' ? (
+								<Box className='mt-4 flex flex-col justify-center items-center gap-2'>
+									<div className='font-medium text-sm flex gap-1 justify-center items-center'>
+										<div className='w-6 h-6 text-center rounded-full bg-red-200'>
+											<PersonOutlineOutlinedIcon
+												fontSize='18px'
+												className=' text-red-600'
+											/>
+										</div>
+										<span>Driver Status</span>
+									</div>
+									<DriverStatus />
+								</Box>
 							) : (
 								<Scheduler />
 							)}
