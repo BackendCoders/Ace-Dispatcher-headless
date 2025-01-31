@@ -343,7 +343,7 @@ export default function Push() {
 				<>
 					<ResizableBox
 						width={(leftWidth / 100) * window.innerWidth}
-						height={window.innerHeight * 0.9}
+						height={window.innerHeight * 1}
 						minConstraints={[window.innerWidth * 0.3, window.innerHeight * 0.9]}
 						maxConstraints={[window.innerWidth * 0.7, window.innerHeight * 0.9]}
 						axis='x'

@@ -347,8 +347,8 @@ const AceScheduler = () => {
 				firstDayOfWeek={1}
 				height={
 					isMobile || isTablet
-						? window.innerHeight - 100
-						: window.innerHeight - 150
+						? window.innerHeight - 60
+						: window.innerHeight - 55
 				}
 				currentView={activeSearch ? 'Agenda' : 'Day'}
 				selectedDate={activeDate}
