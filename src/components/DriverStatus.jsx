@@ -97,7 +97,7 @@ function DriverStatus({ availabilityDate }) {
 						<>
 							<div
 								key={el?.userId}
-								className=' flex justify-center w-full items-center mx-auto cursor-pointer gap-4 mb-2'
+								className='flex justify-center w-full items-center mx-auto cursor-pointer gap-4 mb-2 rounded-md p-1'
 								style={{
 									backgroundColor: el?.colourCode,
 									color: isLightColor(el?.colourCode) ? 'black' : 'white',
@@ -113,7 +113,7 @@ function DriverStatus({ availabilityDate }) {
 									>
 										{el?.userId}
 									</p>
-									<div className='flex flex-col w-[60%] justify-center items-start'>
+									<div className='flex flex-col w-[60%] justify-center items-start text-center'>
 										<p>{el?.fullname}</p>
 									</div>
 									<div
