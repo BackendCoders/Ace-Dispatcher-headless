@@ -43,7 +43,7 @@ function DriverStatus({ availabilityDate }) {
 		}
 		getData();
 
-		intervalId = setInterval(getData, 15000);
+		intervalId = setInterval(getData, 500);
 
 		return () => clearInterval(intervalId);
 		// }, [date, isActiveTestMode]);
