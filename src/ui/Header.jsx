@@ -60,7 +60,9 @@ const Navbar = () => {
 
 	const handleCancelSearch = () => {
 		setOpenSearch(false);
-		dispatch(makeSearchInactive());
+		setTimeout(() => {
+			dispatch(makeSearchInactive());
+		}, 200);
 	};
 
 	const handleRecordTurnDown = () => {

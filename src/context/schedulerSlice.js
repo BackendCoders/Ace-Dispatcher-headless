@@ -84,8 +84,10 @@ const schedulerSlice = createSlice({
 			state.activeSearchResults = action.payload;
 		},
 		makeSearchInactive: (state) => {
+			state.loading = true;
 			state.activeSearch = false;
 			state.activeSearchResults = [];
+			state.loading = false;
 		},
 		setActiveSearchResultClicked: (state, action) => {
 			state.activeSearchResult = action.payload;
