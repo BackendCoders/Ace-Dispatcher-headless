@@ -97,8 +97,7 @@ const Navbar = () => {
 			</>
 			<nav
 				className={`sticky top-0 z-50 flex justify-between items-center ${
-					BASE_URL.includes('api.acetaxisdorset') ||
-					BASE_URL.includes('http://85.234.135.182')
+					BASE_URL.includes('https://ace-server.1soft.co.uk')
 						? 'bg-[#424242]'
 						: 'bg-[#C74949]'
 				}  text-white p-4`}
@@ -114,8 +113,7 @@ const Navbar = () => {
 						/>
 						<span className='text-lg font-bold'>Ace Taxis</span>
 						<span className='text-lg hidden sm:block'>
-							{BASE_URL.includes('api.acetaxisdorset') ||
-							BASE_URL.includes('http://85.234.135.182')
+							{BASE_URL.includes('https://ace-server.1soft.co.uk')
 								? ''
 								: 'TEST MODE'}
 						</span>
@@ -158,8 +156,7 @@ const Navbar = () => {
 							{currentUser?.roleId !== 3 && (
 								<button
 									className={`${
-										BASE_URL.includes('api.acetaxisdorset') ||
-										BASE_URL.includes('http://85.234.135.182')
+										BASE_URL.includes('https://ace-server.1soft.co.uk')
 											? 'bg-[#424242] text-[#C74949] border border-[#C74949]'
 											: 'bg-[#C74949] text-white border border-white'
 									} px-4 py-2 rounded-lg uppercase text-xs sm:text-sm`}
