@@ -38,7 +38,6 @@ const Navbar = () => {
 	const isMobile = useMediaQuery('(max-width:640px)');
 	const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1023px)');
 
-	// console.log(currentUser);
 	// const activeTestMode = useSelector(
 	// 	(state) => state.bookingForm.isActiveTestMode
 	// );
@@ -68,8 +67,6 @@ const Navbar = () => {
 	const handleRecordTurnDown = () => {
 		setRecordTurnModal(true);
 	};
-
-	// console.log('date control---', dateControl);
 
 	return (
 		<>
