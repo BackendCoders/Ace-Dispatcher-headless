@@ -6,9 +6,13 @@ import { driverShift } from '../utils/apiReq';
 import Loader from './Loader';
 import { useMediaQuery } from '@mui/material';
 import isLightColor from '../utils/isLight';
-
+import PanToolAltOutlinedIcon from '@mui/icons-material/PanToolAltOutlined';
+import Modal from '../components/Modal';
+import MsgModal from './MsgModal';
 function DriverStatus({ availabilityDate }) {
 	const [data, setData] = useState([]);
+	const [msgModalOpen, setMsgModalOpen] = useState(false);
+	const [selectedDriver, setSelectedDriver] = useState({});
 	const { bookings, activeBookingIndex } = useSelector(
 		(state) => state.bookingForm
 	);
@@ -20,6 +24,10 @@ function DriverStatus({ availabilityDate }) {
 		isMobile || isTablet
 			? availabilityDate
 			: bookings[activeBookingIndex].pickupDateTime;
+
+	const handleClose = () => {
+		setMsgModalOpen(false);
+	};
 
 	useEffect(() => {
 		let intervalId;
@@ -95,6 +103,17 @@ function DriverStatus({ availabilityDate }) {
 				) : (
 					data?.map((el) => (
 						<>
+							{msgModalOpen && (
+								<Modal
+									open={msgModalOpen}
+									setOpen={handleClose}
+								>
+									<MsgModal
+										selectedDriver={selectedDriver}
+										handleClose={handleClose}
+									/>
+								</Modal>
+							)}
 							<div
 								key={el?.userId}
 								className='flex justify-center w-full items-center mx-auto cursor-pointer gap-4 mb-2 rounded-md p-1'
@@ -103,7 +122,7 @@ function DriverStatus({ availabilityDate }) {
 									color: isLightColor(el?.colourCode) ? 'black' : 'white',
 								}}
 							>
-								<div className='w-full mx-auto flex gap-4 justify-center items-center'>
+								<div className='w-full mx-auto flex gap-2 justify-center items-center'>
 									<p
 										className={`text-sm w-6 h-6 text-center`}
 										style={{
@@ -115,6 +134,22 @@ function DriverStatus({ availabilityDate }) {
 									</p>
 									<div className='flex flex-col w-[60%] justify-center items-start text-center'>
 										<p>{el?.fullname}</p>
+										<button
+											onClick={() => {
+												setMsgModalOpen(true);
+												setSelectedDriver(el);
+											}}
+											className={`px-2 rounded-md flex justify-center group items-center border ${
+												isLightColor(el?.colourCode)
+													? 'border-black'
+													: 'border-white'
+											}`}
+										>
+											<PanToolAltOutlinedIcon
+												fontSize='16'
+												className=''
+											/>
+										</button>
 									</div>
 									<div
 										className={`text-sm text-white px-3 py-1 rounded ${
