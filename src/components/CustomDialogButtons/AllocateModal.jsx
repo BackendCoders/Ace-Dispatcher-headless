@@ -47,7 +47,7 @@ export default function AllocateModal({ setAllocateModal, closeDialog }) {
 		// console.log(driver)
 		setConfirmAllocation(true);
 		setSelectedDriver(driver);
-		dispatch(selectDriver(driver.id));
+		dispatch(selectDriver(driver?.id));
 	}
 
 	return (
@@ -149,7 +149,7 @@ function ConfirmAllocationModal({
 	const { activeSoftAllocate } = useSelector((state) => state.scheduler);
 	const user = useAuth();
 	const handleConfirmClick = async () => {
-		dispatch(allocateBookingToDriver(user.currentUser.id));
+		dispatch(allocateBookingToDriver(user?.currentUser?.id));
 		setConfirmAllocation(false);
 		setAllocateModal(false);
 		closeDialog();
