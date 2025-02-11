@@ -83,8 +83,7 @@ const AceScheduler = () => {
 	// const activeTestMode = useSelector(
 	// 	(state) => state.bookingForm.isActiveTestMode
 	// );
-	const [isSwitchingView, setIsSwitchingView] = useState(false);
-
+	
 	// setting some states for the complenent level state management
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [selectedBookingData, setSelectedBookingData] = useState();
@@ -261,13 +260,6 @@ const AceScheduler = () => {
 		setRecordTurnModal(true);
 	};
 
-	useEffect(() => {
-		if (activeSearch) {
-			setIsSwitchingView(true);
-			setTimeout(() => setIsSwitchingView(false), 200);
-		}
-	}, [activeSearch]);
-
 	// refresh the booking when activeTestMode, currentDate, dispatch, activeComplete changes
 	useEffect(() => {
 		async function helper() {
@@ -350,63 +342,61 @@ const AceScheduler = () => {
 		<ProtectedRoute>
 			<Snackbar />
 			{searchLoading && <Loader />}
-			{!isSwitchingView && (
-				<ScheduleComponent
-					ref={scheduleRef}
-					firstDayOfWeek={1}
-					height={
-						isMobile || isTablet
-							? window.innerHeight - 60
-							: window.innerHeight - 55
-					}
-					currentView={activeSearch ? 'Agenda' : 'Day'}
-					selectedDate={activeDate}
-					navigating={(args) => {
-						dispatch(setDateControl(new Date(args.currentDate).toISOString()));
-						dispatch(
-							changeActiveDate(new Date(args.currentDate).toISOString())
-						);
-					}}
-					eventSettings={eventSettings}
-					eventRendered={onEventRendered}
-					eventClick={onEventClick}
-					cellClick={createBookingOnTimeStamp}
-					editorTemplate={null}
-					popupOpen={(args) => (args.cancel = true)}
-					className='schedule-cell-dimension'
-					views={[
-						{ option: 'Day' },
-						{
-							option: 'Agenda',
-							allowVirtualScrolling: activeSearch ? true : false,
-							interval: 1,
-						},
-					]}
 
-					// agendaDaysCount={365}
-				>
-					{dialogOpen && !viewBookingModal && (
-						<Modal
-							open={dialogOpen}
-							setOpen={setDialogOpen}
-						>
-							<CustomDialog closeDialog={() => setDialogOpen(false)} />
-						</Modal>
-					)}
-					{viewBookingModal && (
-						<Modal
-							open={viewBookingModal}
-							setOpen={setViewBookingModal}
-						>
-							<ViewBookingModal
-								data={selectedBookingData}
-								setViewBookingModal={setViewBookingModal}
-							/>
-						</Modal>
-					)}
-					<Inject services={[Day, Agenda]} />
-				</ScheduleComponent>
-			)}
+			<ScheduleComponent
+				ref={scheduleRef}
+				firstDayOfWeek={1}
+				height={
+					isMobile || isTablet
+						? window.innerHeight - 60
+						: window.innerHeight - 55
+				}
+				currentView={activeSearch ? 'Agenda' : 'Day'}
+				selectedDate={activeDate}
+				navigating={(args) => {
+					dispatch(setDateControl(new Date(args.currentDate).toISOString()));
+					dispatch(changeActiveDate(new Date(args.currentDate).toISOString()));
+				}}
+				eventSettings={eventSettings}
+				eventRendered={onEventRendered}
+				eventClick={onEventClick}
+				cellClick={createBookingOnTimeStamp}
+				editorTemplate={null}
+				popupOpen={(args) => (args.cancel = true)}
+				className='schedule-cell-dimension'
+				views={[
+					{ option: 'Day' },
+					{
+						option: 'Agenda',
+						allowVirtualScrolling: activeSearch ? true : false,
+						interval: 1,
+					},
+				]}
+
+				// agendaDaysCount={365}
+			>
+				{dialogOpen && !viewBookingModal && (
+					<Modal
+						open={dialogOpen}
+						setOpen={setDialogOpen}
+					>
+						<CustomDialog closeDialog={() => setDialogOpen(false)} />
+					</Modal>
+				)}
+				{viewBookingModal && (
+					<Modal
+						open={viewBookingModal}
+						setOpen={setViewBookingModal}
+					>
+						<ViewBookingModal
+							data={selectedBookingData}
+							setViewBookingModal={setViewBookingModal}
+						/>
+					</Modal>
+				)}
+				<Inject services={[Day, Agenda]} />
+			</ScheduleComponent>
+
 			<div className='flex justify-end w-[10%] fixed top-[45px] right-[0px] sm:top-[55px] sm:right-[350px] z-[40]'>
 				{(!isMobile || user?.currentUser?.roleId !== 3) && !activeSearch && (
 					<span className='flex flex-row gap-0 sm:gap-2 items-center align-middle'>
