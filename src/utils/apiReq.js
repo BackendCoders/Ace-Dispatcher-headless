@@ -630,14 +630,14 @@ async function driverShift() {
 }
 
 async function sendMsgToDriver(data) {
-	const URL = `${BASE}/api/DriverApp/SendMessageToDriver?driver=${
+	const URL = `${BASE}/api/AdminUI/SendMessageToDriver?driver=${
 		data.userId
 	}&message=${encodeURIComponent(data.message)}`;
 	return await handlePostReq(URL, {});
 }
 
 async function sendMsgToAllDrivers(data) {
-	const URL = `${BASE}/api/DriverApp/SendMessageToAllDrivers?message=${encodeURIComponent(
+	const URL = `${BASE}/api/AdminUI/SendMessageToAllDrivers?message=${encodeURIComponent(
 		data.message
 	)}`;
 	return await handlePostReq(URL, {});
