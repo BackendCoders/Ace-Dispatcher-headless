@@ -47,6 +47,7 @@ const filterData = (data = {}) => ({
 	hours: data.Hours ?? 0,
 	minutes: data.Minutes ?? 20,
 	isASAP: data.isASAP || false,
+	manuallyPriced: data.manuallyPriced || false,
 });
 
 const initialState = {

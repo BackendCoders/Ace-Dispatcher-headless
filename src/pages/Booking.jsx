@@ -228,7 +228,9 @@ function Booking({ bookingData, id, onBookingUpload }) {
 			priceFromBase: bookingData.chargeFromBase,
 		}).then((quote) => {
 			if (quote.status === 'success') {
-				dispatch(updateValueSilentMode(id, 'price', +quote.totalPrice));
+				if (!bookingData?.manuallyPriced) {
+					dispatch(updateValueSilentMode(id, 'price', +quote.totalPrice));
+				}
 				dispatch(updateValueSilentMode(id, 'quoteOptions', quote));
 				dispatch(
 					updateValueSilentMode(id, 'durationText', String(quote.totalMinutes))
@@ -255,6 +257,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 		bookingData.vias,
 		bookingData.pickupDateTime,
 		bookingData.passengers,
+		bookingData.manuallyPriced,
 		bookingData.scope,
 		dispatch,
 		id,
@@ -285,7 +288,9 @@ function Booking({ bookingData, id, onBookingUpload }) {
 				updateValueSilentMode(id, 'updatedByName', currentUser?.fullName)
 			);
 		} else {
-			dispatch(updateValueSilentMode(id, 'bookedByName', currentUser?.fullName));
+			dispatch(
+				updateValueSilentMode(id, 'bookedByName', currentUser?.fullName)
+			);
 		}
 	}, [isAuth, currentUser, bookingData.bookingType, dispatch, id]);
 
@@ -723,7 +728,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 						</LongButton>
 					</div>
 
-					<div className='grid grid-cols-1 md:grid-cols-4 sm:place-content-center place-content-start gap-4 mb-4 '>
+					<div className='grid grid-cols-1 md:grid-cols-5 sm:place-content-center place-content-start gap-4 mb-4 '>
 						<div className='flex sm:items-center items-start gap-2'>
 							{/* <span>£</span> */}
 							<Input
@@ -747,6 +752,16 @@ function Booking({ bookingData, id, onBookingUpload }) {
 									)
 								}
 								disabled={isBookingOpenInEditMode && currentUser?.roleId === 3}
+							/>
+						</div>
+
+						<div className='flex sm:items-center sm:justify-center'>
+							<span className='sm:-ml-2 mr-2 select-none'>Manually Priced</span>
+							<input
+								type='checkbox'
+								checked={bookingData.manuallyPriced}
+								onChange={(e) => updateData('manuallyPriced', e.target.checked)}
+								className='form-checkbox h-5 w-5 text-primary'
 							/>
 						</div>
 

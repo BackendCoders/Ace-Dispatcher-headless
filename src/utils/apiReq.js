@@ -57,6 +57,7 @@ function filterData(data) {
 		bookingId: data.bookingId || null,
 		updatedByName: data.updatedByName || '',
 		isASAP: data.isASAP || false,
+		manuallyPriced: data.manuallyPriced || false,
 		// actionByUserId: data.actionByUserId || null,
 	});
 }
