@@ -165,7 +165,7 @@ const getBookingData = async function (date) {
 	// Use handlePostReq function
 	const response = await handlePostReq(URL, dataToSend);
 	if (response) {
-		localStorage.setItem('bookings', JSON.stringify(response.bookings));
+		// localStorage.setItem('bookings', JSON.stringify(response.bookings));
 		return response;
 	} else {
 		console.log('Unexpected response:', response);

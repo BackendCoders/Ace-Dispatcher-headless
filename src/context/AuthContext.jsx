@@ -110,6 +110,7 @@ const AuthProvider = ({ children }) => {
 	const logout = () => {
 		localStorage.removeItem('authToken');
 		localStorage.removeItem('username');
+		localStorage.removeItem('accounts');
 		setCurrentUser(null);
 		setIsAuth(false);
 	};
