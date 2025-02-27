@@ -153,6 +153,7 @@ const AuthProvider = ({ children }) => {
 		setIsLoading(false);
 	}, []); // Run only on component mount
 
+	// effect to handle event coming from admin ui via iframe
 	useEffect(() => {
 		const handleMessage = (event) => {
 			const allowedOrigin = import.meta.env.VITE_PARENT_URL; // Parent application URL
