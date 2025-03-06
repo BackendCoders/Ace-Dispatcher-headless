@@ -636,20 +636,22 @@ function CustomDialog({ closeDialog }) {
 											head='Confirmation Status'
 										/>
 
-										<div>
-											<div className='flex w-full items-start mb-4'>
-												<p className='text-md font-medium pr-2 sm:w-[30%] flex justify-end items-end'>
-													Booked By:{' '}
-												</p>
-												<span
-													className={`text-card dark:text-popover-foreground text-[1rem]`}
-												>
-													{data.bookedByName}{' '}
-													<span className='text-md font-medium'>On</span>{' '}
-													{getTodayInEnGbFormat(data.dateCreated)}
-												</span>
+										{user?.currentUser?.roleId !== 3 && (
+											<div>
+												<div className='flex w-full items-start mb-4'>
+													<p className='text-md font-medium pr-2 sm:w-[30%] flex justify-end items-end'>
+														Booked By:{' '}
+													</p>
+													<span
+														className={`text-card dark:text-popover-foreground text-[1rem]`}
+													>
+														{data.bookedByName}{' '}
+														<span className='text-md font-medium'>On</span>{' '}
+														{getTodayInEnGbFormat(data.dateCreated)}
+													</span>
+												</div>
 											</div>
-										</div>
+										)}
 									</div>
 								</div>
 							</div>
