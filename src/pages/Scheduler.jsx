@@ -711,7 +711,7 @@ function SearchModal({ setOpenSearch }) {
 					<TextField
 						label='Pickup Address'
 						fullWidth
-						error={!!errors.pickupAddress} // Show error if validation fails
+						error={!!errors.pickupAddress}
 						helperText={
 							errors.pickupAddress ? 'Must be at least 3 characters' : ''
 						}
