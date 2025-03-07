@@ -111,6 +111,7 @@ export default function DuplicateBookingModal({
 							scope: data?.scope === 4 ? 0 : data?.scope,
 							paymentStatus: 0,
 							accountNumber: data?.scope === 4 ? 9999 : data?.accountNumber,
+							isASAP: false,
 						})
 					}
 				>
