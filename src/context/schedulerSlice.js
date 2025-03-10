@@ -43,6 +43,7 @@ const schedulerSlice = createSlice({
 		activeSoftAllocate: false,
 		activeSearchResults: [],
 		activeSearchResult: null,
+		searchkeywords: {},
 		showDriverAvailability: false,
 		dateControl: formatDate(new Date().toISOString()),
 	},
@@ -108,6 +109,9 @@ const schedulerSlice = createSlice({
 		},
 		setActiveSoftAllocate: (state, action) => {
 			state.activeSoftAllocate = action.payload;
+		},
+		setSearchKeywords: (state, action) => {
+			state.searchkeywords = action.payload;
 		},
 	},
 });
@@ -329,6 +333,7 @@ export const {
 	updateBookingAtIndex,
 	setActiveSearchResultClicked,
 	setActiveSoftAllocate,
+	setSearchKeywords,
 } = schedulerSlice.actions;
 
 export default schedulerSlice.reducer;

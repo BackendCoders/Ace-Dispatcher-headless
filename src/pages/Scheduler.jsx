@@ -41,6 +41,7 @@ import {
 	setActiveBookingIndex,
 	setActiveSearchResult,
 	setDateControl,
+	setSearchKeywords,
 } from '../context/schedulerSlice';
 import {
 	createBookingFromScheduler,
@@ -83,7 +84,7 @@ const AceScheduler = () => {
 	// const activeTestMode = useSelector(
 	// 	(state) => state.bookingForm.isActiveTestMode
 	// );
-	
+
 	// setting some states for the complenent level state management
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [selectedBookingData, setSelectedBookingData] = useState();
@@ -670,6 +671,7 @@ function SearchModal({ setOpenSearch }) {
 			newinputData.phoneNumber ||
 			newinputData.details
 		) {
+			dispatch(setSearchKeywords(newinputData));
 			dispatch(handleSearchBooking(newinputData));
 			if (isMobile || isTablet) {
 				setActiveSectionMobileView('Scheduler');

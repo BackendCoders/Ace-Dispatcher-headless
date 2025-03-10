@@ -3,6 +3,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { makeBooking, updateBooking } from './../utils/apiReq';
 import { formatDate } from './../utils/formatDate';
+import { handleSearchBooking } from './schedulerSlice';
 
 // Filter data to avoid undefined values and make the data structure consistent
 const filterData = (data = {}) => ({
@@ -195,12 +196,16 @@ export const onCreateBooking = (itemIndex) => async (dispatch, getState) => {
 // Action Creator that will update the booking to the Backend api and return the response
 export const onUpdateBooking = (itemIndex) => async (dispatch, getState) => {
 	const targetBooking = getState().bookingForm.bookings[itemIndex];
+	const { activeSearch, searchkeywords } = getState().scheduler;
 	// const activeTestMode = getState().bookingForm.isActiveTestMode;
 	// console.log('targetBooking', targetBooking);
 	// const response = await updateBooking(targetBooking, activeTestMode);
 	const response = await updateBooking(targetBooking);
 	if (response.status === 'success') {
 		dispatch(endBooking({ itemIndex }));
+		if (activeSearch) {
+			dispatch(handleSearchBooking(searchkeywords));
+		}
 		return { status: 'success' };
 	} else {
 		dispatch(updateValue({ itemIndex, property: 'isLoading', value: false }));

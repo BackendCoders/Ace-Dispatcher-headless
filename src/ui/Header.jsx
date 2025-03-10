@@ -18,6 +18,7 @@ import {
 	// changeActiveDate,
 	handleSearchBooking,
 	makeSearchInactive,
+	setSearchKeywords,
 	// setDateControl,
 	// makeSearchInactive,
 } from '../context/schedulerSlice';
@@ -491,6 +492,7 @@ function SearchModal({ setOpenSearch }) {
 			newinputData.phoneNumber ||
 			newinputData.details
 		) {
+			dispatch(setSearchKeywords(newinputData));
 			dispatch(handleSearchBooking(newinputData));
 			if (isMobile || isTablet) {
 				setActiveSectionMobileView('Scheduler');
