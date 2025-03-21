@@ -513,7 +513,7 @@ export default function Push() {
 							<Tab label='Map' />
 							<Tab label='Scheduler' />
 							<Tab label='Logs' />
-							<Tab label='Messages' />
+							<Tab label='Msg' />
 						</Tabs>
 						{/*secondaryTab === 0 && (
 					<CustomDriverAvailibilityChart />
