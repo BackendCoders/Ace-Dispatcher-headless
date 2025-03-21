@@ -445,7 +445,7 @@ const AceScheduler = () => {
 				)}
 			</div>
 
-			<div className='flex justify-end w-[10%] fixed top-[60px] right-[235px] sm:top-[15px] sm:right-[440px] z-[40]'>
+			<div className='flex justify-end w-[10%] fixed top-[60px] right-[235px] sm:top-[15px] sm:right-[465px] z-[40]'>
 				{callerId.length > 0 && (
 					<Badge
 						badgeContent={callerId.length}
@@ -457,7 +457,7 @@ const AceScheduler = () => {
 				)}
 			</div>
 
-			<div className='flex justify-end fixed top-[45px] right-[110px] sm:top-[5px] sm:right-[360px] z-[40]'>
+			<div className='flex justify-end fixed top-[45px] right-[110px] sm:top-[5px] sm:right-[305px] z-[40]'>
 				{
 					<span className='flex flex-row gap-0 sm:gap-2 items-center align-middle'>
 						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
@@ -474,7 +474,7 @@ const AceScheduler = () => {
 					</span>
 				}
 			</div>
-			<div className='flex justify-end fixed top-[65px] right-[110px] sm:top-[5px] sm:right-[210px] z-[40]'>
+			<div className='flex justify-end fixed top-[65px] right-[110px] sm:top-[5px] sm:right-[160px] z-[40]'>
 				{user?.currentUser?.roleId !== 3 && (
 					<span className='flex flex-row gap-0 sm:gap-2 items-center align-middle'>
 						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
@@ -491,7 +491,7 @@ const AceScheduler = () => {
 					</span>
 				)}
 			</div>
-			<div className='flex justify-end fixed top-[15px] right-[140px] sm:top-[10px] sm:right-[160px] z-[40]'>
+			<div className='flex justify-end fixed top-[15px] right-[140px] sm:top-[10px] sm:right-[140px] z-[40]'>
 				{user?.currentUser?.roleId !== 3 && (
 					<div className='flex justify-center items-center uppercase'>
 						{!activeSearch && (
@@ -499,7 +499,7 @@ const AceScheduler = () => {
 								onClick={() => setOpenSearch(true)}
 								// className='text-sm'
 							>
-								{isMobile ? <SearchIcon /> : 'Search'}
+								{isMobile ? <SearchIcon /> : <SearchIcon />}
 							</button>
 						)}
 						{activeSearch && (
@@ -514,7 +514,7 @@ const AceScheduler = () => {
 				)}
 			</div>
 
-			<div className='flex justify-end fixed top-[10px] right-[80px] sm:top-[5px] sm:right-[90px] z-[40]'>
+			<div className='flex justify-end fixed top-[10px] right-[80px] sm:top-[5px] sm:right-[80px] z-[40]'>
 				{user?.currentUser?.roleId !== 3 && (
 					<button
 						className={`${
@@ -529,7 +529,7 @@ const AceScheduler = () => {
 				)}
 			</div>
 
-			<div className='flex justify-end fixed top-[10px] right-[80px] sm:top-[5px] sm:right-[20px] z-[40]'>
+			<div className='flex justify-end fixed top-[10px] right-[80px] sm:top-[5px] sm:right-[15px] z-[40]'>
 				{user?.currentUser?.roleId !== 3 && (
 					<button
 						className={`${
