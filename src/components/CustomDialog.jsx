@@ -48,12 +48,16 @@ function CustomDialog({ closeDialog }) {
 		currentlySelectedBookingIndex: index,
 		activeSearch,
 		activeSearchResult,
+		actionLogsOpen,
 	} = useSelector((state) => state.scheduler);
 	const user = useAuth();
 	// console.log(user);
 	let data = {};
-	data = bookings[index];
-	if (activeSearch) data = activeSearchResult;
+	if (activeSearch || actionLogsOpen) {
+		data = activeSearchResult;
+	} else {
+		data = bookings[index];
+	}
 
 	if (!data?.bookingId) return null;
 
@@ -295,7 +299,13 @@ function CustomDialog({ closeDialog }) {
 
 						{user?.currentUser?.roleId !== 3 && (
 							<button
-								onClick={handleSendConfirmationText}
+								onClick={() => {
+									if (!data?.phoneNumber) {
+										dispatch(openSnackbar('Phone is required', 'error'));
+									} else {
+										handleSendConfirmationText();
+									}
+								}}
 								className={`px-3 py-2 text-white bg-blue-700 hover:bg-opacity-80 rounded-lg`}
 							>
 								Send Confirmation Text
@@ -419,23 +429,37 @@ function CustomDialog({ closeDialog }) {
 											Destination
 										</h3>
 									</div>
-									<div className='flex items-start mb-1 w-full'>
-										<p className='text-md font-medium pr-2 whitespace-nowrap w-[20%] flex justify-end items-end'>
-											To:
-										</p>
-										<span className='text-card dark:text-popover-foreground text-[1rem] w-[80%] flex justify-start items-start'>
-											<a
-												// href={generateRouteLink()}
-												href={`https://www.google.com/maps?q=${encodeURIComponent(
-													data.destinationPostCode
-												)}`}
-												target='_blank'
-												rel='noopener noreferrer'
-												className='text-blue-600'
-											>
-												{`${data.destinationAddress}, ${data.destinationPostCode}`}
-											</a>
-										</span>
+									<div className='flex justify-between items-center'>
+										<div className='flex items-start mb-1 w-[75%]'>
+											<p className='text-md font-medium pr-2 whitespace-nowrap w-[20%] flex justify-end items-end'>
+												To:
+											</p>
+											<span className='text-card dark:text-popover-foreground text-[1rem] w-[80%] flex justify-start items-start'>
+												<a
+													// href={generateRouteLink()}
+													href={`https://www.google.com/maps?q=${encodeURIComponent(
+														data.destinationPostCode
+													)}`}
+													target='_blank'
+													rel='noopener noreferrer'
+													className='text-blue-600'
+												>
+													{`${data.destinationAddress}, ${data.destinationPostCode}`}
+												</a>
+											</span>
+										</div>
+										<div className='flex justify-end items-start mb-1 w-[25%]'>
+											<p className='text-md font-medium pr-2 whitespace-nowrap flex justify-end items-end'>
+												Arrive By:
+											</p>
+											<span className='text-card dark:text-popover-foreground text-[1rem] flex justify-start items-start'>
+												{`${
+													data.arriveBy
+														? data.arriveBy?.split('T')[1].slice(0, 5)
+														: ''
+												}`}
+											</span>
+										</div>
 									</div>
 									{/* <BookingOption
 										text={`${data.destinationAddress}, ${data.destinationPostCode}`}
@@ -578,9 +602,18 @@ function CustomDialog({ closeDialog }) {
 												{data.paymentStatus === 0 &&
 													user?.currentUser?.roleId !== 3 && (
 														<button
-															onClick={() =>
-																setOpenSmsDailogModal((prev) => !prev)
-															}
+															onClick={() => {
+																if (data.phoneNumber || data.email) {
+																	setOpenSmsDailogModal((prev) => !prev);
+																} else {
+																	dispatch(
+																		openSnackbar(
+																			'Phone or Email is required',
+																			'error'
+																		)
+																	);
+																}
+															}}
 															className='px-1 sm:px-3 py-1 text-white bg-green-500 hover:bg-opacity-80 rounded-lg text-[0.65rem] sm:text-[1rem]'
 														>
 															Send Payment Link

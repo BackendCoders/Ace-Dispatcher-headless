@@ -4,8 +4,10 @@ import { Button } from '@mui/material';
 import { useRouteError } from 'react-router-dom';
 import { sendLogs } from '../utils/getLogs';
 import { useEffect } from 'react';
-
+import { useDispatch } from 'react-redux';
+import { openSnackbar } from '../context/snackbarSlice';
 function ErrorPage() {
+	const dispatch = useDispatch();
 	const error = useRouteError();
 	sendLogs(error, 'error');
 
@@ -18,9 +20,10 @@ function ErrorPage() {
 	useEffect(() => {
 		if (shouldReload) {
 			console.warn("Detected 'classList' error. Reloading page...");
+			dispatch(openSnackbar('Oops some error occur!', 'error'));
 			window.location.reload();
 		}
-	}, [shouldReload]);
+	}, [dispatch, shouldReload]);
 
 	if (shouldReload) {
 		return null;

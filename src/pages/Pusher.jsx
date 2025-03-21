@@ -37,6 +37,7 @@ import { sendLogs } from '../utils/getLogs';
 import AvailbilityChartMobileView from '../components/AvailbilityChartMobileView';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import DriverStatus from '../components/DriverStatus';
+import Logs from '../components/Logs';
 
 const pusher = new Pusher('8d1879146140a01d73cf', {
 	cluster: 'eu',
@@ -511,6 +512,7 @@ export default function Push() {
 							{/* <Tab label='Availability' /> */}
 							<Tab label='Map' />
 							<Tab label='Scheduler' />
+							<Tab label='Logs' />
 							<Tab label='Messages' />
 						</Tabs>
 						{/*secondaryTab === 0 && (
@@ -526,7 +528,8 @@ export default function Push() {
 							</>
 						)}
 						{secondaryTab === 1 ? <Scheduler /> : null}
-						{secondaryTab === 2 && <DriverSection />}
+						{secondaryTab === 2 && <Logs />}
+						{secondaryTab === 3 && <DriverSection />}
 					</Box>
 				</>
 			)}

@@ -1,9 +1,10 @@
 /** @format */
 
 import { createSlice } from '@reduxjs/toolkit';
-import { makeBooking, updateBooking } from './../utils/apiReq';
+import { makeBooking, updateBooking, sendQuotes } from './../utils/apiReq';
 import { formatDate } from './../utils/formatDate';
 import { handleSearchBooking } from './schedulerSlice';
+import { getRefreshedBookingsLog } from './BookingLogSlice';
 
 // Filter data to avoid undefined values and make the data structure consistent
 const filterData = (data = {}) => ({
@@ -49,6 +50,7 @@ const filterData = (data = {}) => ({
 	minutes: data.Minutes ?? 20,
 	isASAP: data.isASAP || false,
 	manuallyPriced: data.manuallyPriced || false,
+	arriveBy: data.arriveBy ? formatDate(new Date(data.arriveBy)) : null,
 });
 
 const initialState = {
@@ -60,6 +62,7 @@ const initialState = {
 	// isActiveTestMode: true,
 	isGoogleApiOn: false,
 	activeSectionMobileView: 'Scheduler',
+	createResponseArray: [],
 };
 
 const bookingFormSlice = createSlice({
@@ -150,6 +153,9 @@ const bookingFormSlice = createSlice({
 		setActiveSectionMobileView(state, action) {
 			state.activeSectionMobileView = action.payload;
 		},
+		setCreateResponseArray(state, action) {
+			state.createResponseArray = action.payload;
+		},
 	},
 });
 
@@ -184,6 +190,8 @@ export const onCreateBooking = (itemIndex) => async (dispatch, getState) => {
 	const response = await makeBooking(targetBooking);
 	if (response.status === 'success') {
 		dispatch(endBooking({ itemIndex }));
+		dispatch(setCreateResponseArray(response.value?.entrys));
+		dispatch(getRefreshedBookingsLog());
 		return { status: 'success' };
 	} else {
 		dispatch(
@@ -203,6 +211,8 @@ export const onUpdateBooking = (itemIndex) => async (dispatch, getState) => {
 	const response = await updateBooking(targetBooking);
 	if (response.status === 'success') {
 		dispatch(endBooking({ itemIndex }));
+		dispatch(setCreateResponseArray(response.value?.res));
+		dispatch(getRefreshedBookingsLog());
 		if (activeSearch) {
 			dispatch(handleSearchBooking(searchkeywords));
 		}
@@ -218,6 +228,41 @@ export const removeBooking = (itemIndex) => (dispatch) => {
 	dispatch(endBooking({ itemIndex }));
 };
 
+export const onSendQuoteBooking =
+	(itemIndex, selectedOptions) => async (dispatch, getState) => {
+		const targetBooking = getState().bookingForm.bookings[itemIndex];
+		// const activeTestMode = getState().bookingForm.isActiveTestMode;
+		// const response = await makeBooking(targetBooking, activeTestMode);
+		console.log('slice---', targetBooking);
+		const payload = {
+			date: targetBooking?.pickupDateTime,
+			pickup: `${targetBooking?.pickupAddress}, ${targetBooking?.pickupPostCode}`,
+			vias: targetBooking?.vias,
+			destination: `${targetBooking?.destinationAddress}, ${targetBooking?.destinationPostCode}`,
+			passenger: targetBooking?.passengerName,
+			passengers: targetBooking?.passengers,
+			price: targetBooking?.price,
+			phone:
+				selectedOptions.textMessage || selectedOptions.both
+					? targetBooking?.phoneNumber
+					: '',
+			email:
+				selectedOptions.email || selectedOptions.both
+					? targetBooking?.email
+					: '',
+		};
+		const response = await sendQuotes(payload);
+		if (response.status === 'success') {
+			dispatch(endBooking({ itemIndex }));
+			return { status: 'success' };
+		} else {
+			dispatch(
+				bookingFormSlice.actions.updateDataValue(itemIndex, 'isLoading', false)
+			);
+			return { status: 'error', message: response.message };
+		}
+	};
+
 export const {
 	addData,
 	endBooking,
@@ -229,6 +274,7 @@ export const {
 	addDataFromSchedulerInEditMode,
 	setIsBookingOpenInEditMode,
 	createBookingFromScheduler,
+	setCreateResponseArray,
 } = bookingFormSlice.actions;
 
 export default bookingFormSlice.reducer;

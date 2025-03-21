@@ -9,12 +9,12 @@ import {
 import { registerLicense } from '@syncfusion/ej2-base';
 import Modal from '../components/Modal';
 import CustomDialog from '../components/CustomDialog';
-import { recordTurnDown } from '../utils/apiReq';
+import { recordTurnDown, textMessageDirectly } from '../utils/apiReq';
 import LongButton from '../components/BookingForm/LongButton';
 import SearchIcon from '@mui/icons-material/Search';
 registerLicense(import.meta.env.VITE_SYNCFUSION_KEY);
 import PermPhoneMsgIcon from '@mui/icons-material/PermPhoneMsg';
-
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import './scheduler.css';
 import ProtectedRoute from '../utils/Protected';
 import { useEffect, useRef, useState } from 'react';
@@ -38,6 +38,7 @@ import {
 	changeShowDriverAvailability,
 	completeActiveBookingStatus,
 	getRefreshedBookings,
+	setActionLogsOpen,
 	setActiveBookingIndex,
 	setActiveSearchResult,
 	setDateControl,
@@ -60,6 +61,7 @@ import {
 	// setDateControl,
 	// makeSearchInactive,
 } from '../context/schedulerSlice';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 const AceScheduler = () => {
 	const BASE_URL = import.meta.env.VITE_BASE_URL;
 	const isMobile = useMediaQuery('(max-width: 640px)');
@@ -89,6 +91,7 @@ const AceScheduler = () => {
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [selectedBookingData, setSelectedBookingData] = useState();
 	const [viewBookingModal, setViewBookingModal] = useState(false);
+	const [textMessageModal, setTextMessageModal] = useState(false);
 	const [driverData, setDriverData] = useState([]);
 	const dispatch = useDispatch();
 	const user = useAuth();
@@ -261,6 +264,10 @@ const AceScheduler = () => {
 		setRecordTurnModal(true);
 	};
 
+	const handleTextMessage = () => {
+		setTextMessageModal(true);
+	};
+
 	// refresh the booking when activeTestMode, currentDate, dispatch, activeComplete changes
 	useEffect(() => {
 		async function helper() {
@@ -338,6 +345,10 @@ const AceScheduler = () => {
 	useEffect(() => {
 		onCreate(); // Call onCreate to scroll when the component mounts
 	}, []);
+
+	useEffect(() => {
+		dispatch(setActionLogsOpen(false));
+	}, [dispatch]);
 	// console.log('active Date in Scheduler----', activeDate);
 	return (
 		<ProtectedRoute>
@@ -446,7 +457,7 @@ const AceScheduler = () => {
 				)}
 			</div>
 
-			<div className='flex justify-end fixed top-[45px] right-[110px] sm:top-[5px] sm:right-[280px] z-[40]'>
+			<div className='flex justify-end fixed top-[45px] right-[110px] sm:top-[5px] sm:right-[360px] z-[40]'>
 				{
 					<span className='flex flex-row gap-0 sm:gap-2 items-center align-middle'>
 						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
@@ -463,7 +474,7 @@ const AceScheduler = () => {
 					</span>
 				}
 			</div>
-			<div className='flex justify-end fixed top-[65px] right-[110px] sm:top-[5px] sm:right-[130px] z-[40]'>
+			<div className='flex justify-end fixed top-[65px] right-[110px] sm:top-[5px] sm:right-[210px] z-[40]'>
 				{user?.currentUser?.roleId !== 3 && (
 					<span className='flex flex-row gap-0 sm:gap-2 items-center align-middle'>
 						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
@@ -480,7 +491,7 @@ const AceScheduler = () => {
 					</span>
 				)}
 			</div>
-			<div className='flex justify-end fixed top-[15px] right-[140px] sm:top-[10px] sm:right-[85px] z-[40]'>
+			<div className='flex justify-end fixed top-[15px] right-[140px] sm:top-[10px] sm:right-[160px] z-[40]'>
 				{user?.currentUser?.roleId !== 3 && (
 					<div className='flex justify-center items-center uppercase'>
 						{!activeSearch && (
@@ -503,7 +514,7 @@ const AceScheduler = () => {
 				)}
 			</div>
 
-			<div className='flex justify-end fixed top-[10px] right-[80px] sm:top-[5px] sm:right-[20px] z-[40]'>
+			<div className='flex justify-end fixed top-[10px] right-[80px] sm:top-[5px] sm:right-[90px] z-[40]'>
 				{user?.currentUser?.roleId !== 3 && (
 					<button
 						className={`${
@@ -514,6 +525,24 @@ const AceScheduler = () => {
 						onClick={handleRecordTurnDown}
 					>
 						No
+					</button>
+				)}
+			</div>
+
+			<div className='flex justify-end fixed top-[10px] right-[80px] sm:top-[5px] sm:right-[20px] z-[40]'>
+				{user?.currentUser?.roleId !== 3 && (
+					<button
+						className={`${
+							BASE_URL.includes('api.acetaxisdorset')
+								? 'bg-[#424242] text-[#C74949] border border-[#C74949]'
+								: 'bg-[#C74949] text-white border border-white'
+						} px-4 py-2 rounded-lg uppercase text-xs sm:text-sm`}
+						onClick={handleTextMessage}
+					>
+						<EmailOutlinedIcon
+							fontSize='small'
+							className='text-xs sm:text-sm'
+						/>
 					</button>
 				)}
 			</div>
@@ -539,6 +568,14 @@ const AceScheduler = () => {
 					open={recordTurnModal}
 				>
 					<RecordTurn setRecordTurnModal={setRecordTurnModal} />
+				</Modal>
+			)}
+			{textMessageModal && (
+				<Modal
+					setOpen={setTextMessageModal}
+					open={textMessageModal}
+				>
+					<TextMessage setTextMessageModal={setTextMessageModal} />
 				</Modal>
 			)}
 		</ProtectedRoute>
@@ -835,6 +872,112 @@ function SearchModal({ setOpenSearch }) {
 					<LongButton
 						color='bg-red-700'
 						onClick={() => setOpenSearch(false)} // Close modal on Cancel
+					>
+						Cancel
+					</LongButton>
+				</div>
+			</form>
+		</div>
+	);
+}
+
+function TextMessage({ setTextMessageModal }) {
+	const isMobile = useMediaQuery('(max-width: 640px)');
+	const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1023px)');
+	const dispatch = useDispatch();
+	const {
+		register,
+		handleSubmit,
+		reset,
+		formState: { isSubmitSuccessful, errors }, // Access form errors
+	} = useForm({
+		defaultValues: {
+			message: '',
+			telephone: '',
+		},
+	});
+
+	const handleSubmitForm = async (data) => {
+		console.log('form Data', data);
+
+		// Dispatch search action only if some data is entered
+		if (data?.message || data.telephone) {
+			const response = await textMessageDirectly(data);
+			if (response.status === 'success') {
+				dispatch(openSnackbar('Message Send Successfully', 'success'));
+				if (isMobile || isTablet) {
+					setActiveSectionMobileView('Scheduler');
+				}
+				setTextMessageModal(false);
+			}
+			// Close the modal after search
+		} else {
+			console.log('Please fill form');
+		}
+	};
+
+	useEffect(() => {
+		if (isSubmitSuccessful) {
+			reset({
+				message: '',
+				telephone: '',
+			});
+		}
+	}, [reset, isSubmitSuccessful]);
+
+	return (
+		<div className='bg-white p-6 rounded-lg shadow-lg w-[90vw] md:w-[45vw] sm:w-[25vw] max-w-md mx-auto'>
+			<h2 className='text-2xl font-semibold mb-4 flex gap-1 items-center'>
+				<MailOutlineIcon />
+				Text Message
+			</h2>
+			<form onSubmit={handleSubmit(handleSubmitForm)}>
+				<Box
+					mt={2}
+					display='flex'
+					justifyContent='space-between'
+					gap={2}
+				>
+					<TextField
+						label='Phone Number'
+						fullWidth
+						error={!!errors.telephone} // Show error if validation fails
+						helperText={errors.telephone ? 'Phone Number is Required' : ''}
+						{...register('telephone', {
+							required: 'Phone Number field is required',
+						})}
+					/>
+				</Box>
+				<Box
+					mt={2}
+					display='flex'
+					justifyContent='space-between'
+					gap={2}
+				>
+					<TextField
+						label='Message'
+						fullWidth
+						error={!!errors.message}
+						helperText={errors.message ? 'Must be at least 3 characters' : ''}
+						{...register('message', {
+							minLength: {
+								value: 3,
+								message: 'Must be at least 3 characters',
+							},
+						})}
+					/>
+				</Box>
+
+				<div className='mt-4 flex gap-1'>
+					<LongButton
+						type='submit'
+						color='bg-green-700'
+					>
+						Submit
+					</LongButton>
+					<LongButton
+						color='bg-red-700'
+						onClick={() => setTextMessageModal(false)} // Close modal on Cancel
 					>
 						Cancel
 					</LongButton>

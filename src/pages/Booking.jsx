@@ -9,6 +9,7 @@ import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 
 // Context And Hooks imports for data flow and management
 import {
+	onSendQuoteBooking,
 	removeBooking,
 	updateValue,
 	updateValueSilentMode,
@@ -19,6 +20,7 @@ import {
 	fireCallerEvent,
 	deleteSchedulerBooking,
 	getAccountList,
+	getDuration,
 } from '../utils/apiReq';
 
 // All local component utilitys
@@ -44,6 +46,7 @@ import {
 	getRefreshedBookings,
 	setDateControl,
 } from '../context/schedulerSlice';
+import SendQuoteModal from '../components/CustomDialogButtons/SendQuoteModal';
 
 function Booking({ bookingData, id, onBookingUpload }) {
 	// All Hooks and Contexts for the data flow and management
@@ -59,6 +62,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 
 	// All Local States and Hooks for ui and fligs
 	const [isAddVIAOpen, setIsAddVIAOpen] = useState(false);
+	const [arriveByFlag, setArriveByFlag] = useState(false);
 	const [isRepeatBookingModelActive, setIsRepeatBookingModelActive] =
 		useState(false);
 	const [isDriverModalActive, setDriverModalActive] = useState(false);
@@ -70,6 +74,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 	const phoneNumberRef = useRef(null);
 	const pickupDateTimeRef = useRef(null);
 	const [isQuoteDialogActive, setIsQuoteDialogActive] = useState(false);
+	const [isSendQuoteActive, setIsSendQuoteActive] = useState(false);
 	const [quote, setQuote] = useState(null);
 	const [formSubmitLoading, setFormSubmitLoading] = useState(false);
 	const isMobile = useMediaQuery('(max-width:640px)');
@@ -193,6 +198,69 @@ function Booking({ bookingData, id, onBookingUpload }) {
 	function handleClick(event, ref) {
 		ref.current.focus();
 		ref.current.select();
+	}
+
+	async function calculatePickup() {
+		if (!bookingData.arriveBy) {
+			console.error('arriveBy is missing');
+			return;
+		}
+
+		// Make the booking quote request
+		const quote = await getDuration({
+			pickupPostcode: bookingData.pickupPostCode,
+			destinationPostcode: bookingData.destinationPostCode,
+			pickupDate: bookingData.arriveBy, // Initially pass arriveBy time
+		});
+
+		if (quote.status === 200) {
+			let totalDuration = quote?.data; // Duration in minutes
+
+			if (!totalDuration) {
+				console.error('Total duration is missing in quote response');
+				return;
+			}
+
+			totalDuration += 5; // Add 5 minutes buffer
+
+			// Convert arriveBy (ISO 8601 format) to Date object
+			const arriveByDate = new Date(bookingData.arriveBy);
+
+			// Subtract totalDuration (converted from minutes to milliseconds)
+			const pickupDate = new Date(
+				arriveByDate.getTime() - totalDuration * 60000
+			);
+
+			if (isNaN(pickupDate.getTime())) {
+				console.error('Invalid calculated pickup date:', pickupDate);
+				return;
+			}
+
+			// const isoPickupDate = pickupDate.toISOString().slice(0, 16);
+
+			// const localPickupDate = pickupDate
+			// 	.toLocaleString('en-GB', {
+			// 		year: 'numeric',
+			// 		month: '2-digit',
+			// 		day: '2-digit',
+			// 		hour: '2-digit',
+			// 		minute: '2-digit',
+			// 		hour12: false,
+			// 	})
+			// 	.replace(',', ''); // Removes the comma for clean formatting
+
+			// console.log(
+			// 	'ISO Pickup Time:',
+			// 	isoPickupDate,
+			// 	bookingData.pickupDateTime
+			// );
+			// console.log('Local Pickup Time (Display):', localPickupDate);
+
+			// Update state with both values
+			dispatch(
+				updateValueSilentMode(id, 'pickupDateTime', formatDate(pickupDate))
+			);
+		}
 	}
 
 	useEffect(() => {
@@ -411,11 +479,21 @@ function Booking({ bookingData, id, onBookingUpload }) {
 
 				const data = await deleteSchedulerBooking(reqData);
 				if (data.status === 'success') {
-					openSnackbar('COA done successfully', 'success');
+					dispatch(openSnackbar('COA done successfully', 'success'));
 					setConfirmCoaModal(false);
 					getRefreshedBookings();
 				}
 			}
+		} catch (error) {
+			console.log(error);
+		}
+	}
+
+	async function handleSendQuoteModal(selectedOptions) {
+		try {
+			console.log(selectedOptions);
+			await dispatch(onSendQuoteBooking(id, selectedOptions));
+			dispatch(openSnackbar('Quote Sent Successfully', 'success'));
 		} catch (error) {
 			console.log(error);
 		}
@@ -471,6 +549,15 @@ function Booking({ bookingData, id, onBookingUpload }) {
 						<ConfirmCOA
 							onClick={handleCoaButton}
 							setConfirmCoaModal={setConfirmCoaModal}
+						/>
+					</Modal>
+					<Modal
+						open={isSendQuoteActive}
+						setOpen={setIsSendQuoteActive}
+					>
+						<SendQuoteModal
+							onclick={handleSendQuoteModal}
+							setIsSendQuoteActive={setIsSendQuoteActive}
 						/>
 					</Modal>
 					<SimpleSnackbar />
@@ -706,7 +793,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 						/>
 					</div>
 
-					<div className='mb-2'>
+					<div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-2'>
 						<textarea
 							placeholder='Booking Details'
 							className='w-full bg-input text-foreground p-2 rounded-lg border border-border'
@@ -720,6 +807,72 @@ function Booking({ bookingData, id, onBookingUpload }) {
 								}
 							}}
 						></textarea>
+						<div className='flex-col justify-center items-center'>
+							<div className='flex justify-start items-center mb-2'>
+								<span
+									className={`${
+										bookingData.isASAP ? 'text-[#228B22]' : ''
+									} mr-2`}
+								>
+									Arrive By
+								</span>
+								<Switch
+									sx={{
+										'& .MuiSwitch-switchBase.Mui-checked': {
+											color: '#228B22', // Thumb color
+										},
+										'& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+											backgroundColor: '#228B22', // Track color
+										},
+									}}
+									checked={arriveByFlag}
+									onChange={() => {
+										setArriveByFlag((prev) => {
+											const newFlag = !prev;
+											if (!newFlag) {
+												updateData('arriveBy', null); // Set arriveBy to null when switching off
+											} else {
+												updateData('arriveBy', formatDate(new Date()));
+											}
+											return newFlag;
+										});
+									}}
+								/>
+
+								<div
+									className='px-3 bg-red-700 hover:bg-opacity-80 rounded-lg flex cursor-pointer'
+									onClick={calculatePickup}
+								>
+									<span
+										color='error'
+										className='text-white flex gap-2 px-3 py-2'
+										type='button'
+									>
+										<span>Calculate Pickup</span>
+									</span>
+								</div>
+							</div>
+
+							<input
+								required
+								type='datetime-local'
+								className='w-full bg-input text-foreground p-2 rounded-lg border border-border'
+								value={bookingData?.arriveBy || ''}
+								disabled={!arriveByFlag}
+								onKeyDown={(e) => {
+									if (e.key === 'Enter') {
+										pickupRef.current.focus();
+										pickupRef.current.select();
+									}
+								}}
+								onChange={(e) => {
+									if (!isValidDate(e.target.value)) return;
+									updateData('arriveBy', e.target.value);
+									if (e.inputType === 'insertText') e.target.blur();
+									return e.target.value;
+								}}
+							/>
+						</div>
 					</div>
 
 					<div className='mb-4'>
@@ -989,15 +1142,34 @@ function Booking({ bookingData, id, onBookingUpload }) {
 					</div>
 
 					<div className='flex justify-between space-x-4'>
-						{currentUser?.roleId !== 3 && (
-							<button
-								onClick={() => setConfirmCoaModal(true)}
-								className='bg-muted text-primary-foreground text-white px-4 py-2 rounded-lg bg-orange-700'
-								type='button'
-							>
-								Cancel On Arrival
-							</button>
-						)}
+						<div className='flex justify-start space-x-4'>
+							{currentUser?.roleId !== 3 && (
+								<button
+									onClick={() => setConfirmCoaModal(true)}
+									className='bg-muted text-primary-foreground text-white px-4 py-2 rounded-lg bg-orange-700'
+									type='button'
+								>
+									Cancel On Arrival
+								</button>
+							)}
+							{currentUser?.roleId !== 3 && (
+								<button
+									onClick={() => {
+										if (bookingData?.phoneNumber || bookingData?.email) {
+											setIsSendQuoteActive(true);
+										} else {
+											dispatch(
+												openSnackbar('Please fill phone or email', 'error')
+											);
+										}
+									}}
+									className='bg-muted text-primary-foreground px-4 py-2 rounded-lg bg-gray-100'
+									type='button'
+								>
+									Send Quote
+								</button>
+							)}
+						</div>
 						<div className='flex justify-end space-x-4'>
 							<button
 								onClick={deleteForm}

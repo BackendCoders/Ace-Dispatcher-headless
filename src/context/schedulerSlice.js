@@ -46,6 +46,7 @@ const schedulerSlice = createSlice({
 		searchkeywords: {},
 		showDriverAvailability: false,
 		dateControl: formatDate(new Date().toISOString()),
+		actionLogsOpen: false,
 	},
 	reducers: {
 		insertBookings: (state, action) => {
@@ -112,6 +113,9 @@ const schedulerSlice = createSlice({
 		},
 		setSearchKeywords: (state, action) => {
 			state.searchkeywords = action.payload;
+		},
+		setActionLogsOpen: (state, action) => {
+			state.actionLogsOpen = action.payload;
 		},
 	},
 });
@@ -334,6 +338,7 @@ export const {
 	setActiveSearchResultClicked,
 	setActiveSoftAllocate,
 	setSearchKeywords,
+	setActionLogsOpen,
 } = schedulerSlice.actions;
 
 export default schedulerSlice.reducer;

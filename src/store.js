@@ -5,6 +5,7 @@ import bookingFormReducer from './context/bookingSlice';
 import caller from './context/callerSlice';
 import snackbarReducer from './context/snackbarSlice';
 import schedulerReducer from './context/schedulerSlice';
+import bookingLogsReducer from './context/BookingLogSlice';
 
 const store = configureStore({
 	reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
 		caller,
 		snackbar: snackbarReducer,
 		scheduler: schedulerReducer,
+		logs: bookingLogsReducer,
 	},
 });
 

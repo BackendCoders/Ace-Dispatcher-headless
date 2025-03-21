@@ -24,12 +24,16 @@ function parseRecurrenceRule(rule) {
 	let interval = 1;
 	let repeatEnd = false;
 	let repeatEndValue = '';
+	let isFortnightly = false;
 
 	ruleParts.forEach((part) => {
 		if (part.startsWith('FREQ=')) {
 			frequency = part.replace('FREQ=', '').toLowerCase();
 		} else if (part.startsWith('INTERVAL=')) {
 			interval = parseInt(part.replace('INTERVAL=', ''), 10);
+			if (interval === 2) {
+				isFortnightly = true; // If interval is 2, mark as fortnightly
+			}
 		} else if (part.startsWith('UNTIL=')) {
 			repeatEnd = true;
 			repeatEndValue = part.replace('UNTIL=', '');
@@ -77,7 +81,7 @@ function parseRecurrenceRule(rule) {
 	}
 
 	return {
-		f: frequency,
+		f: isFortnightly ? 'fortnightly' : frequency,
 		i: interval,
 		re: repeatEnd,
 		rev: repeatEndDate,
@@ -157,13 +161,13 @@ function RepeatBooking({ onSet }) {
 			freq:
 				frequency === 'daily'
 					? RRule.DAILY
-					: frequency === 'weekly'
+					: frequency === 'weekly' || frequency === 'fortnightly'
 					? RRule.WEEKLY
 					: frequency === 'monthly'
 					? RRule.MONTHLY
 					: null,
 			byweekday: selectedWeekDays,
-			interval: interval,
+			interval: frequency === 'fortnightly' ? 2 : interval,
 		};
 
 		if (repeatEndValue) {
@@ -190,7 +194,11 @@ function RepeatBooking({ onSet }) {
 	// This useEffect will update the state depending on condition of the form
 	useEffect(() => {
 		if (repeatEnd === 'never') setRepeatEndValue('');
-		if (frequency !== 'daily' && frequency !== 'weekly') {
+		if (
+			frequency !== 'daily' &&
+			frequency !== 'weekly' &&
+			frequency !== 'fortnightly'
+		) {
 			setRepeatEnd('never');
 		}
 		if (frequency === 'daily') {
@@ -229,11 +237,12 @@ function RepeatBooking({ onSet }) {
 						<option value='none'>None</option>
 						<option value='daily'>Daily</option>
 						<option value='weekly'>Weekly</option>
+						<option value='fortnightly'>Fortnightly</option>
 					</select>
 				</div>
 				{frequency === 'daily' ? null : (
 					<>
-						{frequency === 'weekly' ? (
+						{frequency === 'weekly' || frequency === 'fortnightly' ? (
 							<div>
 								<label className='block text-sm font-medium text-foreground mb-1'>
 									Days
@@ -264,7 +273,11 @@ function RepeatBooking({ onSet }) {
 						Repeat End
 					</label>
 					<select
-						disabled={frequency !== 'daily' && frequency !== 'weekly'}
+						disabled={
+							frequency !== 'daily' &&
+							frequency !== 'weekly' &&
+							frequency !== 'fortnightly'
+						}
 						id='repeat-end'
 						className='border border-border rounded-md p-2 w-full bg-input text-foreground focus:ring-primary focus:border-primary'
 						value={repeatEnd}

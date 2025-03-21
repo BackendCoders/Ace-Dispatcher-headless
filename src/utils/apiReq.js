@@ -58,6 +58,7 @@ function filterData(data) {
 		updatedByName: data.updatedByName || '',
 		isASAP: data.isASAP || false,
 		manuallyPriced: data.manuallyPriced || false,
+		arriveBy: data.arriveBy || null,
 		// actionByUserId: data.actionByUserId || null,
 	});
 }
@@ -81,7 +82,7 @@ function setHeaders() {
 	const accessToken = localStorage.getItem('authToken');
 	if (!accessToken) return {};
 	return {
-		'accept': '*/*',
+		'Accept': '*/*',
 		'Authorization': `Bearer ${accessToken}`,
 		'Content-Type': 'application/json',
 		'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -646,6 +647,50 @@ async function sendMsgToAllDrivers(data) {
 	return await handlePostReq(URL, {});
 }
 
+async function sendQuotes(data) {
+	const URL = `${BASE}/api/bookings/SendQuote`;
+	return await handlePostReq(URL, data);
+}
+
+async function getDuration(data) {
+	const URL = `${BASE}/api/Bookings/GetDuration?pickupDate=${
+		data?.pickupDate
+	}&pickupPostcode=${encodeURIComponent(
+		data?.pickupPostcode
+	)}&destinationPostcode=${data?.destinationPostcode}`;
+	try {
+		const response = await axios.get(URL, { headers: setHeaders() });
+		console.log(response);
+		if (response.status !== 200) throw new Error('Could not fetch duration');
+		sendLogs(
+			{
+				url: URL,
+				requestBody: data,
+				headers: setHeaders(),
+				response: response.data,
+			},
+			'info'
+		);
+		return response;
+	} catch (error) {
+		console.log(error);
+		sendLogs({ url: URL, error: error }, 'error');
+		return error;
+	}
+}
+
+async function textMessageDirectly(data) {
+	const URL = `${BASE}/api/SmsQue/SendText?message=${encodeURIComponent(
+		data.message
+	)}&telephone=${data.telephone}`;
+	return await handlePostReq(URL, null);
+}
+
+async function getBookingsLog() {
+	const URL = `${BASE}/api/Bookings/GetActionLogs`;
+	return await handleGetReq(URL);
+}
+
 export {
 	getBookingData,
 	makeBooking,
@@ -678,4 +723,8 @@ export {
 	driverShift,
 	sendMsgToAllDrivers,
 	sendMsgToDriver,
+	sendQuotes,
+	textMessageDirectly,
+	getBookingsLog,
+	getDuration,
 };
