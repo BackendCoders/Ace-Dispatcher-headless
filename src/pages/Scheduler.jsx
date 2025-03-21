@@ -446,7 +446,7 @@ const AceScheduler = () => {
 				)}
 			</div>
 
-			<div className='flex justify-end w-[10%] fixed top-[60px] right-[235px] sm:top-[15px] sm:right-[425px] z-[40]'>
+			<div className='flex justify-end w-[10%] fixed top-[60px] right-[235px] sm:top-[15px] sm:right-[395px] z-[40]'>
 				{callerId.length > 0 && (
 					<Badge
 						badgeContent={callerId.length}
@@ -458,9 +458,9 @@ const AceScheduler = () => {
 				)}
 			</div>
 
-			<div className='flex justify-end fixed top-[45px] right-[110px] sm:top-[5px] sm:right-[265px] z-[40]'>
+			<div className='flex justify-end fixed top-[45px] right-[110px] sm:top-[5px] sm:right-[245px] z-[40]'>
 				{
-					<span className='flex flex-row gap-0 sm:gap-2 items-center align-middle'>
+					<span className='flex flex-row gap-0 sm:gap-0 items-center align-middle'>
 						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
 							Availability
 						</span>
@@ -475,9 +475,9 @@ const AceScheduler = () => {
 					</span>
 				}
 			</div>
-			<div className='flex justify-end fixed top-[65px] right-[110px] sm:top-[5px] sm:right-[160px] z-[40]'>
+			<div className='flex justify-end fixed top-[65px] right-[110px] sm:top-[5px] sm:right-[150px] z-[40]'>
 				{user?.currentUser?.roleId !== 3 && (
-					<span className='flex flex-row gap-0 sm:gap-1 items-center align-middle'>
+					<span className='flex flex-row gap-0 sm:gap-0 items-center align-middle'>
 						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
 							<GoogleIcon
 								fontSize='small'
@@ -496,7 +496,7 @@ const AceScheduler = () => {
 					</span>
 				)}
 			</div>
-			<div className='flex justify-end fixed top-[15px] right-[140px] sm:top-[10px] sm:right-[140px] z-[40]'>
+			<div className='flex justify-end fixed top-[15px] right-[160px] sm:top-[10px] sm:right-[130px] z-[40]'>
 				{user?.currentUser?.roleId !== 3 && (
 					<div className='flex justify-center items-center uppercase'>
 						{!activeSearch && (
@@ -504,7 +504,7 @@ const AceScheduler = () => {
 								onClick={() => setOpenSearch(true)}
 								// className='text-sm'
 							>
-								{isMobile ? <SearchIcon /> : <SearchIcon />}
+								{isMobile ? <SearchIcon fontSize='small' /> : <SearchIcon />}
 							</button>
 						)}
 						{activeSearch && (
@@ -519,14 +519,14 @@ const AceScheduler = () => {
 				)}
 			</div>
 
-			<div className='flex justify-end fixed top-[10px] right-[80px] sm:top-[5px] sm:right-[80px] z-[40]'>
+			<div className='flex justify-end fixed top-[10px] right-[120px] sm:top-[5px] sm:right-[70px] z-[40]'>
 				{user?.currentUser?.roleId !== 3 && (
 					<button
 						className={`${
 							BASE_URL.includes('api.acetaxisdorset')
 								? 'bg-[#424242] text-[#C74949] border border-[#C74949]'
 								: 'bg-[#C74949] text-white border border-white'
-						} px-4 py-2 rounded-lg uppercase text-xs sm:text-sm`}
+						} px-2 sm:px-4 py-2 rounded-lg uppercase text-xs sm:text-sm`}
 						onClick={handleRecordTurnDown}
 					>
 						No
@@ -534,14 +534,14 @@ const AceScheduler = () => {
 				)}
 			</div>
 
-			<div className='flex justify-end fixed top-[10px] right-[80px] sm:top-[5px] sm:right-[15px] z-[40]'>
+			<div className='flex justify-end fixed top-[10px] right-[80px] sm:top-[5px] sm:right-[10px] z-[40]'>
 				{user?.currentUser?.roleId !== 3 && (
 					<button
 						className={`${
 							BASE_URL.includes('api.acetaxisdorset')
 								? 'bg-[#424242] text-[#C74949] border border-[#C74949]'
 								: 'bg-[#C74949] text-white border border-white'
-						} px-4 py-2 rounded-lg uppercase text-xs sm:text-sm`}
+						} px-2 sm:px-4 py-2 rounded-lg text-xs sm:text-xs`}
 						onClick={handleTextMessage}
 					>
 						<EmailOutlinedIcon
