@@ -62,6 +62,7 @@ import {
 	// makeSearchInactive,
 } from '../context/schedulerSlice';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import GoogleIcon from '@mui/icons-material/Google';
 const AceScheduler = () => {
 	const BASE_URL = import.meta.env.VITE_BASE_URL;
 	const isMobile = useMediaQuery('(max-width: 640px)');
@@ -445,7 +446,7 @@ const AceScheduler = () => {
 				)}
 			</div>
 
-			<div className='flex justify-end w-[10%] fixed top-[60px] right-[235px] sm:top-[15px] sm:right-[465px] z-[40]'>
+			<div className='flex justify-end w-[10%] fixed top-[60px] right-[235px] sm:top-[15px] sm:right-[425px] z-[40]'>
 				{callerId.length > 0 && (
 					<Badge
 						badgeContent={callerId.length}
@@ -457,7 +458,7 @@ const AceScheduler = () => {
 				)}
 			</div>
 
-			<div className='flex justify-end fixed top-[45px] right-[110px] sm:top-[5px] sm:right-[305px] z-[40]'>
+			<div className='flex justify-end fixed top-[45px] right-[110px] sm:top-[5px] sm:right-[265px] z-[40]'>
 				{
 					<span className='flex flex-row gap-0 sm:gap-2 items-center align-middle'>
 						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
@@ -476,9 +477,13 @@ const AceScheduler = () => {
 			</div>
 			<div className='flex justify-end fixed top-[65px] right-[110px] sm:top-[5px] sm:right-[160px] z-[40]'>
 				{user?.currentUser?.roleId !== 3 && (
-					<span className='flex flex-row gap-0 sm:gap-2 items-center align-middle'>
+					<span className='flex flex-row gap-0 sm:gap-1 items-center align-middle'>
 						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
-							Google Api
+							<GoogleIcon
+								fontSize='small'
+								className='text-sm'
+							/>{' '}
+							Api
 						</span>
 						<Switch
 							checked={isGoogleApiOn}
