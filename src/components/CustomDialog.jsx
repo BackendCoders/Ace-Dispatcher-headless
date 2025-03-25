@@ -541,7 +541,7 @@ function CustomDialog({ closeDialog }) {
 											head='Allocated Driver'
 										/>
 										<BookingOption
-											text={data.price ? `£${data.price}` : 'NA'}
+											text={data.price ? `£${data.price?.toFixed(2, 0)}` : 'NA'}
 											head='Price'
 										/>
 										<BookingOption
