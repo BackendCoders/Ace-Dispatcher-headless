@@ -176,6 +176,11 @@ export function deleteSchedulerBooking(
 		const bookingId = activeSearch
 			? activeSearchResult.bookingId
 			: bookings[index].bookingId;
+
+		const email = activeSearch
+			? activeSearchResult.email
+			: bookings[index].email;
+		const sendEmail = email ? true : false;
 		console.log({ bookingId });
 
 		const reqData = {
@@ -184,6 +189,7 @@ export function deleteSchedulerBooking(
 			actionByUserId: id,
 			cancelBlock,
 			cancelledOnArrival: cancelledOnArrival,
+			sendEmail,
 		};
 
 		// const data = await deleteBooking(reqData, testMode);
