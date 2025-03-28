@@ -832,7 +832,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 											if (!newFlag) {
 												updateData('arriveBy', null); // Set arriveBy to null when switching off
 											} else {
-												updateData('arriveBy', formatDate(new Date()));
+												updateData('arriveBy', formatDate(new Date(bookingData?.pickupDateTime)));
 											}
 											return newFlag;
 										});
