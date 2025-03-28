@@ -579,6 +579,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 								onChange={(e) => {
 									if (!isValidDate(e.target.value)) return;
 									updateData('pickupDateTime', e.target.value);
+									updateData('arriveBy', e.target.value);
 									return e.target.value;
 								}}
 							/>
@@ -832,7 +833,10 @@ function Booking({ bookingData, id, onBookingUpload }) {
 											if (!newFlag) {
 												updateData('arriveBy', null); // Set arriveBy to null when switching off
 											} else {
-												updateData('arriveBy', formatDate(new Date(bookingData?.pickupDateTime)));
+												updateData(
+													'arriveBy',
+													formatDate(new Date(bookingData?.pickupDateTime))
+												);
 											}
 											return newFlag;
 										});
