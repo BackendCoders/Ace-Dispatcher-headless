@@ -29,7 +29,7 @@ import Pusher from 'pusher-js';
 import JourneyQuote from '../components/JourneyQuote';
 
 import { openSnackbar } from '../context/snackbarSlice';
-import DriverSection from '../components/DriverSection';
+// import DriverSection from '../components/DriverSection';
 import { getRefreshedBookings } from '../context/schedulerSlice';
 import CustomDriverAvailabilityChart from '../components/CustomDriverAvailabilityChart';
 import { loadGoogleMapsScript } from '../utils/googleMap';
@@ -513,7 +513,7 @@ export default function Push() {
 							<Tab label='Map' />
 							<Tab label='Scheduler' />
 							<Tab label='Logs' />
-							<Tab label='Msg' />
+							{/* <Tab label='Msg' /> */}
 						</Tabs>
 						{/*secondaryTab === 0 && (
 					<CustomDriverAvailibilityChart />
@@ -529,7 +529,7 @@ export default function Push() {
 						)}
 						{secondaryTab === 1 ? <Scheduler /> : null}
 						{secondaryTab === 2 && <Logs />}
-						{secondaryTab === 3 && <DriverSection />}
+						{/* {secondaryTab === 3 && <DriverSection />} */}
 					</Box>
 				</>
 			)}
