@@ -579,7 +579,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 								onChange={(e) => {
 									if (!isValidDate(e.target.value)) return;
 									updateData('pickupDateTime', e.target.value);
-									updateData('arriveBy', e.target.value);
+									if (arriveByFlag) updateData('arriveBy', e.target.value);
 									return e.target.value;
 								}}
 							/>
