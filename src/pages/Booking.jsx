@@ -11,6 +11,7 @@ import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import {
 	onSendQuoteBooking,
 	removeBooking,
+	setBookingQuote,
 	updateValue,
 	updateValueSilentMode,
 } from '../context/bookingSlice';
@@ -173,6 +174,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 	// This Function cancels the booking form
 	function deleteForm() {
 		dispatch(removeBooking(id));
+		dispatch(setBookingQuote(null));
 	}
 
 	async function handleFireCallerEvent() {

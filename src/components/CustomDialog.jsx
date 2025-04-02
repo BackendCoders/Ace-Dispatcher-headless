@@ -10,6 +10,7 @@ import DuplicateBookingModal from './CustomDialogButtons/DuplicateBookingModal';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	addDataFromSchedulerInEditMode,
+	findQuote,
 	setActiveSectionMobileView,
 } from '../context/bookingSlice';
 import HomeIcon from '@mui/icons-material/Home';
@@ -731,6 +732,16 @@ function CustomDialog({ closeDialog }) {
 									};
 									dispatch(addDataFromSchedulerInEditMode(filterData));
 									dispatch(setActiveSectionMobileView('Booking'));
+									dispatch(
+										findQuote({
+											pickupPostcode: data?.pickupPostCode,
+											viaPostcodes: data?.vias.map((via) => via.postCode),
+											destinationPostcode: data?.destinationPostCode,
+											pickupDateTime: data?.pickupDateTime,
+											passengers: data?.passengers,
+											priceFromBase: data?.chargeFromBase,
+										})
+									);
 									closeDialog(false);
 								}
 							}}

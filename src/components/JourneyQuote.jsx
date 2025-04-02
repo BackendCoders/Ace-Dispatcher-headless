@@ -1,13 +1,22 @@
 /** @format */
 
+import { useSelector } from 'react-redux';
+
 function JourneyQuote({ quoteOptions }) {
-	if (!quoteOptions) return null;
+	const { bookingQuote } = useSelector((state) => state.bookingForm);
+	let data;
+	if (bookingQuote) {
+		data = bookingQuote;
+	} else {
+		data = quoteOptions;
+	}
+	if (!data) return null;
 
 	return (
 		<div className='w-full mx-auto p-1 bg-white shadow-lg rounded-lg'>
 			<div className='bg-green-600 p-4 rounded-t-lg text-white flex gap-5'>
 				<h1 className='text-2xl font-bold'>JOURNEY COST:</h1>
-				<p className='text-2xl font-bold'>£{quoteOptions.totalPrice}</p>
+				<p className='text-2xl font-bold'>£{data?.totalPrice}</p>
 			</div>
 
 			<div className='p-4'>
@@ -16,7 +25,7 @@ function JourneyQuote({ quoteOptions }) {
 						CHARGE FROM BASE:
 					</h2>
 					<p className='text-md font-medium text-gray-700 flex-grow'>
-						{quoteOptions.fromBase ? 'Yes' : 'No'}
+						{data?.fromBase ? 'Yes' : 'No'}
 					</p>
 				</div>
 
@@ -25,7 +34,7 @@ function JourneyQuote({ quoteOptions }) {
 						JOURNEY TIME:
 					</h2>
 					<p className='text-md font-semibold text-gray-700 flex-grow'>
-						{quoteOptions.durationText}
+						{data?.durationText}
 					</p>
 				</div>
 
@@ -34,7 +43,7 @@ function JourneyQuote({ quoteOptions }) {
 						JOURNEY MILEAGE:
 					</h2>
 					<p className='text-md font-semibold text-gray-700 flex-grow'>
-						{quoteOptions.mileageText}
+						{data?.mileageText}
 					</p>
 				</div>
 
@@ -43,7 +52,7 @@ function JourneyQuote({ quoteOptions }) {
 						TARIFF:
 					</h2>
 					<p className='text-md font-semibold text-gray-700 flex-grow'>
-						{quoteOptions.tariff}
+						{data?.tariff}
 					</p>
 				</div>
 			</div>

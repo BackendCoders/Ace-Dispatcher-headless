@@ -4,6 +4,7 @@ import { Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	addDataFromSchedulerInEditMode,
+	findQuote,
 	setActiveSectionMobileView,
 	setIsBookingOpenInEditMode,
 } from '../../context/bookingSlice';
@@ -29,6 +30,16 @@ function EditBookingModal({ setEditBookingModal, closeDialog }) {
 		dispatch(addDataFromSchedulerInEditMode(filterData));
 		dispatch(setActiveSectionMobileView('Booking'));
 		dispatch(setIsBookingOpenInEditMode((prev) => !prev));
+		dispatch(
+			findQuote({
+				pickupPostcode: data?.pickupPostCode,
+				viaPostcodes: data?.vias.map((via) => via.postCode),
+				destinationPostcode: data?.destinationPostCode,
+				pickupDateTime: data?.pickupDateTime,
+				passengers: data?.passengers,
+				priceFromBase: data?.chargeFromBase,
+			})
+		);
 		closeDialog(false);
 		setEditBookingModal(false);
 	}
@@ -37,6 +48,16 @@ function EditBookingModal({ setEditBookingModal, closeDialog }) {
 		dispatch(addDataFromSchedulerInEditMode({ editBlock: true, ...data }));
 		dispatch(setActiveSectionMobileView('Booking'));
 		dispatch(setIsBookingOpenInEditMode((prev) => !prev));
+		dispatch(
+			findQuote({
+				pickupPostcode: data?.pickupPostCode,
+				viaPostcodes: data?.vias.map((via) => via.postCode),
+				destinationPostcode: data?.destinationPostCode,
+				pickupDateTime: data?.pickupDateTime,
+				passengers: data?.passengers,
+				priceFromBase: data?.chargeFromBase,
+			})
+		);
 		closeDialog(false);
 		setEditBookingModal(false);
 	}
