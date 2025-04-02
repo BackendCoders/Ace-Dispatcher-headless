@@ -216,7 +216,7 @@ function CustomDialog({ closeDialog }) {
 	};
 
 	return (
-		<div className='fixed sm:top-[-20px] sm:left-[-35vw] left-[-45vw] inset-0 w-[90vw] sm:w-[70vw] mx-auto z-50 flex items-center justify-center p-1 sm:p-4 bg-background bg-opacity-50'>
+		<div className='fixed sm:top-[-50px] sm:left-[-35vw] left-[-45vw] inset-0 w-[90vw] sm:w-[70vw] mx-auto z-50 flex items-center justify-center p-1 sm:p-4 bg-background bg-opacity-50'>
 			<div className='relative w-full max-w-7xl p-3 sm:p-6 bg-card rounded-lg shadow-lg dark:bg-popover bg-white max-h-[90vh] overflow-y-auto sm:overflow-hidden'>
 				<div className='flex items-center justify-between mb-6'>
 					<div className='flex flex-wrap items-center justify-start gap-4'>
