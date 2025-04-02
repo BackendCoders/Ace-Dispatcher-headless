@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 import { formatDate } from './formatDate';
-import { sendLogs } from './getLogs';
+// import { sendLogs } from './getLogs';
 import { filterVias } from './filterVias';
 const BASE = import.meta.env.VITE_BASE_URL;
 
@@ -104,7 +104,7 @@ async function handleGetReq(URL) {
 			return null;
 		}
 	} catch (err) {
-		sendLogs({ url: URL, error: err.response }, 'error');
+		// sendLogs({ url: URL, error: err.response }, 'error');
 		console.error('Error in GET request:', err);
 		return {
 			...err.response,
@@ -129,7 +129,7 @@ async function handlePostReq(URL, data) {
 			return null;
 		}
 	} catch (err) {
-		sendLogs({ url: URL, error: err.response }, 'error');
+		// sendLogs({ url: URL, error: err.response }, 'error');
 		return {
 			...err.response,
 			status: err.response.status > 499 ? 'error' : 'fail',
@@ -147,16 +147,16 @@ async function makeBooking(data) {
 	// const filteredData = data;
 	const res = await handlePostReq(URL, filteredData);
 	if (res.status === 'success')
-		sendLogs(
-			{
-				url: URL,
-				requestBody: data,
-				headers: setHeaders(),
-				response: res,
-			},
-			'info'
-		);
-	return res;
+		// sendLogs(
+		// 	{
+		// 		url: URL,
+		// 		requestBody: data,
+		// 		headers: setHeaders(),
+		// 		response: res,
+		// 	},
+		// 	'info'
+		// );
+		return res;
 }
 
 const getBookingData = async function (date) {
@@ -189,17 +189,17 @@ async function makeBookingQuoteRequest(data) {
 
 	const res = await handlePostReq(URL, requestData);
 	if (res.status === 'success')
-		sendLogs(
-			{
-				url: URL,
-				requestBody: data,
-				headers: setHeaders(),
-				response: res,
-			},
-			'info'
-		);
+		// sendLogs(
+		// 	{
+		// 		url: URL,
+		// 		requestBody: data,
+		// 		headers: setHeaders(),
+		// 		response: res,
+		// 	},
+		// 	'info'
+		// );
 
-	return res;
+		return res;
 }
 // Local Api for address Suggestions
 async function getPoi(code) {
@@ -318,17 +318,17 @@ async function updateBooking(data) {
 	// console.log(filteredData);
 	const res = await handlePostReq(URL, filteredData);
 	if (res.status === 'success')
-		sendLogs(
-			{
-				url: URL,
-				requestBody: data,
-				headers: setHeaders(),
-				response: res,
-			},
-			'info'
-		);
+		// sendLogs(
+		// 	{
+		// 		url: URL,
+		// 		requestBody: data,
+		// 		headers: setHeaders(),
+		// 		response: res,
+		// 	},
+		// 	'info'
+		// );
 
-	return res;
+		return res;
 }
 
 async function deleteSchedulerBooking(data) {
@@ -342,17 +342,17 @@ async function deleteSchedulerBooking(data) {
 		sendEmail: data.sendEmail,
 	});
 	if (res.status === 'success')
-		sendLogs(
-			{
-				url: URL,
-				requestBody: data,
-				headers: setHeaders(),
-				response: res,
-			},
-			'info'
-		);
+		// sendLogs(
+		// 	{
+		// 		url: URL,
+		// 		requestBody: data,
+		// 		headers: setHeaders(),
+		// 		response: res,
+		// 	},
+		// 	'info'
+		// );
 
-	return res;
+		return res;
 }
 
 async function getAvailabilityDriverOld(date) {
@@ -439,68 +439,68 @@ async function allocateDriver(allocateReqData) {
 	const URL = `${BASE}/api/Bookings/Allocate`;
 	const res = await handlePostReq(URL, allocateReqData);
 	if (res.status === 'success')
-		sendLogs(
-			{
-				url: URL,
-				requestBody: allocateReqData,
-				headers: setHeaders(),
-				response: res,
-			},
-			'info'
-		);
+		// sendLogs(
+		// 	{
+		// 		url: URL,
+		// 		requestBody: allocateReqData,
+		// 		headers: setHeaders(),
+		// 		response: res,
+		// 	},
+		// 	'info'
+		// );
 
-	return res;
+		return res;
 }
 
 async function softAllocateDriver(allocateReqData) {
 	const URL = `${BASE}/api/Bookings/SoftAllocate`;
 	const res = await handlePostReq(URL, allocateReqData);
 	if (res.status === 'success')
-		sendLogs(
-			{
-				url: URL,
-				requestBody: allocateReqData,
-				headers: setHeaders(),
-				response: res,
-			},
-			'info'
-		);
+		// sendLogs(
+		// 	{
+		// 		url: URL,
+		// 		requestBody: allocateReqData,
+		// 		headers: setHeaders(),
+		// 		response: res,
+		// 	},
+		// 	'info'
+		// );
 
-	return res;
+		return res;
 }
 
 async function completeBookings(completeBookingData) {
 	const URL = `${BASE}/api/Bookings/Complete`;
 	const res = await handlePostReq(URL, completeBookingData);
 	if (res.status === 'success')
-		sendLogs(
-			{
-				url: URL,
-				requestBody: completeBookingData,
-				headers: setHeaders(),
-				response: res,
-			},
-			'info'
-		);
+		// sendLogs(
+		// 	{
+		// 		url: URL,
+		// 		requestBody: completeBookingData,
+		// 		headers: setHeaders(),
+		// 		response: res,
+		// 	},
+		// 	'info'
+		// );
 
-	return res;
+		return res;
 }
 
 async function bookingFindByTerm(queryField) {
 	const URL = `${BASE}/api/Bookings/FindByTerm?term=${queryField}`;
 	const res = await handleGetReq(URL);
 	if (res.status === 'success')
-		sendLogs(
-			{
-				url: URL,
-				requestBody: queryField,
-				headers: setHeaders(),
-				// response: res,
-			},
-			'info'
-		);
+		// sendLogs(
+		// 	{
+		// 		url: URL,
+		// 		requestBody: queryField,
+		// 		headers: setHeaders(),
+		// 		// response: res,
+		// 	},
+		// 	'info'
+		// );
 
-	return res;
+		return res;
 }
 
 async function bookingFindByBookings(data) {
@@ -516,17 +516,17 @@ async function bookingFindByBookings(data) {
 	};
 	const res = await handlePostReq(URL, reqData);
 	if (res.status === 'success')
-		sendLogs(
-			{
-				url: URL,
-				requestBody: reqData,
-				headers: setHeaders(),
-				response: res,
-			},
-			'info'
-		);
+		// sendLogs(
+		// 	{
+		// 		url: URL,
+		// 		requestBody: reqData,
+		// 		headers: setHeaders(),
+		// 		response: res,
+		// 	},
+		// 	'info'
+		// );
 
-	return res;
+		return res;
 }
 
 async function findBookingById(bookingId) {
@@ -551,17 +551,17 @@ async function bookingPayment(data) {
 	);
 
 	if (response.status === 'success')
-		sendLogs(
-			{
-				url: URL,
-				requestBody: data,
-				headers: setHeaders(),
-				response: response,
-			},
-			'info'
-		);
+		// sendLogs(
+		// 	{
+		// 		url: URL,
+		// 		requestBody: data,
+		// 		headers: setHeaders(),
+		// 		response: response,
+		// 	},
+		// 	'info'
+		// );
 
-	return response;
+		return response;
 }
 
 async function sendPaymentLink(paymentDetail) {
@@ -605,21 +605,21 @@ async function sendReminderForPayment(data) {
 }
 
 async function recordTurnDown(data) {
-	const reqData = {
-		amount: data.amount || 0,
-	};
+	// const reqData = {
+	// 	amount: data.amount || 0,
+	// };
 	const URL = `${BASE}/api/bookings/recordTurndown?amount=${data?.amount}`;
 	const res = await handleGetReq(URL);
 	if (res.status === 'success') {
-		sendLogs(
-			{
-				url: URL,
-				requestBody: reqData,
-				headers: setHeaders(),
-				response: res,
-			},
-			'info'
-		);
+		// sendLogs(
+		// 	{
+		// 		url: URL,
+		// 		requestBody: reqData,
+		// 		headers: setHeaders(),
+		// 		response: res,
+		// 	},
+		// 	'info'
+		// );
 		return res;
 	}
 }
@@ -663,19 +663,19 @@ async function getDuration(data) {
 		const response = await axios.get(URL, { headers: setHeaders() });
 		console.log(response);
 		if (response.status !== 200) throw new Error('Could not fetch duration');
-		sendLogs(
-			{
-				url: URL,
-				requestBody: data,
-				headers: setHeaders(),
-				response: response.data,
-			},
-			'info'
-		);
+		// sendLogs(
+		// 	{
+		// 		url: URL,
+		// 		requestBody: data,
+		// 		headers: setHeaders(),
+		// 		response: response.data,
+		// 	},
+		// 	'info'
+		// );
 		return response;
 	} catch (error) {
 		console.log(error);
-		sendLogs({ url: URL, error: error }, 'error');
+		// sendLogs({ url: URL, error: error }, 'error');
 		return error;
 	}
 }

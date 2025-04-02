@@ -8,12 +8,12 @@ import CallerIdPopUp from './components/CallerIdPopUp';
 import { Provider } from 'react-redux';
 import store from './store';
 import Footer from './ui/Footer';
-import { checkPreviousLogs } from './utils/getLogs';
+// import { checkPreviousLogs } from './utils/getLogs';
 import { useMediaQuery } from '@mui/material';
 
 function AppLayout() {
 	const isMobile = useMediaQuery('(max-width:640px)');
-	checkPreviousLogs();
+	// checkPreviousLogs();
 	return (
 		<AuthProvider>
 			<BookingProvider>

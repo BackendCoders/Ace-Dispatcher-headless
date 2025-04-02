@@ -3,7 +3,7 @@
 import { createContext, useState, useEffect } from 'react';
 import { getAccountList } from '../utils/apiReq';
 import { getAllDrivers } from '../utils/apiReq';
-import { sendLogs } from '../utils/getLogs';
+// import { sendLogs } from '../utils/getLogs';
 const BASEURL = import.meta.env.VITE_BASE_URL;
 
 const AuthContext = createContext({
@@ -32,14 +32,14 @@ const AuthProvider = ({ children }) => {
 			};
 			const response = await fetch(BASEURL + '/api/UserProfile/Login', request);
 
-			sendLogs(
-				{
-					url: `${BASEURL}/api/UserProfile/Login`,
-					requestBody: request,
-					response: response,
-				},
-				'info'
-			);
+			// sendLogs(
+			// 	{
+			// 		url: `${BASEURL}/api/UserProfile/Login`,
+			// 		requestBody: request,
+			// 		response: response,
+			// 	},
+			// 	'info'
+			// );
 
 			if (response.ok) {
 				const data = await response.json();
@@ -80,14 +80,14 @@ const AuthProvider = ({ children }) => {
 				BASEURL + `/api/UserProfile/GetUser?username=${username}`,
 				request
 			);
-			sendLogs(
-				{
-					url: `${BASEURL}/api/UserProfile/GetUser?username=${username}`,
-					requestBody: request,
-					response,
-				},
-				'info'
-			);
+			// sendLogs(
+			// 	{
+			// 		url: `${BASEURL}/api/UserProfile/GetUser?username=${username}`,
+			// 		requestBody: request,
+			// 		response,
+			// 	},
+			// 	'info'
+			// );
 
 			if (response.ok) {
 				const data = await response.json();
