@@ -181,7 +181,7 @@ export default function Push() {
 	}, []);
 
 	// all for the slider between componenet
-	const [leftWidth, setLeftWidth] = useState(45);
+	const [leftWidth, setLeftWidth] = useState(40);
 
 	const handleResize = (event, { size }) => {
 		const newWidth = (size.width / window.innerWidth) * 100;
