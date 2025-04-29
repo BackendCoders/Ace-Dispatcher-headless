@@ -692,6 +692,11 @@ async function getBookingsLog() {
 	return await handleGetReq(URL);
 }
 
+async function confirmAllSoftAllocate(date) {
+	const URL = `${BASE}/api/Bookings/ConfirmAllSoftAllocates?forDate=${date}`;
+	return await handlePostReq(URL, null);
+}
+
 export {
 	getBookingData,
 	makeBooking,
@@ -728,4 +733,5 @@ export {
 	textMessageDirectly,
 	getBookingsLog,
 	getDuration,
+	confirmAllSoftAllocate,
 };

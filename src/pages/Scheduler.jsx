@@ -12,6 +12,8 @@ import CustomDialog from '../components/CustomDialog';
 import { recordTurnDown, textMessageDirectly } from '../utils/apiReq';
 import LongButton from '../components/BookingForm/LongButton';
 import SearchIcon from '@mui/icons-material/Search';
+import NoCrashOutlinedIcon from '@mui/icons-material/NoCrashOutlined';
+
 registerLicense(import.meta.env.VITE_SYNCFUSION_KEY);
 import PermPhoneMsgIcon from '@mui/icons-material/PermPhoneMsg';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
@@ -63,6 +65,7 @@ import {
 } from '../context/schedulerSlice';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import GoogleIcon from '@mui/icons-material/Google';
+import ConfirmSoftAllocateModal from '../components/CustomDialogButtons/ConfimSoftAllocateModal';
 const AceScheduler = () => {
 	const BASE_URL = import.meta.env.VITE_BASE_URL;
 	const isMobile = useMediaQuery('(max-width: 640px)');
@@ -93,6 +96,7 @@ const AceScheduler = () => {
 	const [selectedBookingData, setSelectedBookingData] = useState();
 	const [viewBookingModal, setViewBookingModal] = useState(false);
 	const [textMessageModal, setTextMessageModal] = useState(false);
+	const [confirmSoftModal, setConfirmSoftModal] = useState(false);
 	const [driverData, setDriverData] = useState([]);
 	const dispatch = useDispatch();
 	const user = useAuth();
@@ -419,6 +423,21 @@ const AceScheduler = () => {
 				<Inject services={[Day, Agenda]} />
 			</ScheduleComponent>
 
+			<div className='flex justify-end w-[10%] fixed top-[65px] right-[200px] sm:top-[55px] sm:right-[550px] z-[40]'>
+				{(!isMobile || user?.currentUser?.roleId !== 3) && !activeSearch && (
+					<button
+						className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal rounded-lg bg-blue-700 text-white hover:bg-opacity-80 px-2 py-1 sm:px-3 sm:py-2'
+						onClick={() => setConfirmSoftModal(true)}
+					>
+						{isMobile ? (
+							<NoCrashOutlinedIcon fontSize='small' />
+						) : (
+							'Confirm Soft Allocate'
+						)}
+					</button>
+				)}
+			</div>
+
 			<div className='flex justify-end w-[10%] fixed top-[45px] right-[0px] sm:top-[55px] sm:right-[350px] z-[40]'>
 				{(!isMobile || user?.currentUser?.roleId !== 3) && !activeSearch && (
 					<span className='flex flex-row gap-0 sm:gap-2 items-center align-middle'>
@@ -590,6 +609,14 @@ const AceScheduler = () => {
 					open={textMessageModal}
 				>
 					<TextMessage setTextMessageModal={setTextMessageModal} />
+				</Modal>
+			)}
+			{confirmSoftModal && (
+				<Modal
+					open={confirmSoftModal}
+					setOpen={setConfirmSoftModal}
+				>
+					<ConfirmSoftAllocateModal setConfirmSoftModal={setConfirmSoftModal} />
 				</Modal>
 			)}
 		</ProtectedRoute>
