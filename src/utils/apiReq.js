@@ -697,6 +697,11 @@ async function confirmAllSoftAllocate(date) {
 	return await handlePostReq(URL, null);
 }
 
+async function getAllGPS() {
+	const URL = `${BASE}/api/UserProfile/GetAllGPS`;
+	return await handleGetReq(URL);
+}
+
 export {
 	getBookingData,
 	makeBooking,
@@ -734,4 +739,5 @@ export {
 	getBookingsLog,
 	getDuration,
 	confirmAllSoftAllocate,
+	getAllGPS,
 };
