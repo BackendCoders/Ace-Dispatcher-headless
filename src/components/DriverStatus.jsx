@@ -134,22 +134,27 @@ function DriverStatus({ availabilityDate }) {
 									</p>
 									<div className='flex flex-col w-[60%] justify-center items-start text-center'>
 										<p>{el?.fullname}</p>
-										<button
-											onClick={() => {
-												setMsgModalOpen(true);
-												setSelectedDriver(el);
-											}}
-											className={`px-2 rounded-md flex justify-center group items-center border ${
-												isLightColor(el?.colourCode)
-													? 'border-black'
-													: 'border-white'
-											}`}
-										>
-											<PanToolAltOutlinedIcon
-												fontSize='16'
-												className=''
-											/>
-										</button>
+										<div className='flex gap-1 items-center'>
+											<p>
+												Started @ {el?.startAt?.split('T')[1]?.slice(0, 5)}
+											</p>
+											<button
+												onClick={() => {
+													setMsgModalOpen(true);
+													setSelectedDriver(el);
+												}}
+												className={`px-2 rounded-md flex justify-center group items-center border ${
+													isLightColor(el?.colourCode)
+														? 'border-black'
+														: 'border-white'
+												}`}
+											>
+												<PanToolAltOutlinedIcon
+													fontSize='16'
+													className=''
+												/>
+											</button>
+										</div>
 									</div>
 									<div
 										className={`text-sm text-white px-3 py-1 rounded ${
