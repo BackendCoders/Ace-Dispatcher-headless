@@ -12,7 +12,7 @@ import CustomDialog from '../components/CustomDialog';
 import { recordTurnDown, textMessageDirectly } from '../utils/apiReq';
 import LongButton from '../components/BookingForm/LongButton';
 import SearchIcon from '@mui/icons-material/Search';
-import NoCrashOutlinedIcon from '@mui/icons-material/NoCrashOutlined';
+// import NoCrashOutlinedIcon from '@mui/icons-material/NoCrashOutlined';
 
 registerLicense(import.meta.env.VITE_SYNCFUSION_KEY);
 import PermPhoneMsgIcon from '@mui/icons-material/PermPhoneMsg';
@@ -423,14 +423,14 @@ const AceScheduler = () => {
 				<Inject services={[Day, Agenda]} />
 			</ScheduleComponent>
 
-			<div className='flex justify-end w-[10%] fixed top-[65px] right-[200px] sm:top-[55px] sm:right-[550px] z-[40]'>
+			<div className='flex justify-end w-[10%] fixed top-[65px] right-[118px] sm:top-[55px] sm:right-[550px] z-[40]'>
 				{(!isMobile || user?.currentUser?.roleId !== 3) && !activeSearch && (
 					<button
 						className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal rounded-lg bg-blue-700 text-white hover:bg-opacity-80 px-2 py-1 sm:px-3 sm:py-2'
 						onClick={() => setConfirmSoftModal(true)}
 					>
 						{isMobile ? (
-							<NoCrashOutlinedIcon fontSize='small' />
+							'Confirm SA'
 						) : (
 							'Confirm SA'
 						)}
@@ -486,7 +486,7 @@ const AceScheduler = () => {
 				)}
 			</div>
 
-			<div className='flex justify-end fixed top-[45px] right-[110px] sm:top-[5px] sm:right-[245px] z-[40]'>
+			<div className='flex justify-end fixed top-[45px] right-[110px] sm:top-[5px] sm:right-[150px] z-[40]'>
 				{
 					<span className='flex flex-row gap-0 sm:gap-0 items-center align-middle'>
 						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
