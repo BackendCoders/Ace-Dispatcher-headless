@@ -2,7 +2,7 @@
 
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { Box, Switch, TextField, useMediaQuery } from '@mui/material';
+import { Box, TextField, useMediaQuery } from '@mui/material';
 import { useEffect, useState } from 'react';
 import Modal from '../components/Modal';
 import CallIcon from '@mui/icons-material/Call';
@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 // import { setActiveTestMode, setIsGoogleApiOn } from '../context/bookingSlice';
 import {
 	setActiveSectionMobileView,
-	setIsGoogleApiOn,
+	// setIsGoogleApiOn,
 } from '../context/bookingSlice';
 
 import {
@@ -42,7 +42,7 @@ const Navbar = () => {
 	// const activeTestMode = useSelector(
 	// 	(state) => state.bookingForm.isActiveTestMode
 	// );
-	const isGoogleApiOn = useSelector((state) => state.bookingForm.isGoogleApiOn);
+	// const isGoogleApiOn = useSelector((state) => state.bookingForm.isGoogleApiOn);
 	const callerId = useSelector((state) => state.caller);
 	const { activeSearch } = useSelector((state) => state.scheduler);
 	const [openSearch, setOpenSearch] = useState(false);
@@ -198,7 +198,7 @@ const Navbar = () => {
 								</div>
 							)}
 
-							{currentUser?.roleId !== 3 && (
+							{/* {currentUser?.roleId !== 3 && (
 								<span className='flex gap-2 items-center'>
 									<span className='text-xs sm:text-sm'>Use Google Api</span>
 									<Switch
@@ -209,7 +209,7 @@ const Navbar = () => {
 										size='small'
 									/>
 								</span>
-							)}
+							)} */}
 
 							{/* Test Mode Toogle Button */}
 							{/* <span className='flex flex-row gap-2 items-center align-middle'>
@@ -325,7 +325,7 @@ const Navbar = () => {
 					)}
 
 					{/* Google API Toggle */}
-					{currentUser?.roleId !== 3 && (
+					{/* {currentUser?.roleId !== 3 && (
 						<div className='flex justify-start items-center gap-2 mb-4'>
 							<span>Use Google Api</span>
 							<Switch
@@ -336,7 +336,7 @@ const Navbar = () => {
 								}}
 							/>
 						</div>
-					)}
+					)} */}
 
 					{/* Logout Button */}
 					{isAuth && (

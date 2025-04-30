@@ -49,7 +49,7 @@ import {
 import {
 	createBookingFromScheduler,
 	setActiveSectionMobileView,
-	setIsGoogleApiOn,
+	// setIsGoogleApiOn,
 } from '../context/bookingSlice';
 import Loader from '../components/Loader';
 import { getAllDrivers } from '../utils/apiReq';
@@ -64,7 +64,7 @@ import {
 	// makeSearchInactive,
 } from '../context/schedulerSlice';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
-import GoogleIcon from '@mui/icons-material/Google';
+// import GoogleIcon from '@mui/icons-material/Google';
 import ConfirmSoftAllocateModal from '../components/CustomDialogButtons/ConfimSoftAllocateModal';
 const AceScheduler = () => {
 	const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -73,7 +73,7 @@ const AceScheduler = () => {
 	const [recordTurnModal, setRecordTurnModal] = useState(false);
 	const [openSearch, setOpenSearch] = useState(false);
 	const callerId = useSelector((state) => state.caller);
-	const isGoogleApiOn = useSelector((state) => state.bookingForm.isGoogleApiOn);
+	// const isGoogleApiOn = useSelector((state) => state.bookingForm.isGoogleApiOn);
 
 	// taking our global states from the redux
 	const {
@@ -432,7 +432,7 @@ const AceScheduler = () => {
 						{isMobile ? (
 							<NoCrashOutlinedIcon fontSize='small' />
 						) : (
-							'Confirm Soft Allocate'
+							'Confirm SA'
 						)}
 					</button>
 				)}
@@ -503,7 +503,7 @@ const AceScheduler = () => {
 					</span>
 				}
 			</div>
-			<div className='flex justify-end fixed top-[65px] right-[110px] sm:top-[5px] sm:right-[150px] z-[40]'>
+			{/* <div className='flex justify-end fixed top-[65px] right-[110px] sm:top-[5px] sm:right-[150px] z-[40]'>
 				{user?.currentUser?.roleId !== 3 && (
 					<span className='flex flex-row gap-0 sm:gap-0 items-center align-middle'>
 						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
@@ -523,7 +523,7 @@ const AceScheduler = () => {
 						/>
 					</span>
 				)}
-			</div>
+			</div> */}
 			<div className='flex justify-end fixed top-[15px] right-[160px] sm:top-[10px] sm:right-[130px] z-[40]'>
 				{user?.currentUser?.roleId !== 3 && (
 					<div className='flex justify-center items-center uppercase'>
