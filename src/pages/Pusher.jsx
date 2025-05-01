@@ -424,6 +424,9 @@ export default function Push() {
 										onBookingUpload={handleBookingUpload}
 									/>
 									<SimpleSnackbar />
+									{import.meta.env.VITE_BASE_URL.includes(
+										'https://dev.ace-api.1soft.co.uk'
+									) && <DriverStatus />}
 								</Box>
 							</Box>
 							{showDriverAvailability && (
@@ -455,7 +458,7 @@ export default function Push() {
 										aria-label='scrollable force tabs example'
 									>
 										<Tab label='Availability' />
-										<Tab label='Status' />
+										{/* <Tab label='Status' /> */}
 									</Tabs>
 									{thirdTab === 0 ? (
 										<Box
@@ -469,7 +472,7 @@ export default function Push() {
 											<CustomDriverAvailabilityChart />
 										</Box>
 									) : (
-										<Box
+										{/* <Box
 											sx={{
 												display: 'flex',
 												justifyContent: 'space-evenly',
@@ -478,7 +481,7 @@ export default function Push() {
 											}}
 										>
 											<DriverStatus />
-										</Box>
+										</Box> */}
 									)}
 								</Box>
 							)}

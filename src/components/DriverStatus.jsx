@@ -74,28 +74,31 @@ function DriverStatus({ availabilityDate }) {
 	};
 
 	const statusColors = {
-		1000: 'bg-blue-500', // Start
-		1001: 'bg-gray-500', // Finish
-		1002: 'bg-cyan-950', // OnBreak
-		1003: 'bg-green-500', // FinishBreak
-		3003: 'bg-orange-500', // OnRoute
-		3004: 'bg-indigo-500', // AtPickup
-		3005: 'bg-green-900', // PassengerOnBoard
-		3006: 'bg-yellow-500', // SoonToClear
-		3007: 'bg-green-500', // Clear
-		3008: 'bg-red-500', // NoJob
-		2000: 'bg-green-600', // Accept
-		2001: 'bg-red-600', // Reject
-		2002: 'bg-yellow-600', // TimedOut
+		1000: 'blue', // Start
+		1001: 'gray', // Finish
+		1002: 'cyan', // OnBreak
+		1003: 'green', // FinishBreak
+		3003: 'orange', // OnRoute
+		3004: 'indigo', // AtPickup
+		3005: 'pink', // PassengerOnBoard
+		3006: 'yellow', // SoonToClear
+		3007: 'skyblue', // Clear
+		3008: 'red', // NoJob
+		2000: 'green', // Accept
+		2001: 'red', // Reject
+		2002: 'yellow', // TimedOut
 	};
 
 	return (
-		<div className='flex flex-col items-center justify-center w-full h-full bg-white rounded-lg px-4 pb-4 sm:p-6 sm:pb-4'>
+		<div className='flex flex-col items-center justify-center w-full sm:w-[10%] h-full bg-white rounded-lg px-4 pb-4 sm:p-0 sm:pb-0'>
 			<div className='flex w-full flex-col justify-center items-center pb-2'>
-				<p className='font-medium'>
-					{date?.split('T')[0].split('-').reverse().join('/')}{' '}
-					{date?.split('T')[1]}
-				</p>
+				{!isMobile && <h1 className='font-semibold'>Status</h1>}
+				{isMobile && (
+					<p className={`font-medium ${!isMobile ? 'text-sm mt-2' : ''}`}>
+						{date?.split('T')[0].split('-').reverse().join('/')}{' '}
+						{date?.split('T')[1]}
+					</p>
+				)}
 			</div>
 			<div className='m-auto w-full h-full overflow-auto mb-4'>
 				{loading ? (
@@ -116,53 +119,74 @@ function DriverStatus({ availabilityDate }) {
 							)}
 							<div
 								key={el?.userId}
-								className='flex justify-center w-full items-center mx-auto cursor-pointer gap-4 mb-2 rounded-md p-1'
+								className='flex sm:flex-col sm:justify-start sm:items-start justify-center w-full items-center mx-auto cursor-pointer gap-4 mb-2 rounded-md p-1'
 								style={{
-									backgroundColor: el?.colourCode,
-									color: isLightColor(el?.colourCode) ? 'black' : 'white',
+									backgroundColor: isMobile
+										? el?.colourCode
+										: statusColors[el?.status],
+									color: isLightColor(
+										isMobile ? el?.colourCode : statusColors[el?.status]
+									)
+										? 'black'
+										: 'white',
+								}}
+								onClick={() => {
+									if (!isMobile) {
+										setMsgModalOpen(true);
+										setSelectedDriver(el);
+									}
 								}}
 							>
-								<div className='w-full mx-auto flex gap-2 justify-center items-center'>
+								<div className='w-full mx-auto flex sm:flex-col sm:justify-start sm:items-start gap-2 justify-center items-center'>
 									<p
-										className={`text-sm w-6 h-6 text-center`}
+										className={`text-sm text-center`}
 										style={{
-											backgroundColor: el?.colourCode,
-											color: isLightColor(el?.colourCode) ? 'black' : 'white',
+											backgroundColor: isMobile
+												? el?.colourCode
+												: statusColors[el?.status],
+											color: isLightColor(
+												isMobile ? el?.colourCode : statusColors[el?.status]
+											)
+												? 'black'
+												: 'white',
 										}}
 									>
-										{el?.userId}
+										{el?.userId} {!isMobile && status[el?.status]}
 									</p>
-									<div className='flex flex-col w-[60%] justify-center items-start text-center'>
-										<p>{el?.fullname}</p>
-										<div className='flex gap-1 items-center'>
-											<p>
-												Started @ {el?.startAt?.split('T')[1]?.slice(0, 5)}
-											</p>
-											<button
-												onClick={() => {
-													setMsgModalOpen(true);
-													setSelectedDriver(el);
-												}}
-												className={`px-2 rounded-md flex justify-center group items-center border ${
-													isLightColor(el?.colourCode)
-														? 'border-black'
-														: 'border-white'
-												}`}
-											>
-												<PanToolAltOutlinedIcon
-													fontSize='16'
-													className=''
-												/>
-											</button>
+									<div className='flex flex-col w-[60%] sm:justify-start justify-center items-start'>
+										{isMobile && <p>{el?.fullname}</p>}
+										{isMobile && (
+											<div className='flex gap-1 items-center'>
+												<p className='sm:text-sm whitespace-nowrap'>
+													Started @ {el?.startAt?.split('T')[1]?.slice(0, 5)}
+												</p>
+												<button
+													onClick={() => {
+														setMsgModalOpen(true);
+														setSelectedDriver(el);
+													}}
+													className={`px-2 rounded-md flex justify-center group items-center border ${
+														isLightColor(el?.colourCode)
+															? 'border-black'
+															: 'border-white'
+													}`}
+												>
+													<PanToolAltOutlinedIcon
+														fontSize='16'
+														className=''
+													/>
+												</button>
+											</div>
+										)}
+									</div>
+									{isMobile && (
+										<div
+											className={`text-sm text-white px-3 py-1 rounded`}
+											style={{ backgroundColor: statusColors[el?.status] }}
+										>
+											{status[el?.status]}
 										</div>
-									</div>
-									<div
-										className={`text-sm text-white px-3 py-1 rounded ${
-											statusColors[el?.status] || 'bg-gray-400'
-										}`}
-									>
-										{status[el?.status]}
-									</div>
+									)}
 								</div>
 							</div>
 						</>
