@@ -65,7 +65,7 @@ function DriverStatus({ availabilityDate }) {
 		3003: 'OnRoute',
 		3004: 'AtPickup',
 		3005: 'POB',
-		3006: 'ST',
+		3006: 'STC',
 		3007: 'Clear',
 		3008: 'NoJob',
 		2000: 'Accept',
