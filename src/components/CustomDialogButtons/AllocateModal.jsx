@@ -61,7 +61,9 @@ export default function AllocateModal({ setAllocateModal, closeDialog }) {
 				</div>
 				<div className='bg-[#16A34A] text-center font-medium text-white py-2 px-4 w-full rounded-sm'>
 					<p>
-						{data.subject ? data.subject : 'Gillingham station -- Guys Marsh'}
+						{data
+							? data.pickupAddress + ' - ' + data.destinationAddress
+							: 'Gillingham station -- Guys Marsh'}
 					</p>
 				</div>
 
