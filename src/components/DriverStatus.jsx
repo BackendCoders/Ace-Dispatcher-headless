@@ -121,14 +121,8 @@ function DriverStatus({ availabilityDate }) {
 								key={el?.userId}
 								className='flex sm:flex-col sm:justify-start sm:items-start justify-center w-full items-center mx-auto cursor-pointer gap-4 mb-2 rounded-md p-1'
 								style={{
-									backgroundColor: isMobile
-										? el?.colourCode
-										: statusColors[el?.status],
-									color: isLightColor(
-										isMobile ? el?.colourCode : statusColors[el?.status]
-									)
-										? 'black'
-										: 'white',
+									backgroundColor: el?.colourCode,
+									color: isLightColor(el?.colourCode) ? 'black' : 'white',
 								}}
 								onClick={() => {
 									if (!isMobile) {
@@ -137,21 +131,28 @@ function DriverStatus({ availabilityDate }) {
 									}
 								}}
 							>
-								<div className='w-full mx-auto flex sm:flex-col sm:justify-start sm:items-start gap-2 justify-center items-center'>
+								<div className='w-full mx-auto flex sm:flex-col sm:justify-center sm:items-center gap-2 justify-center items-center sm:mt-1'>
 									<p
 										className={`text-sm text-center`}
 										style={{
-											backgroundColor: isMobile
-												? el?.colourCode
-												: statusColors[el?.status],
-											color: isLightColor(
-												isMobile ? el?.colourCode : statusColors[el?.status]
-											)
-												? 'black'
-												: 'white',
+											backgroundColor: el?.colourCode,
+											color: isLightColor(el?.colourCode) ? 'black' : 'white',
 										}}
 									>
-										{el?.userId} {!isMobile && status[el?.status]}
+										{el?.userId}{' '}
+										{!isMobile && (
+											<span
+												className='p-1 rounded-md'
+												style={{
+													backgroundColor: statusColors[el?.status],
+													color: isLightColor(statusColors[el?.status])
+														? 'black'
+														: 'white',
+												}}
+											>
+												{status[el?.status]}
+											</span>
+										)}
 									</p>
 									<div className='flex flex-col w-[60%] sm:justify-start justify-center items-start'>
 										{isMobile && <p>{el?.fullname}</p>}
