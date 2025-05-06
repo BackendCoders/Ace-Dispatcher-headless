@@ -12,7 +12,6 @@ import {
 	bookingFindByBookings,
 	softAllocateDriver,
 } from '../utils/apiReq';
-import axios from 'axios';
 import { formatDate } from '../utils/formatDate';
 
 const isMobile = window.innerWidth <= 640;
@@ -238,17 +237,17 @@ export function allocateBookingToDriver(actionByUserId) {
 			// console.log('notification---', notification);
 
 			// const expoToken = notification.data.data.expoNotificationToken;
-			const bookingId = currentBooking.bookingId;
-			await axios.post(
-				'http://192.168.1.13:80/api/Authenticate/sendnotification',
-				{
-					userId: selectedDriver,
-					title: 'Got a new booking',
-					messageBody:
-						'You have been allocated a new booking. Please check the app for more details.',
-					bookingId: `${bookingId}`,
-				}
-			);
+			// const bookingId = currentBooking.bookingId;
+			// await axios.post(
+			// 	'http://192.168.1.13:80/api/Authenticate/sendnotification',
+			// 	{
+			// 		userId: selectedDriver,
+			// 		title: 'Got a new booking',
+			// 		messageBody:
+			// 			'You have been allocated a new booking. Please check the app for more details.',
+			// 		bookingId: `${bookingId}`,
+			// 	}
+			// );
 
 			dispatch(getRefreshedBookings());
 		}
