@@ -7,7 +7,9 @@ import { getAllDrivers } from '../utils/apiReq';
 const BASEURL = import.meta.env.VITE_BASE_URL;
 
 const AuthContext = createContext({
-	currentUser: null,
+	currentUser: localStorage.getItem('userData')
+		? JSON.parse(localStorage.getItem('userData'))
+		: null,
 	isAuth: false,
 	login: () => {},
 	logout: () => {},
