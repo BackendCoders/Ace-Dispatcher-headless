@@ -25,6 +25,7 @@ import {
 } from '../context/schedulerSlice';
 import { useAuth } from '../hooks/useAuth';
 import {
+	createCOAEntry,
 	driverArrived,
 	sendConfirmationText,
 	sendPaymentLink,
@@ -215,6 +216,25 @@ function CustomDialog({ closeDialog }) {
 		}
 	};
 
+	const handleCOAEntry = async (pickupAddress) => {
+		try {
+			const payload = {
+				accno: data.accountNumber,
+				journeyDate: data?.pickupDateTime,
+				passengerName: data.passengerName,
+				pickupAddress: pickupAddress,
+			};
+			const response = await createCOAEntry(payload);
+			if (response.status === 'success') {
+				dispatch(openSnackbar('COA Entry Created Successfully!', 'success'));
+			} else {
+				dispatch(openSnackbar('Failed To Create COA Entry', 'error'));
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	return (
 		<div className='fixed sm:left-[-35vw] left-[-45vw] inset-0 w-[90vw] sm:w-[70vw] mx-auto z-50 flex items-center justify-center p-1 sm:p-4 bg-background bg-opacity-50'>
 			<div className='relative w-full max-w-7xl p-3 sm:p-6 bg-card rounded-lg shadow-lg dark:bg-popover bg-white max-h-[90vh] overflow-y-auto sm:overflow-hidden'>
@@ -375,13 +395,42 @@ function CustomDialog({ closeDialog }) {
 											}
 											head='Date/Time'
 										/>
-										<BookingOption
-											text={`${data.pickupAddress}, ${data.pickupPostCode}`}
-											head='From'
-											link={`https://www.google.com/maps?q=${encodeURIComponent(
-												data.pickupPostCode
-											)}`}
-										/>
+										<div className='flex'>
+											{data?.scope === 1 && user?.currentUser?.roleId !== 3 && (
+												<button
+													onClick={() => handleCOAEntry(data?.pickupAddress)}
+													className={`px-1 py-1 text-white bg-red-700 hover:bg-opacity-80 rounded-lg text-sm`}
+												>
+													COA
+												</button>
+											)}
+											<div className='flex items-start mb-1 w-full'>
+												<p className='text-md font-medium pr-2 sm:whitespace-nowrap sm:w-auto flex justify-start sm:justify-end sm:items-end ml-2'>
+													From:{' '}
+												</p>
+												<span
+													className={`${'text-card dark:text-popover-foreground text-[1rem]'} sm:w-[70%] flex sm:justify-start sm:items-start`}
+												>
+													<a
+														href={`https://www.google.com/maps?q=${encodeURIComponent(
+															data.pickupPostCode
+														)}`}
+														target='_blank'
+														rel='noopener noreferrer'
+														className='text-blue-600'
+													>
+														{data.pickupAddress}, {data.pickupPostCode}
+													</a>
+												</span>
+											</div>
+											{/* <BookingOption
+												text={`${data.pickupAddress}, ${data.pickupPostCode}`}
+												head='From'
+												link={`https://www.google.com/maps?q=${encodeURIComponent(
+													data.pickupPostCode
+												)}`}
+											/> */}
+										</div>
 									</div>
 								</div>
 							</div>
@@ -399,7 +448,17 @@ function CustomDialog({ closeDialog }) {
 											data.vias.map((via, idx) => (
 												<>
 													<div className='flex items-start mb-1 w-full'>
-														<p className='text-md font-medium pr-2 whitespace-nowrap w-[20%] flex justify-end items-end'>
+														{data?.scope === 1 &&
+															user?.currentUser?.roleId !== 3 && (
+																<button
+																	key={idx}
+																	onClick={() => handleCOAEntry(via.address)}
+																	className={`px-1 py-1 text-white bg-red-700 hover:bg-opacity-80 rounded-lg text-sm`}
+																>
+																	{`COA: ${idx + 1}`}
+																</button>
+															)}
+														<p className='text-md font-medium pr-2 whitespace-nowrap w-auto ml-2 flex justify-end items-end'>
 															{`Via ${idx + 1}:`}
 														</p>
 														<span className='text-card dark:text-popover-foreground text-[1rem] w-[80%] flex justify-start items-start'>

@@ -707,6 +707,14 @@ async function mergeBookings(primaryBookingId, appendBookingId) {
 	return await handleGetReq(URL);
 }
 
+async function createCOAEntry(data) {
+	const { accno, journeyDate, passengerName, pickupAddress } = data;
+	const URL = `${BASE}/api/Bookings/CreateCOAEntry?accno=${accno}&journeyDate=${journeyDate}&passengerName=${encodeURIComponent(
+		passengerName
+	)}&pickupAddress=${encodeURIComponent(pickupAddress)}`;
+	return handlePostReq(URL, null);
+}
+
 export {
 	getBookingData,
 	makeBooking,
@@ -746,5 +754,5 @@ export {
 	confirmAllSoftAllocate,
 	getAllGPS,
 	mergeBookings,
-
+	createCOAEntry,
 };
