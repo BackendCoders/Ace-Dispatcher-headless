@@ -164,13 +164,7 @@ const AuthProvider = ({ children }) => {
 			// Validate the origin of the message
 			if (event.origin === allowedOrigin) {
 				if (event.data?.action === 'logout') {
-					console.log('Received logout message from parent');
-					localStorage.clear();
-					setIsAuth(false);
-					setUsername(null);
-					setToken(null);
-					setCurrentUser(null);
-					window.location.href = '/login'; // Or your desired logout route
+					logout();
 					return;
 				}
 				const { token, userData, username } = event.data; // Token sent by parent app
