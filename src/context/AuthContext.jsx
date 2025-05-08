@@ -112,6 +112,7 @@ const AuthProvider = ({ children }) => {
 	const logout = () => {
 		localStorage.removeItem('authToken');
 		localStorage.removeItem('username');
+		localStorage.removeItem('userData');
 		localStorage.removeItem('accounts');
 		setCurrentUser(null);
 		setIsAuth(false);
@@ -162,6 +163,16 @@ const AuthProvider = ({ children }) => {
 
 			// Validate the origin of the message
 			if (event.origin === allowedOrigin) {
+				if (event.data?.action === 'logout') {
+					console.log('Received logout message from parent');
+					localStorage.clear();
+					setIsAuth(false);
+					setUsername(null);
+					setToken(null);
+					setCurrentUser(null);
+					window.location.href = '/login'; // Or your desired logout route
+					return;
+				}
 				const { token, userData, username } = event.data; // Token sent by parent app
 				if (token && userData && username) {
 					// Save token to local storage
