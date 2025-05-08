@@ -5,6 +5,7 @@ import {
 	Day,
 	Agenda,
 	Inject,
+	DragAndDrop,
 } from '@syncfusion/ej2-react-schedule';
 import { registerLicense } from '@syncfusion/ej2-base';
 import Modal from '../components/Modal';
@@ -40,10 +41,12 @@ import {
 	changeShowDriverAvailability,
 	completeActiveBookingStatus,
 	getRefreshedBookings,
+	mergeTwoBookings,
 	setActionLogsOpen,
 	setActiveBookingIndex,
 	setActiveSearchResult,
 	setDateControl,
+	setMergeMode,
 	setSearchKeywords,
 } from '../context/schedulerSlice';
 import {
@@ -84,6 +87,7 @@ const AceScheduler = () => {
 		activeSearch,
 		activeSearchResults,
 		showDriverAvailability,
+		mergeMode,
 		// activeSoftAllocate,
 		loading: searchLoading,
 	} = useSelector((state) => state.scheduler);
@@ -98,6 +102,7 @@ const AceScheduler = () => {
 	const [textMessageModal, setTextMessageModal] = useState(false);
 	const [confirmSoftModal, setConfirmSoftModal] = useState(false);
 	const [driverData, setDriverData] = useState([]);
+	const [draggedBooking, setDraggedBooking] = useState(null);
 	const dispatch = useDispatch();
 	const user = useAuth();
 	const scheduleRef = useRef(null);
@@ -258,6 +263,20 @@ const AceScheduler = () => {
 			if (args?.element?.querySelector('.e-icons'))
 				args.element.querySelector('.e-icons').style.color = 'white';
 		}
+
+		if (mergeMode) {
+			args.element.style.cursor = 'move';
+
+			// Highlight if this is the dragged booking
+			if (draggedBooking && args.data.bookingId === draggedBooking.bookingId) {
+				args.element.style.opacity = '0.5';
+			} else {
+				args.element.style.opacity = '1';
+			}
+		} else {
+			args.element.style.cursor = 'default';
+			args.element.style.opacity = '1';
+		}
 	}
 
 	const handleCancelSearch = () => {
@@ -398,6 +417,73 @@ const AceScheduler = () => {
 						interval: 1,
 					},
 				]}
+				allowDragAndDrop={mergeMode}
+				dragStart={(args) => {
+					if (mergeMode && args.event) {
+						console.log('Drag Start:', args.data.bookingId);
+						setDraggedBooking(args.data.bookingId);
+					}
+				}}
+				dragStop={async (args) => {
+					if (mergeMode && draggedBooking) {
+						try {
+							const scheduler = scheduleRef.current;
+							const mouseEvent = args.event?.event;
+
+							// 1. SAFE COORDINATE CHECK
+							if (!mouseEvent || !Number.isFinite(mouseEvent.clientX)) {
+								console.error('Invalid mouse event');
+								return;
+							}
+
+							// 2. TRY SCHEDULER API FIRST (Most reliable)
+							let targetBooking;
+							if (scheduler?.getEventDetails) {
+								const eventData = scheduler.getEventDetails(mouseEvent.target);
+								targetBooking = eventData?.bookingId || eventData?.Id;
+							}
+
+							// 3. DOM FALLBACK (With proper element checking)
+							if (!targetBooking) {
+								const elements = document.elementsFromPoint(
+									mouseEvent.clientX,
+									mouseEvent.clientY
+								);
+
+								const targetElement = elements.find((el) =>
+									el?.classList?.contains('e-appointment')
+								);
+
+								// SAFE ATTRIBUTE ACCESS
+								const targetBookingElement = targetElement?.hasAttribute?.(
+									'data-id'
+								)
+									? targetElement.getAttribute('data-id')
+									: targetElement?.dataset?.bookingId;
+								targetBooking = targetBookingElement?.split('_')[1];
+							}
+
+							// 4. EXECUTE MERGE
+							if (targetBooking && targetBooking !== draggedBooking) {
+								const response = await dispatch(
+									mergeTwoBookings(targetBooking, draggedBooking)
+								);
+								if (response.status === 'fail') {
+									dispatch(openSnackbar(response.data, 'error'));
+								} else {
+									dispatch(
+										openSnackbar('Booking Merge Successfully!', 'success')
+									);
+								}
+							}
+						} catch (error) {
+							console.error('Drag stop error:', error);
+						} finally {
+							setDraggedBooking(null);
+							if (args) args.cancel = true;
+						}
+					}
+				}}
 
 				// agendaDaysCount={365}
 			>
@@ -420,7 +506,7 @@ const AceScheduler = () => {
 						/>
 					</Modal>
 				)}
-				<Inject services={[Day, Agenda]} />
+				<Inject services={[Day, Agenda, DragAndDrop]} />
 			</ScheduleComponent>
 
 			<div className='flex justify-end w-[10%] fixed top-[65px] right-[118px] sm:top-[55px] sm:right-[550px] z-[40]'>
@@ -429,12 +515,26 @@ const AceScheduler = () => {
 						className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal rounded-lg bg-blue-700 text-white hover:bg-opacity-80 px-2 py-1 sm:px-3 sm:py-2'
 						onClick={() => setConfirmSoftModal(true)}
 					>
-						{isMobile ? (
-							'Confirm SA'
-						) : (
-							'Confirm SA'
-						)}
+						{isMobile ? 'Confirm SA' : 'Confirm SA'}
 					</button>
+				)}
+			</div>
+
+			<div className='flex justify-end w-[10%] fixed top-[80px] right-[0px] sm:top-[90px] sm:right-[0px] z-[40]'>
+				{(!isMobile || user?.currentUser?.roleId !== 3) && !activeSearch && (
+					<span className='flex flex-row gap-2 items-center align-middle'>
+						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
+							Merge Mode
+						</span>
+						<Switch
+							checked={mergeMode}
+							onChange={() => {
+								dispatch(setMergeMode(!mergeMode));
+							}}
+							className='text-sm'
+							size={isMobile ? 'small' : 'large'}
+						/>
+					</span>
 				)}
 			</div>
 

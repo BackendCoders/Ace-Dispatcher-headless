@@ -702,6 +702,11 @@ async function getAllGPS() {
 	return await handleGetReq(URL);
 }
 
+async function mergeBookings(primaryBookingId, appendBookingId) {
+	const URL = `${BASE}/api/Bookings/MergeBookings?primaryBookingId=${primaryBookingId}&appendBookingId=${appendBookingId}`;
+	return await handleGetReq(URL);
+}
+
 export {
 	getBookingData,
 	makeBooking,
@@ -740,4 +745,6 @@ export {
 	getDuration,
 	confirmAllSoftAllocate,
 	getAllGPS,
+	mergeBookings,
+
 };

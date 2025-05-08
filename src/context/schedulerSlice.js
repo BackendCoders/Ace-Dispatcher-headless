@@ -11,6 +11,7 @@ import {
 	findBookingById,
 	bookingFindByBookings,
 	softAllocateDriver,
+	mergeBookings,
 } from '../utils/apiReq';
 import { formatDate } from '../utils/formatDate';
 
@@ -46,6 +47,7 @@ const schedulerSlice = createSlice({
 		showDriverAvailability: false,
 		dateControl: formatDate(new Date().toISOString()),
 		actionLogsOpen: false,
+		mergeMode: false,
 	},
 	reducers: {
 		insertBookings: (state, action) => {
@@ -115,6 +117,9 @@ const schedulerSlice = createSlice({
 		},
 		setActionLogsOpen: (state, action) => {
 			state.actionLogsOpen = action.payload;
+		},
+		setMergeMode: (state, action) => {
+			state.mergeMode = action.payload;
 		},
 	},
 });
@@ -330,6 +335,16 @@ export const setActiveSearchResult = function (bookingId) {
 	};
 };
 
+export const mergeTwoBookings = function (primaryBookingId, appendBookingId) {
+	return async (dispatch) => {
+		const response = await mergeBookings(primaryBookingId, appendBookingId);
+		if (response.status === 'success') {
+			dispatch(getRefreshedBookings());
+		}
+		return response;
+	};
+};
+
 export const {
 	completeActiveBookingStatus,
 	allocateActiveBookingStatus,
@@ -344,6 +359,7 @@ export const {
 	setActiveSoftAllocate,
 	setSearchKeywords,
 	setActionLogsOpen,
+	setMergeMode
 } = schedulerSlice.actions;
 
 export default schedulerSlice.reducer;
