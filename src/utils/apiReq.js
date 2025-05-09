@@ -715,6 +715,11 @@ async function createCOAEntry(data) {
 	return handlePostReq(URL, null);
 }
 
+async function getCOAEntrys(date) {
+	const URL = `${BASE}/api/Bookings/GetCOAEntrys?date=${date}`;
+	return await handleGetReq(URL);
+}
+
 export {
 	getBookingData,
 	makeBooking,
@@ -755,4 +760,5 @@ export {
 	getAllGPS,
 	mergeBookings,
 	createCOAEntry,
+	getCOAEntrys,
 };
