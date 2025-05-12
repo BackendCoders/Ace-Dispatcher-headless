@@ -216,12 +216,12 @@ function CustomDialog({ closeDialog }) {
 		}
 	};
 
-	const handleCOAEntry = async (pickupAddress) => {
+	const handleCOAEntry = async (pickupAddress, passengerName) => {
 		try {
 			const payload = {
 				accno: data.accountNumber,
 				journeyDate: data?.pickupDateTime,
-				passengerName: data.passengerName,
+				passengerName: passengerName,
 				pickupAddress: pickupAddress,
 			};
 			const response = await createCOAEntry(payload);
@@ -398,7 +398,14 @@ function CustomDialog({ closeDialog }) {
 										<div className='flex'>
 											{data?.scope === 1 && user?.currentUser?.roleId !== 3 && (
 												<button
-													onClick={() => handleCOAEntry(data?.pickupAddress)}
+													onClick={() => {
+														const passengerName = data?.passengerName?.includes(
+															','
+														)
+															? data?.passengerName.split(',')[0]
+															: data?.passengerName;
+														handleCOAEntry(data?.pickupAddress, passengerName);
+													}}
 													className={`px-1 py-1 text-white bg-red-700 hover:bg-opacity-80 rounded-lg text-sm`}
 												>
 													COA
@@ -452,7 +459,21 @@ function CustomDialog({ closeDialog }) {
 															user?.currentUser?.roleId !== 3 && (
 																<button
 																	key={idx}
-																	onClick={() => handleCOAEntry(via.address)}
+																	onClick={() => {
+																		{
+																			const passengerName =
+																				data?.passengerName?.includes(',')
+																					? data?.passengerName
+																							.split(',')
+																							.at(idx + 1)
+																							.trim()
+																					: data?.passengerName;
+																			handleCOAEntry(
+																				via.address,
+																				passengerName
+																			);
+																		}
+																	}}
 																	className={`px-1 py-1 text-white bg-red-700 hover:bg-opacity-80 rounded-lg text-sm`}
 																>
 																	{`COA: ${idx + 1}`}
