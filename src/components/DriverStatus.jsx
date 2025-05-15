@@ -82,7 +82,7 @@ function DriverStatus({ availabilityDate }) {
 		3004: 'indigo', // AtPickup
 		3005: 'pink', // PassengerOnBoard
 		3006: 'yellow', // SoonToClear
-		3007: 'skyblue', // Clear
+		3007: 'green', // Clear
 		3008: 'red', // NoJob
 		2000: 'green', // Accept
 		2001: 'red', // Reject
