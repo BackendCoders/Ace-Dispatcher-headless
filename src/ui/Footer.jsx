@@ -13,7 +13,6 @@ import { PersonOutlineOutlined } from '@mui/icons-material';
 function Footer() {
 	// const user = useAuth();
 	const { isAuth } = useAuth();
-	// console.log('User', user);
 	const { showDriverAvailability } = useSelector((state) => state.scheduler);
 	// const { isActiveTestMode } = useSelector((state) => state.bookingForm);
 	// const [notification, setNotification] = useState(false);
