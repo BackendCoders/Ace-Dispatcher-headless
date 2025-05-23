@@ -199,7 +199,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 
 	function handleClick(event, ref) {
 		ref.current.focus();
-		ref.current.select();
+		// ref.current.select();
 	}
 
 	async function calculatePickup() {
@@ -378,13 +378,18 @@ function Booking({ bookingData, id, onBookingUpload }) {
 			destinationRef.current.focus();
 			destinationRef.current.select();
 		} else {
-			pickupRef.current.focus();
-			pickupRef.current.select();
+			if (isBookingOpenInEditMode) {
+				pickupRef.current.focus(); // only focus apply in case of edit
+			} else {
+				pickupRef.current.focus();
+				pickupRef.current.select();
+			}
 		}
 	}, [
 		bookingData.pickupAddress,
 		bookingData.bookingType,
 		bookingData.formBusy,
+		isBookingOpenInEditMode,
 	]);
 
 	// update the time of the form if form is not busy every 30 sec

@@ -69,6 +69,7 @@ import {
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 // import GoogleIcon from '@mui/icons-material/Google';
 import ConfirmSoftAllocateModal from '../components/CustomDialogButtons/ConfimSoftAllocateModal';
+import SearchOffOutlinedIcon from '@mui/icons-material/SearchOffOutlined';
 const AceScheduler = () => {
 	const BASE_URL = import.meta.env.VITE_BASE_URL;
 	const isMobile = useMediaQuery('(max-width: 640px)');
@@ -640,7 +641,11 @@ const AceScheduler = () => {
 								onClick={handleCancelSearch}
 								// className='text-sm'
 							>
-								Cancel Search
+								{isMobile ? (
+									<SearchOffOutlinedIcon fontSize='small' />
+								) : (
+									<SearchOffOutlinedIcon />
+								)}
 							</button>
 						)}
 					</div>
@@ -860,6 +865,17 @@ function SearchModal({ setOpenSearch }) {
 			console.log('Please enter search criteria');
 		}
 	};
+
+	useEffect(() => {
+		const handleKeyDown = (e) => {
+			if (e.key === 'End') {
+				handleSubmit(handleSubmitForm)(); // This ensures form validation
+			}
+		};
+
+		window.addEventListener('keydown', handleKeyDown);
+		return () => window.removeEventListener('keydown', handleKeyDown);
+	}, [handleSubmit]);
 
 	useEffect(() => {
 		if (isSubmitSuccessful) {

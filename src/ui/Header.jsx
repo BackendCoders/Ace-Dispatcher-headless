@@ -505,6 +505,17 @@ function SearchModal({ setOpenSearch }) {
 	};
 
 	useEffect(() => {
+		const handleKeyDown = (e) => {
+			if (e.key === 'End') {
+				handleSubmit(handleSubmitForm)(); // This ensures form validation
+			}
+		};
+
+		window.addEventListener('keydown', handleKeyDown);
+		return () => window.removeEventListener('keydown', handleKeyDown);
+	}, [handleSubmit]);
+
+	useEffect(() => {
 		if (isSubmitSuccessful) {
 			reset({
 				pickupAddress: '',
