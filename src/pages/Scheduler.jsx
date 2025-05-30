@@ -511,7 +511,7 @@ const AceScheduler = () => {
 			</ScheduleComponent>
 
 			<div className='flex justify-end w-[10%] fixed top-[65px] right-[118px] sm:top-[55px] sm:right-[550px] z-[40]'>
-				{(!isMobile || user?.currentUser?.roleId !== 3) && !activeSearch && (
+				{user?.currentUser?.roleId !== 3 && !activeSearch && (
 					<button
 						className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal rounded-lg bg-blue-700 text-white hover:bg-opacity-80 px-2 py-1 sm:px-3 sm:py-2'
 						onClick={() => setConfirmSoftModal(true)}
@@ -522,7 +522,7 @@ const AceScheduler = () => {
 			</div>
 
 			<div className='flex justify-end w-[10%] fixed top-[80px] right-[0px] sm:top-[90px] sm:right-[0px] z-[40]'>
-				{(!isMobile || user?.currentUser?.roleId !== 3) && !activeSearch && (
+				{user?.currentUser?.roleId !== 3 && !activeSearch && (
 					<span className='flex flex-row gap-2 items-center align-middle'>
 						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
 							Merge Mode
@@ -540,7 +540,7 @@ const AceScheduler = () => {
 			</div>
 
 			<div className='flex justify-end w-[10%] fixed top-[45px] right-[0px] sm:top-[55px] sm:right-[350px] z-[40]'>
-				{(!isMobile || user?.currentUser?.roleId !== 3) && !activeSearch && (
+				{user?.currentUser?.roleId !== 3 && !activeSearch && (
 					<span className='flex flex-row gap-0 sm:gap-2 items-center align-middle'>
 						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
 							{isMobile ? 'Allocated' : 'Show Allocated'}
@@ -558,7 +558,7 @@ const AceScheduler = () => {
 			</div>
 			{/* Changed by Tanya - (9 Aug) */}
 			<div className='flex justify-end w-[10%] fixed top-[65px] right-[0px] sm:top-[55px] sm:right-[160px] z-[40]'>
-				{(!isMobile || user?.currentUser?.roleId !== 3) && !activeSearch && (
+				{user?.currentUser?.roleId !== 3 && !activeSearch && (
 					<span className='flex flex-row gap-0 sm:gap-2 items-center align-middle'>
 						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
 							{isMobile ? 'Completed' : 'Show Completed'}
@@ -588,7 +588,7 @@ const AceScheduler = () => {
 			</div>
 
 			<div className='flex justify-end fixed top-[45px] right-[110px] sm:top-[5px] sm:right-[150px] z-[40]'>
-				{
+				{!isMobile && (
 					<span className='flex flex-row gap-0 sm:gap-0 items-center align-middle'>
 						<span className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal'>
 							Availability
@@ -602,7 +602,7 @@ const AceScheduler = () => {
 							size={isMobile ? 'small' : 'large'}
 						/>
 					</span>
-				}
+				)}
 			</div>
 			{/* <div className='flex justify-end fixed top-[65px] right-[110px] sm:top-[5px] sm:right-[150px] z-[40]'>
 				{user?.currentUser?.roleId !== 3 && (
