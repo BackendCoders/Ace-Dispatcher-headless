@@ -91,9 +91,10 @@ export default function CompleteBookingModal({
 					<div className='w-full relative flex flex-col justify-center items-start gap-2'>
 						<label>Parking Charge</label>
 						<input
-							type='text'
+							type='number'
+							step="0.01"
 							value={parkingCharge === 0 ? '' : parkingCharge}
-							onChange={(e) => setParkingCharge(parseFloat(e.target.value))}
+							onChange={(e) => setParkingCharge(+e.target.value)}
 							min='0'
 							className='w-full pl-10 pr-4 py-2 p-2 border border-gray-500 rounded-md placeholder:text-slate-900'
 							disabled={user?.currentUser?.roleId === 3 || data?.scope !== 1}
