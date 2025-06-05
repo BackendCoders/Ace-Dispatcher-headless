@@ -664,7 +664,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 													convertToOneHourLaterFromPickUp()
 													// eslint-disable-next-line no-mixed-spaces-and-tabs
 											  )
-											: null;
+											: updateData("returnDateTime" , null);
 										updateData('returnBooking', !bookingData.returnBooking);
 									}}
 								/>
