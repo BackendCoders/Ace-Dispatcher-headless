@@ -720,6 +720,11 @@ async function getCOAEntrys(date) {
 	return await handleGetReq(URL);
 }
 
+async function getQuoteHvsDriver(payload) {
+	const URL = `${BASE}/api/Bookings/QuoteHVSDriver`;
+	return await handlePostReq(URL, payload);
+}
+
 export {
 	getBookingData,
 	makeBooking,
@@ -761,4 +766,5 @@ export {
 	mergeBookings,
 	createCOAEntry,
 	getCOAEntrys,
+	getQuoteHvsDriver,
 };

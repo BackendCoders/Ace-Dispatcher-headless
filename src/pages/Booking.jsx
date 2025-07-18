@@ -2,7 +2,7 @@
 // all External Libraries and Components are imports
 import { Button, Switch, TextField, useMediaQuery } from '@mui/material';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
-import { useEffect, useState, Fragment, useRef } from 'react';
+import { useEffect, useState, Fragment, useRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { isValidDate } from '../utils/isValidDate';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
@@ -22,6 +22,7 @@ import {
 	deleteSchedulerBooking,
 	getAccountList,
 	getDuration,
+	getQuoteHvsDriver,
 } from '../utils/apiReq';
 
 // All local component utilitys
@@ -120,6 +121,24 @@ function Booking({ bookingData, id, onBookingUpload }) {
 		}
 
 		updateData('durationMinutes', hours * 60 + minutes);
+
+		const passengerNameCount = bookingData?.passengerName?.split(',')?.length;
+		const passengers = bookingData?.passengers;
+
+		if (
+			bookingData.scope === 1 &&
+			(bookingData.accountNumber === 9014 ||
+				bookingData.accountNumber === 10026) &&
+			passengerNameCount !== Number(passengers)
+		) {
+			dispatch(
+				openSnackbar(
+					'Booking does not specify the correct number of passengers',
+					'error'
+				)
+			);
+			return;
+		}
 
 		setFormSubmitLoading(true);
 		await onBookingUpload(id);
@@ -506,6 +525,50 @@ function Booking({ bookingData, id, onBookingUpload }) {
 		}
 	}
 
+	const hvsDriverQuote = useCallback(async () => {
+		try {
+			if (!bookingData.pickupPostCode || !bookingData.destinationPostCode)
+				return;
+
+			const payload = {
+				pickupPostcode: bookingData.pickupPostCode,
+				viaPostcodes: bookingData.vias.map((via) => via.postCode),
+				destinationPostcode: bookingData.destinationPostCode,
+				pickupDateTime: bookingData.pickupDateTime,
+				passengers: bookingData.passengers,
+				priceFromBase: bookingData.chargeFromBase,
+			};
+
+			const response = await getQuoteHvsDriver(payload);
+
+			if (response.status === 'success') {
+				updateData('price', response?.totalPrice.toFixed(2));
+			}
+		} catch (error) {
+			console.log(error);
+			dispatch(openSnackbar('Unable to fetch Driver Price', 'error'));
+		}
+	}, [
+		bookingData.chargeFromBase,
+		bookingData.destinationPostCode,
+		bookingData.passengers,
+		bookingData.pickupDateTime,
+		bookingData.pickupPostCode,
+		bookingData.vias,
+		dispatch,
+		updateData,
+	]);
+
+	useEffect(() => {
+		if (
+			bookingData.scope === 1 &&
+			(bookingData.accountNumber === 9014 ||
+				bookingData.accountNumber === 10026)
+		) {
+			hvsDriverQuote();
+		}
+	}, [bookingData.scope, bookingData.accountNumber, hvsDriverQuote]);
+
 	if (!bookingData) return null;
 
 	return (
@@ -664,7 +727,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 													convertToOneHourLaterFromPickUp()
 													// eslint-disable-next-line no-mixed-spaces-and-tabs
 											  )
-											: updateData("returnDateTime" , null);
+											: updateData('returnDateTime', null);
 										updateData('returnBooking', !bookingData.returnBooking);
 									}}
 								/>
@@ -1082,7 +1145,10 @@ function Booking({ bookingData, id, onBookingUpload }) {
 									name='scope'
 									id='options'
 									value={bookingData.scope}
-									onChange={(e) => updateData('scope', +e.target.value)}
+									onChange={(e) => {
+										updateData('scope', +e.target.value);
+										if (+e.target.value === 1) updateData('price', '');
+									}}
 									className='block w-[75%] mt-1 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm'
 								>
 									<option value={0}>Cash</option>
@@ -1104,9 +1170,14 @@ function Booking({ bookingData, id, onBookingUpload }) {
 											name='account'
 											id='account'
 											value={bookingData.accountNumber}
-											onChange={(e) =>
-												updateData('accountNumber', +e.target.value)
-											}
+											onChange={(e) => {
+												updateData('accountNumber', +e.target.value);
+												if (
+													+e.target.value === 9014 ||
+													+e.target.value === 10026
+												)
+													hvsDriverQuote();
+											}}
 											className='block w-[65%] mt-1 py-2 px-0 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm'
 										>
 											{accountDetails?.map((el, i) => (
