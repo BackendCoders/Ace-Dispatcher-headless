@@ -49,6 +49,7 @@ import {
 	setDateControl,
 } from '../context/schedulerSlice';
 import SendQuoteModal from '../components/CustomDialogButtons/SendQuoteModal';
+import WarningModal from '../components/BookingForm/WarningModal';
 
 function Booking({ bookingData, id, onBookingUpload }) {
 	// All Hooks and Contexts for the data flow and management
@@ -79,6 +80,8 @@ function Booking({ bookingData, id, onBookingUpload }) {
 	const [isSendQuoteActive, setIsSendQuoteActive] = useState(false);
 	const [quote, setQuote] = useState(null);
 	const [formSubmitLoading, setFormSubmitLoading] = useState(false);
+	const [isWarningOpen, setIsWarningOpen] = useState(false);
+	const [warningCallback, setWarningCallback] = useState(() => () => {})
 	const isMobile = useMediaQuery('(max-width:640px)');
 	// working for 🔁 button basically toggles between pickup and destination addresses
 	function toggleAddress() {
@@ -138,6 +141,20 @@ function Booking({ bookingData, id, onBookingUpload }) {
 				)
 			);
 			return;
+		}
+
+		if (
+			bookingData.scope === 1 &&
+			(bookingData.accountNumber === 9014 ||
+				bookingData.accountNumber === 10026) &&
+			passengerNameCount !== bookingData.vias.length + 1
+		) {
+			const confirmed = await new Promise((resolve) => {
+				setWarningCallback(() => resolve);
+				setIsWarningOpen(true);
+			});
+
+			if (!confirmed) return;
 		}
 
 		setFormSubmitLoading(true);
@@ -628,6 +645,15 @@ function Booking({ bookingData, id, onBookingUpload }) {
 						<SendQuoteModal
 							onclick={handleSendQuoteModal}
 							setIsSendQuoteActive={setIsSendQuoteActive}
+						/>
+					</Modal>
+					<Modal
+						open={isWarningOpen}
+						setOpen={setIsWarningOpen}
+					>
+						<WarningModal
+							setIsWarningOpen={setIsWarningOpen}
+							resolve={warningCallback}
 						/>
 					</Modal>
 					<SimpleSnackbar />
