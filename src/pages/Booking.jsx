@@ -563,16 +563,22 @@ function Booking({ bookingData, id, onBookingUpload }) {
 			const response = await getQuoteHvsDriver(payload);
 
 			if (response.status === 'success') {
-				updateData('price', +response?.priceDriver.toFixed(2));
-				if (bookingData.scope === 1 && bookingData.accountNumber !== 9999)
-					updateData('priceAccount', +response?.priceAccount?.toFixed(2));
-				else updateData('priceAccount', 0);
+				if (!bookingData?.manuallyPriced) {
+					updateData('price', +response?.priceDriver.toFixed(2));
+					if (bookingData.scope === 1 && bookingData.accountNumber !== 9999)
+						updateData('priceAccount', +response?.priceAccount?.toFixed(2));
+					else updateData('priceAccount', 0);
+				} else {
+					updateData('price', bookingData?.price);
+					updateData('priceAccount', bookingData?.priceAccount);
+				}
 			}
 		} catch (error) {
 			console.log(error);
 			dispatch(openSnackbar('Unable to fetch Driver Price', 'error'));
 		}
 	}, [
+		bookingData.manuallyPriced,
 		bookingData.chargeFromBase,
 		bookingData.accountNumber,
 		bookingData.destinationPostCode,
