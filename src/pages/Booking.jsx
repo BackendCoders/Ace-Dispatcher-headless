@@ -583,9 +583,9 @@ function Booking({ bookingData, id, onBookingUpload }) {
 
 	useEffect(() => {
 		if (
-			bookingData.scope === 1 &&
-			(bookingData.accountNumber === 9014 ||
-				bookingData.accountNumber === 10026)
+			bookingData.scope === 1
+			// (bookingData.accountNumber === 9014 ||
+			// 	bookingData.accountNumber === 10026)
 		) {
 			hvsDriverQuote();
 		}
@@ -1203,11 +1203,11 @@ function Booking({ bookingData, id, onBookingUpload }) {
 											value={bookingData.accountNumber}
 											onChange={(e) => {
 												updateData('accountNumber', +e.target.value);
-												if (
-													+e.target.value === 9014 ||
-													+e.target.value === 10026
-												)
-													hvsDriverQuote();
+												// if (
+												// 	+e.target.value === 9014 ||
+												// 	+e.target.value === 10026
+												// )
+												hvsDriverQuote();
 											}}
 											className='block w-[65%] mt-1 py-2 px-0 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm'
 										>
