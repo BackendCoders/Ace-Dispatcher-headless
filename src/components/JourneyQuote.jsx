@@ -16,7 +16,7 @@ function JourneyQuote({ quoteOptions }) {
 		<div className='w-full mx-auto p-1 bg-white shadow-lg rounded-lg'>
 			<div className='bg-green-600 p-4 rounded-t-lg text-white flex gap-5'>
 				<h1 className='text-2xl font-bold'>JOURNEY COST:</h1>
-				<p className='text-2xl font-bold'>£{data?.totalPrice}</p>
+				<p className='text-2xl font-bold'>£{data?.priceDriver?.toFixed(2)}</p>
 			</div>
 
 			<div className='p-4'>

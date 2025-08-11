@@ -15,7 +15,7 @@ function QuoteDialog({ onSet, quote }) {
 					<h2 className='text-lg font-semibold'>Booking Quote</h2>
 				</div>
 				<div className='bg-green-700 text-white py-4 px-8 rounded-lg text-center mb-4'>
-					<p className='text-2xl font-bold'>£{quote.totalPrice.toFixed(2)}</p>
+					<p className='text-2xl font-bold'>£{quote.priceDriver.toFixed(2)}</p>
 					<p className='text-sm'>{quote.tariff}</p>
 				</div>
 				<div className='text-center mb-2'>

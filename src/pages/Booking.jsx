@@ -81,7 +81,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 	const [quote, setQuote] = useState(null);
 	const [formSubmitLoading, setFormSubmitLoading] = useState(false);
 	const [isWarningOpen, setIsWarningOpen] = useState(false);
-	const [warningCallback, setWarningCallback] = useState(() => () => {})
+	const [warningCallback, setWarningCallback] = useState(() => () => {});
 	const isMobile = useMediaQuery('(max-width:640px)');
 	// working for 🔁 button basically toggles between pickup and destination addresses
 	function toggleAddress() {
@@ -192,11 +192,12 @@ function Booking({ bookingData, id, onBookingUpload }) {
 			viaPostcodes: bookingData.vias.map((via) => via.postCode),
 			destinationPostcode: bookingData.destinationPostCode,
 			pickupDateTime: bookingData.pickupDateTime,
-			passengers: bookingData.passengers,
+			passengers: Number(bookingData.passengers),
 			priceFromBase: bookingData.chargeFromBase,
+			accountNo: bookingData.accountNumber || 9999,
 		});
 		if (quote.status === 'success') {
-			updateData('price', +quote.totalPrice);
+			updateData('price', +quote.priceDriver);
 			updateData('durationText', String(quote.totalMinutes));
 			updateData('quoteOptions', quote);
 			setIsQuoteDialogActive(true);
@@ -330,12 +331,13 @@ function Booking({ bookingData, id, onBookingUpload }) {
 			viaPostcodes: bookingData.vias.map((via) => via.postCode),
 			destinationPostcode: bookingData.destinationPostCode,
 			pickupDateTime: bookingData.pickupDateTime,
-			passengers: bookingData.passengers,
+			passengers: Number(bookingData.passengers),
 			priceFromBase: bookingData.chargeFromBase,
+			accountNo: bookingData.accountNumber || 9999,
 		}).then((quote) => {
 			if (quote.status === 'success') {
 				if (!bookingData?.manuallyPriced) {
-					dispatch(updateValueSilentMode(id, 'price', +quote.totalPrice));
+					dispatch(updateValueSilentMode(id, 'price', +quote.priceDriver));
 				}
 				dispatch(updateValueSilentMode(id, 'quoteOptions', quote));
 				dispatch(
@@ -360,6 +362,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 		bookingData.destinationPostCode,
 		bookingData.postcode,
 		bookingData.chargeFromBase,
+		bookingData.accountNumber,
 		bookingData.vias,
 		bookingData.pickupDateTime,
 		bookingData.passengers,
@@ -552,14 +555,15 @@ function Booking({ bookingData, id, onBookingUpload }) {
 				viaPostcodes: bookingData.vias.map((via) => via.postCode),
 				destinationPostcode: bookingData.destinationPostCode,
 				pickupDateTime: bookingData.pickupDateTime,
-				passengers: bookingData.passengers,
+				passengers: Number(bookingData.passengers),
 				priceFromBase: bookingData.chargeFromBase,
+				accountNo: bookingData.accountNumber || 9999,
 			};
 
 			const response = await getQuoteHvsDriver(payload);
 
 			if (response.status === 'success') {
-				updateData('price', response?.totalPrice.toFixed(2));
+				updateData('price', response?.priceDriver.toFixed(2));
 			}
 		} catch (error) {
 			console.log(error);
@@ -567,6 +571,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 		}
 	}, [
 		bookingData.chargeFromBase,
+		bookingData.accountNumber,
 		bookingData.destinationPostCode,
 		bookingData.passengers,
 		bookingData.pickupDateTime,
