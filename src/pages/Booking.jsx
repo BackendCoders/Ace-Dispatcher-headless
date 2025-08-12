@@ -563,10 +563,12 @@ function Booking({ bookingData, id, onBookingUpload }) {
 			const response = await getQuoteHvsDriver(payload);
 
 			if (response.status === 'success') {
-				updateData('price', +response?.priceDriver.toFixed(2));
-				if (bookingData.scope === 1 && bookingData.accountNumber !== 9999)
-					updateData('priceAccount', +response?.priceAccount?.toFixed(2));
-				else updateData('priceAccount', 0);
+				if (!bookingData.manuallyPriced) {
+					updateData('price', +response?.priceDriver.toFixed(2));
+					if (bookingData.scope === 1 && bookingData.accountNumber !== 9999)
+						updateData('priceAccount', +response?.priceAccount?.toFixed(2));
+					else updateData('priceAccount', 0);
+				}
 			}
 		} catch (error) {
 			console.log(error);
@@ -579,6 +581,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
 		bookingData.passengers,
 		bookingData.pickupDateTime,
 		bookingData.pickupPostCode,
+		bookingData.manuallyPriced,
 		bookingData.vias,
 		dispatch,
 		updateData,
@@ -997,21 +1000,22 @@ function Booking({ bookingData, id, onBookingUpload }) {
 								required={true}
 								placeholder='Driver Price (£)'
 								value={bookingData.price}
-								onChange={(e) =>
-									updateData(
-										'price',
-										(() => {
-											const value = parseFloat(e.target.value);
-											if (e.target.value === '') return '';
-											if (
-												(!isNaN(value) && value >= 0) ||
-												e.target.value === ''
-											) {
-												return value;
-											} else return bookingData.price;
-										})()
-									)
-								}
+								onChange={(e) => {
+									const value = parseFloat(e.target.value);
+
+									if (e.target.value === '') {
+										updateData('price', '');
+										return;
+									}
+
+									if (!isNaN(value) && value >= 0) {
+										// If this change is user-initiated and not from API
+										if (!bookingData.manuallyPriced) {
+											updateData('manuallyPriced', true);
+										}
+										updateData('price', value);
+									}
+								}}
 								disabled={isBookingOpenInEditMode && currentUser?.roleId === 3}
 							/>
 						</div>
@@ -1181,7 +1185,8 @@ function Booking({ bookingData, id, onBookingUpload }) {
 									value={bookingData.scope}
 									onChange={(e) => {
 										updateData('scope', +e.target.value);
-										if (+e.target.value === 1) updateData('price', '');
+										if (+e.target.value === 1 && !bookingData?.manuallyPriced)
+											updateData('price', '');
 									}}
 									className='block w-[75%] mt-1 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm'
 								>
