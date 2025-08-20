@@ -1241,6 +1241,9 @@ function Booking({ bookingData, id, onBookingUpload }) {
 													if (e.target.value === '')
 														return updateData('priceAccount', '');
 													if (!isNaN(newValue) && newValue >= 0) {
+														if (!bookingData.manuallyPriced) {
+															updateData('manuallyPriced', true);
+														}
 														return updateData('priceAccount', +e.target.value);
 													}
 												}}
