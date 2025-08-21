@@ -104,9 +104,9 @@ const BookingTable = ({ onConfirm, onSet, numBooking }) => {
 				<button
 					className={`tab-link py-2 px-4 text-gray-600 border-b-2 ${
 						activeTab === 'current-bookings'
-							? 'border-blue-500'
+							? 'border-red-500'
 							: 'border-transparent'
-					} hover:border-blue-500 focus:outline-none`}
+					} hover:border-red-500 focus:outline-none`}
 					onClick={() => handleTabClick('current-bookings')}
 				>
 					Current Bookings
@@ -254,7 +254,7 @@ function CurrentTable({ bookings, selectedRow, selectRow, activeTab }) {
 		<>
 			<table className='min-w-full table-auto'>
 				<thead>
-					<tr>
+					<tr className='bg-red-500 text-white'>
 						{rows.map((row, index) => (
 							<th
 								key={index}
