@@ -254,7 +254,11 @@ function CurrentTable({ bookings, selectedRow, selectRow, activeTab }) {
 		<>
 			<table className='min-w-full table-auto'>
 				<thead>
-					<tr className='bg-red-500 text-white'>
+					<tr
+						className={` ${
+							activeTab === 'current-bookings' ? 'bg-red-500 text-white' : ''
+						} `}
+					>
 						{rows.map((row, index) => (
 							<th
 								key={index}
