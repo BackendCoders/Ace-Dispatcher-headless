@@ -30,6 +30,11 @@
 	display: none;
 } */
 
+html {
+	scroll-behavior: smooth;
+	-webkit-overflow-scrolling: touch; /* Ensures smooth momentum scrolling on iOS */
+}
+
 ::-webkit-scrollbar {
 	width: 12px; /* Increase width for better visibility */
 }
