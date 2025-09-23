@@ -516,7 +516,7 @@ const AceScheduler = () => {
 						className='select-none whitespace-nowrap text-xs sm:text-sm uppercase font-normal rounded-lg bg-blue-700 text-white hover:bg-opacity-80 px-2 py-1 sm:px-3 sm:py-2'
 						onClick={() => setConfirmSoftModal(true)}
 					>
-						{isMobile ? 'Confirm SA' : 'Confirm SA'}
+						{isMobile ? 'Conf. SA' : 'Conf. SA'}
 					</button>
 				)}
 			</div>
