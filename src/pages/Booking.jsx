@@ -1249,7 +1249,14 @@ function Booking({ bookingData, id, onBookingUpload }) {
 														return updateData('priceAccount', +e.target.value);
 													}
 												}}
-												className='w-full bg-input text-foreground p-2 rounded-lg border border-border'
+												className={`w-full 
+												${
+													bookingData.bookingType === 'Current' &&
+													bookingData?.priceAccount > 0
+														? 'bg-green-100'
+														: 'bg-input'
+												}
+												text-foreground p-2 rounded-lg border border-border`}
 											/>
 										) : null}
 									</div>
