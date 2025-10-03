@@ -320,8 +320,8 @@ function Booking({ bookingData, id, onBookingUpload }) {
 	// auto calculate the quotes based on Pickup and destination
 	useEffect(() => {
 		if (
-			!bookingData.pickupPostCode ||
-			(!bookingData.destinationPostCode && bookingData.vias.length === 0) ||
+			!bookingData.pickupPostCode || bookingData.pickupPostCode.length < 6 ||
+			(!bookingData.destinationPostCode || bookingData.destinationPostCode.length < 6 && bookingData.vias.length === 0) ||
 			bookingData.scope !== 0
 		)
 			return;
