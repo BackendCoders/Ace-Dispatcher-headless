@@ -8,10 +8,8 @@ import Modal from '../components/Modal';
 import CallIcon from '@mui/icons-material/Call';
 import Badge from '@mui/material/Badge';
 import { useDispatch, useSelector } from 'react-redux';
-// import { setActiveTestMode, setIsGoogleApiOn } from '../context/bookingSlice';
 import {
 	setActiveSectionMobileView,
-	// setIsGoogleApiOn,
 } from '../context/bookingSlice';
 
 import {
