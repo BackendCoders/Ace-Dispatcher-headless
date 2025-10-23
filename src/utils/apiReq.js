@@ -59,6 +59,7 @@ function filterData(data) {
 		isASAP: data.isASAP || false,
 		manuallyPriced: data.manuallyPriced || false,
 		arriveBy: data.arriveBy || null,
+		isDuplicate: data.isDuplicate || false,
 		// actionByUserId: data.actionByUserId || null,
 	});
 }

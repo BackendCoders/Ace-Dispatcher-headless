@@ -261,7 +261,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
         return;
       }
 
-      totalDuration += 5; // Add 5 minutes buffer
+      totalDuration += 0; // Add 5 minutes buffer removed
 
       // Convert arriveBy (ISO 8601 format) to Date object
       const arriveByDate = new Date(bookingData.arriveBy);
