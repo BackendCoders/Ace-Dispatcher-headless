@@ -57,7 +57,7 @@ export default function SimpleSnackbar({
 				sx={{ '& .MuiSnackbarContent-root': { backgroundColor: color } }}
 				color='error'
 				open={open}
-				autoHideDuration={6000}
+				autoHideDuration={1000}
 				onClose={handleClose}
 				message={message}
 				action={action}
