@@ -43,8 +43,8 @@ export const addCallerToBooking = function (selectedRow, activeTab) {
       bookingType: type,
       PickupDateTime:
         type === "Current" ? targetCallerData.PickupDateTime : new Date(),
-      scope: 0,
-      accountNumber: 9999,
+      Scope: type === 0,
+      AccountNumber: 9999,
       // Add any additional properties you want to extend here
     };
 
