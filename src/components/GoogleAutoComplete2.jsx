@@ -221,25 +221,38 @@ function GoogleAutoComplete({
         try {
           // Fetch local API suggestions (getPoi)
           const localSuggestions = await getPoi(input);
-          const localFormatted = localSuggestions.map((poi) => ({
-            label: `${poi.address}, ${poi.postcode || "No Postcode"}`,
-            id: poi.id,
-            name: poi.name,
-            address: poi.address || "Unknown Address",
-            postcode: poi.postcode || "No Postcode",
-            longitude: poi.longitude,
-            latitude: poi.latitude,
-            source: "local",
-          }));
+          const localFormatted = localSuggestions.map((poi) => {
+            const cleanedAddress = poi.address
+              .replace(/,\s*[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i, "")
+              .trim();
+            return {
+              label: cleanedAddress,
+              id: poi.id,
+              name: poi.name,
+              address: cleanedAddress || "Unknown Address",
+              postcode: poi.postcode || "No Postcode",
+              longitude: poi.longitude,
+              latitude: poi.latitude,
+              source: "local",
+            };
+          });
 
           // Fetch getAddress.io suggestions
           const addressSuggestions = await getAddressSuggestions(input);
-          const addressFormatted = addressSuggestions.map((suggestion) => ({
-            label: suggestion.address, // Use the address directly
-            id: suggestion.id,
-            address: suggestion.address || "Unknown Address",
-            source: "getAddress",
-          }));
+          const addressFormatted = addressSuggestions.map((suggestion) => {
+            const cleanedAddress = suggestion.address
+              .replace(/,\s*[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i, "")
+              .trim();
+            return {
+              label: cleanedAddress, // Use the address directly
+              id: suggestion.id,
+              address: cleanedAddress || "Unknown Address",
+              postcode: (suggestion.address.match(
+                /[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i
+              ) || [""])[0],
+              source: "getAddress",
+            };
+          });
 
           // Combine local suggestions first, followed by getAddress.io suggestions
           const combinedSuggestions = [...localFormatted, ...addressFormatted];
