@@ -171,6 +171,9 @@ function Booking({ bookingData, id, onBookingUpload }) {
   function handleAddPickup(location) {
     updateData("pickupAddress", location.address);
     updateData("pickupPostCode", location.postcode);
+    if (location?.name) {
+      updateData("passengerName", location?.name);
+    }
   }
 
   // This Function sets the destination address and postcode by location data used in autocomplete
@@ -373,7 +376,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
         console.error("Quote request failed:", err);
       });
   }, [
-	bookingData.formBusy,
+    bookingData.formBusy,
     bookingData.pickupPostCode,
     bookingData.destinationPostCode,
     bookingData.postcode,
@@ -581,7 +584,7 @@ function Booking({ bookingData, id, onBookingUpload }) {
       if (response.status === "success") {
         if (!bookingData.manuallyPriced) {
           updateData("price", +response?.priceDriver.toFixed(2));
-		  updateData("quoteOptions", response);
+          updateData("quoteOptions", response);
           updateData("durationText", String(response.totalMinutes));
           updateData("hours", Math.floor(response.totalMinutes / 60));
           updateData("minutes", response.totalMinutes % 60);
