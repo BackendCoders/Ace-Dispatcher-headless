@@ -324,9 +324,9 @@ function Booking({ bookingData, id, onBookingUpload }) {
   useEffect(() => {
     if (
       !bookingData.pickupPostCode ||
-      bookingData.pickupPostCode.length < 6 ||
+      bookingData.pickupPostCode.length < 7 ||
       !bookingData.destinationPostCode ||
-      (bookingData.destinationPostCode.length < 6 &&
+      (bookingData.destinationPostCode.length < 7 &&
         bookingData.vias.length === 0) ||
       bookingData.scope !== 0
     )
@@ -566,7 +566,12 @@ function Booking({ bookingData, id, onBookingUpload }) {
 
   const hvsDriverQuote = useCallback(async () => {
     try {
-      if (!bookingData.pickupPostCode || !bookingData.destinationPostCode)
+      if (
+        !bookingData.pickupPostCode ||
+        !bookingData.destinationPostCode ||
+        bookingData.pickupPostCode.length < 7 ||
+        bookingData.destinationPostCode.length < 7
+      )
         return;
 
       const payload = {
