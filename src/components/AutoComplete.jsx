@@ -1,7 +1,7 @@
 /** @format */
 
 import { useState, useEffect, useRef } from 'react';
-import { getPoi, getPostal } from '../utils/apiReq';
+import { getAddressByPostCode } from '../utils/apiReq';
 import { TextField } from '@mui/material';
 
 const Autocomplete = ({
@@ -9,7 +9,6 @@ const Autocomplete = ({
 	onPushChange,
 	onChange,
 	value,
-	type,
 	required,
 	inputRef,
 	// postcodeFilled,
@@ -33,51 +32,22 @@ const Autocomplete = ({
 			setOptions([]);
 			return;
 		}
-		async function fetchPoi() {
-			try {
-				const response = await getPoi(inputValue);
-				// const response = await getAddressSuggestions(inputValue);
-				setOptions(
-					response.map((item) => ({
-						label: item.address,
-						// label: item.formatted_address.join(' '),
-						// address: item.formatted_address.join(' '),
-						postcode: item.postcode,
-						...item,
-					})),
-				);
-				setShowOptions(true);
-			} catch (error) {
-				console.error('Error fetching data:', error);
-			}
-		}
 		async function getPostalID() {
-			const response = await getPostal(inputValue);
+			const response = await getAddressByPostCode(inputValue);
 			if (response.status === 'success') {
-				setOptions(
-					response.Addresses.map((item) => {
-						const filteredAddress = item
-							.split(',')
-							.map((part) => part.trim())
-							.filter((part) => part.length > 0)
-							.join(', ');
-
-						return {
-							label: filteredAddress,
-							postcode: inputValue,
-							address: filteredAddress,
-							raw: item, // Retain the original address for reference if needed
-						};
-					}),
-				);
+				const address = response.expandedAddress;
+				setOptions([
+					{
+						label: address.formattedAddress,
+						postcode: inputValue,
+						address: address.formattedAddress,
+						raw: address.formattedAddressPC, // Retain the original address for reference if needed
+					},
+				]);
 				setShowOptions(true);
 			}
 		}
-		// if (type === 'postal') {
-		// 	getPostalID();
-		// } else {
-		// 	fetchPoi();
-		// }
+		getPostalID();
 	}, [inputValue]);
 
 	useEffect(() => {

@@ -694,6 +694,11 @@ async function getDuration(data) {
 	}
 }
 
+async function getAddressByPostCode(postcode) {
+	const URL = `${BASE}/api/Address/PostcodeLookup?postcode=${postcode}`;
+	return await handleGetReq(URL);
+}
+
 async function textMessageDirectly(data) {
 	const URL = `${BASE}/api/SmsQue/SendText?message=${encodeURIComponent(
 		data.message,
@@ -787,6 +792,7 @@ export {
 	textMessageDirectly,
 	getBookingsLog,
 	getDuration,
+	getAddressByPostCode,
 	confirmAllSoftAllocate,
 	getAllGPS,
 	mergeBookings,
