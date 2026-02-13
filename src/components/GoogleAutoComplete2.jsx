@@ -45,6 +45,7 @@ function GoogleAutoComplete({
 						const cleanedAddress = suggestion.label;
 						return {
 							label: cleanedAddress, // Use the address directly
+							name: suggestion.name,
 							id: suggestion.id,
 							address: cleanedAddress || 'Unknown Address',
 							postcode:
