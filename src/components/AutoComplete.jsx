@@ -10,7 +10,7 @@ const Autocomplete = ({
 	onChange,
 	value,
 	required,
-	inputRef,
+	// inputRef,
 	// postcodeFilled,
 }) => {
 	const [inputValue, setInputValue] = useState(value || '');
@@ -18,6 +18,7 @@ const Autocomplete = ({
 	const [showOptions, setShowOptions] = useState(false);
 	const [focus, setFocus] = useState(false);
 	const [activeOptionIndex, setActiveOptionIndex] = useState(-1);
+	const inputRef = useRef(null);
 
 	// const inputRef = useRef(null);
 	const optionsListRef = useRef(null);
@@ -47,7 +48,11 @@ const Autocomplete = ({
 				setShowOptions(true);
 			}
 		}
-		getPostalID();
+		const isActive = () => {
+			return document.activeElement === inputRef.current;
+		};
+
+		if (inputRef?.current && isActive()) getPostalID();
 	}, [inputValue]);
 
 	useEffect(() => {
@@ -116,7 +121,7 @@ const Autocomplete = ({
 				type='text'
 				autoComplete='new-password'
 				id={Math.random().toString(36).substring(7)}
-				ref={inputRef}
+				inputRef={inputRef}
 				label={placeholder}
 				required={required}
 				onBlur={handleBlur}

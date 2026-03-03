@@ -73,22 +73,19 @@ function GoogleAutoComplete({
 
 	// Handle suggestion selection
 	const handleSuggestionSelect = async (suggestion) => {
-		let selectedAddress = suggestion.address || 'Unknown Address';
-		let selectedPostcode = suggestion.postcode || 'No Postcode';
+		let selectedAddress = '';
+		let selectedPostcode = '';
 
 		// If the suggestion is from getAddress.io, fetch full details before updating the form
-		if (suggestion.source === 'google') {
-			try {
-				const sessionToken = getToken();
-				const fullDetails = await resolveAddress(suggestion.id, sessionToken);
-				if (fullDetails) {
-					// selectedAddress =
-					// 	fullDetails.formatted_address.join(', ') || 'Unknown Address';
-					selectedPostcode = fullDetails.postcode || 'No Postcode';
-				}
-			} catch (error) {
-				console.error('Error fetching full address details:', error);
+		try {
+			const sessionToken = getToken();
+			const fullDetails = await resolveAddress(suggestion.id, sessionToken);
+			if (fullDetails) {
+				selectedAddress = fullDetails.formattedAddress;
+				selectedPostcode = fullDetails.postcode || 'No Postcode';
 			}
+		} catch (error) {
+			console.error('Error fetching full address details:', error);
 		}
 
 		// Update the input field directly with the selected address
