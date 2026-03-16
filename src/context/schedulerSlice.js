@@ -311,15 +311,36 @@ export const handleSearchBooking = function (keyword) {
 		dispatch(schedulerSlice.actions.setLoading(true));
 		// const res = await bookingFindByTerm(keyword, activeTestMode);
 		// const res = await bookingFindByBookings(keyword, activeTestMode);
-		const res = await bookingFindByBookings(keyword);
+		// await bookingFindByBookings(keyword);
+		let res;
 
-		dispatch(schedulerSlice.actions.setLoading(false));
-		if (res.status === 'success') {
-			const results = res.results
-				.filter((booking) => booking.cancelled === false)
-				.map((el) => filterScheduledBookings(el));
-			dispatch(schedulerSlice.actions.makeSearchActive(results));
+		if (!keyword.booking_id) {
+			res = await bookingFindByBookings(keyword);
+			dispatch(schedulerSlice.actions.setLoading(false));
+			if (res.status === 'success') {
+				const results = res.results
+					.filter((booking) => booking.cancelled === false)
+					.map((el) => filterScheduledBookings(el));
+				dispatch(schedulerSlice.actions.makeSearchActive(results));
+			}
+		} else {
+			res = await findBookingById(keyword.booking_id);
+			dispatch(schedulerSlice.actions.setLoading(false));
+			if (res.status === 'success') {
+				const results = [filterScheduledBookings(res)];
+				// const results = res.results
+				// 	.filter((booking) => booking.cancelled === false)
+				// 	.map((el) => filterScheduledBookings(el));
+				dispatch(schedulerSlice.actions.makeSearchActive(results));
+			}
 		}
+		dispatch(schedulerSlice.actions.setLoading(false));
+		// if (res.status === 'success') {
+		// 	const results = res.results
+		// 		.filter((booking) => booking.cancelled === false)
+		// 		.map((el) => filterScheduledBookings(el));
+		// 	dispatch(schedulerSlice.actions.makeSearchActive(results));
+		// }
 	};
 };
 

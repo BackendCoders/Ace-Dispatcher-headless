@@ -8,9 +8,7 @@ import Modal from '../components/Modal';
 import CallIcon from '@mui/icons-material/Call';
 import Badge from '@mui/material/Badge';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-	setActiveSectionMobileView,
-} from '../context/bookingSlice';
+import { setActiveSectionMobileView } from '../context/bookingSlice';
 
 import {
 	// changeActiveDate,

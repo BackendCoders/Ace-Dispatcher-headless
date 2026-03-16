@@ -131,7 +131,7 @@ const AceScheduler = () => {
 		if (args?.data?.suggestedUserId && !args?.data?.userId) {
 			// If there's a suggestedUserId, use the suggested driver's color
 			const suggestedDriver = driverData.find(
-				(driver) => driver.id === args.data.suggestedUserId
+				(driver) => driver.id === args.data.suggestedUserId,
 			);
 			if (suggestedDriver) {
 				driverColor = suggestedDriver.colorRGB;
@@ -221,10 +221,10 @@ const AceScheduler = () => {
 				args.data.paymentStatus === 0
 					? 'red'
 					: args?.data?.paymentStatus === 2
-					? 'green'
-					: args.data.paymentStatus === 3
-					? 'orange'
-					: '';
+						? 'green'
+						: args.data.paymentStatus === 3
+							? 'orange'
+							: '';
 			const cardBadge = createBadge('Card', badgeColor);
 			parentNode.insertBefore(cardBadge, subjectElement);
 			// - ${
@@ -448,16 +448,16 @@ const AceScheduler = () => {
 							if (!targetBooking) {
 								const elements = document.elementsFromPoint(
 									mouseEvent.clientX,
-									mouseEvent.clientY
+									mouseEvent.clientY,
 								);
 
 								const targetElement = elements.find((el) =>
-									el?.classList?.contains('e-appointment')
+									el?.classList?.contains('e-appointment'),
 								);
 
 								// SAFE ATTRIBUTE ACCESS
 								const targetBookingElement = targetElement?.hasAttribute?.(
-									'data-id'
+									'data-id',
 								)
 									? targetElement.getAttribute('data-id')
 									: targetElement?.dataset?.bookingId;
@@ -467,13 +467,13 @@ const AceScheduler = () => {
 							// 4. EXECUTE MERGE
 							if (targetBooking && targetBooking !== draggedBooking) {
 								const response = await dispatch(
-									mergeTwoBookings(targetBooking, draggedBooking)
+									mergeTwoBookings(targetBooking, draggedBooking),
 								);
 								if (response.status === 'fail') {
 									dispatch(openSnackbar(response.data, 'error'));
 								} else {
 									dispatch(
-										openSnackbar('Booking Merge Successfully!', 'success')
+										openSnackbar('Booking Merge Successfully!', 'success'),
 									);
 								}
 							}
@@ -835,6 +835,7 @@ function SearchModal({ setOpenSearch }) {
 	const handleSubmitForm = async (data) => {
 		console.log('form Data', data);
 		const newinputData = {
+			booking_id: data?.booking_id || null,
 			pickupAddress: data?.pickupAddress || '',
 			pickupPostcode: data?.pickupPostcode || '',
 			destinationAddress: data?.destinationAddress || '',
@@ -846,6 +847,7 @@ function SearchModal({ setOpenSearch }) {
 
 		// Dispatch search action only if some data is entered
 		if (
+			newinputData.booking_id ||
 			newinputData.pickupAddress ||
 			newinputData.pickupPostcode ||
 			newinputData.destinationAddress ||
@@ -898,6 +900,13 @@ function SearchModal({ setOpenSearch }) {
 				Search Bookings
 			</h2>
 			<form onSubmit={handleSubmit(handleSubmitForm)}>
+				<TextField
+					label='Booking Id'
+					fullWidth
+					error={!!errors.booking_id} // Show error if validation fails
+					helperText={errors.booking_id ? 'Must be at least 3 characters' : ''}
+					{...register('booking_id')}
+				/>
 				<Box
 					mt={2}
 					display='flex'
